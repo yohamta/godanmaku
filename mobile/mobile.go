@@ -1,4 +1,4 @@
-package godanmakumobile
+package mobile
 
 import (
 	"github.com/hajimehoshi/ebiten/mobile"
@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	game, err := godanmaku.NewGame()
+	game, err := danmaku.NewGame()
 	if err != nil {
 		panic(err)
 	}
