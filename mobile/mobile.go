@@ -1,9 +1,9 @@
-package mobile
+package godanmakumobile
 
 import (
 	"github.com/hajimehoshi/ebiten/mobile"
 
-	"github.com/yohamta/godanmaku"
+	"github.com/yohamta/godanmaku/danmaku"
 )
 
 func init() {
