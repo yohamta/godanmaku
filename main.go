@@ -24,13 +24,14 @@ func (g *Game) Draw(screen *ebiten.Image) {
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
 // If you don't have to adjust the screen size with the outside size, just return a fixed size.
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
+	return 240, 320
 }
 
 func main() {
 	game := &Game{}
+
 	// Sepcify the window size as you like. Here, a doulbed size is specified.
-	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowSize(480, 640)
 	ebiten.SetWindowTitle("Your game's title")
 	// Call ebiten.RunGame to start your game loop.
 	if err := ebiten.RunGame(game); err != nil {

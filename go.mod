@@ -1,4 +1,4 @@
-module github.com/yohamta/go-danmaku
+module github.com/yohamta/godanmaku
 
 go 1.14
 
