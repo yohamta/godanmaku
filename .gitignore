@@ -14,6 +14,9 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-# Exectable
+# Temporary files
 godanmaku
-godanmaku.framework
+Mobile.framework
+
+# Mac
+.DS_Store

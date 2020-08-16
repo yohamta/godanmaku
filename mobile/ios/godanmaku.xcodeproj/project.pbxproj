@@ -1,0 +1,632 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0736B2C124E953FB004DFA1E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0736B2C024E953FB004DFA1E /* AppDelegate.m */; };
+		0736B2C424E953FB004DFA1E /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0736B2C324E953FB004DFA1E /* SceneDelegate.m */; };
+		0736B2C724E953FB004DFA1E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0736B2C624E953FB004DFA1E /* ViewController.m */; };
+		0736B2CA24E953FB004DFA1E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0736B2C824E953FB004DFA1E /* Main.storyboard */; };
+		0736B2CC24E953FC004DFA1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0736B2CB24E953FC004DFA1E /* Assets.xcassets */; };
+		0736B2CF24E953FC004DFA1E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0736B2CD24E953FC004DFA1E /* LaunchScreen.storyboard */; };
+		0736B2D224E953FC004DFA1E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0736B2D124E953FC004DFA1E /* main.m */; };
+		0736B2DC24E953FC004DFA1E /* godanmakuTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0736B2DB24E953FC004DFA1E /* godanmakuTests.m */; };
+		0736B2E724E953FC004DFA1E /* godanmakuUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0736B2E624E953FC004DFA1E /* godanmakuUITests.m */; };
+		0736B2F624E954B5004DFA1E /* Mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0736B2F524E954B5004DFA1E /* Mobile.framework */; };
+		078E705224E963D3000B064F /* MobileEbitenViewControllerWithErrorHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = 078E705124E963D3000B064F /* MobileEbitenViewControllerWithErrorHandling.m */; };
+		078E705424E96521000B064F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078E705324E96521000B064F /* AudioToolbox.framework */; };
+		078E705624E96528000B064F /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078E705524E96528000B064F /* GLKit.framework */; };
+		078E705824E96533000B064F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078E705724E96533000B064F /* OpenGLES.framework */; };
+		078E705A24E9653B000B064F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 078E705924E9653B000B064F /* AVFoundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0736B2D824E953FC004DFA1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0736B2B424E953FB004DFA1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0736B2BB24E953FB004DFA1E;
+			remoteInfo = godanmaku;
+		};
+		0736B2E324E953FC004DFA1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0736B2B424E953FB004DFA1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0736B2BB24E953FB004DFA1E;
+			remoteInfo = godanmaku;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0736B2BC24E953FB004DFA1E /* godanmaku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = godanmaku.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0736B2BF24E953FB004DFA1E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		0736B2C024E953FB004DFA1E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		0736B2C224E953FB004DFA1E /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		0736B2C324E953FB004DFA1E /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		0736B2C524E953FB004DFA1E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		0736B2C624E953FB004DFA1E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		0736B2C924E953FB004DFA1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0736B2CB24E953FC004DFA1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0736B2CE24E953FC004DFA1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0736B2D024E953FC004DFA1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0736B2D124E953FC004DFA1E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0736B2D724E953FC004DFA1E /* godanmakuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = godanmakuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0736B2DB24E953FC004DFA1E /* godanmakuTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = godanmakuTests.m; sourceTree = "<group>"; };
+		0736B2DD24E953FC004DFA1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0736B2E224E953FC004DFA1E /* godanmakuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = godanmakuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0736B2E624E953FC004DFA1E /* godanmakuUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = godanmakuUITests.m; sourceTree = "<group>"; };
+		0736B2E824E953FC004DFA1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0736B2F524E954B5004DFA1E /* Mobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mobile.framework; sourceTree = "<group>"; };
+		078E705024E963BF000B064F /* MobileEbitenViewControllerWithErrorHandling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileEbitenViewControllerWithErrorHandling.h; sourceTree = "<group>"; };
+		078E705124E963D3000B064F /* MobileEbitenViewControllerWithErrorHandling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileEbitenViewControllerWithErrorHandling.m; sourceTree = "<group>"; };
+		078E705324E96521000B064F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		078E705524E96528000B064F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		078E705724E96533000B064F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		078E705924E9653B000B064F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0736B2B924E953FB004DFA1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				078E705A24E9653B000B064F /* AVFoundation.framework in Frameworks */,
+				078E705824E96533000B064F /* OpenGLES.framework in Frameworks */,
+				078E705624E96528000B064F /* GLKit.framework in Frameworks */,
+				078E705424E96521000B064F /* AudioToolbox.framework in Frameworks */,
+				0736B2F624E954B5004DFA1E /* Mobile.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0736B2D424E953FC004DFA1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0736B2DF24E953FC004DFA1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0736B2B324E953FB004DFA1E = {
+			isa = PBXGroup;
+			children = (
+				0736B2BE24E953FB004DFA1E /* godanmaku */,
+				0736B2DA24E953FC004DFA1E /* godanmakuTests */,
+				0736B2E524E953FC004DFA1E /* godanmakuUITests */,
+				0736B2BD24E953FB004DFA1E /* Products */,
+				0736B2F424E954B4004DFA1E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		0736B2BD24E953FB004DFA1E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0736B2BC24E953FB004DFA1E /* godanmaku.app */,
+				0736B2D724E953FC004DFA1E /* godanmakuTests.xctest */,
+				0736B2E224E953FC004DFA1E /* godanmakuUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0736B2BE24E953FB004DFA1E /* godanmaku */ = {
+			isa = PBXGroup;
+			children = (
+				0736B2BF24E953FB004DFA1E /* AppDelegate.h */,
+				0736B2C024E953FB004DFA1E /* AppDelegate.m */,
+				0736B2C224E953FB004DFA1E /* SceneDelegate.h */,
+				0736B2C324E953FB004DFA1E /* SceneDelegate.m */,
+				0736B2C524E953FB004DFA1E /* ViewController.h */,
+				0736B2C624E953FB004DFA1E /* ViewController.m */,
+				0736B2C824E953FB004DFA1E /* Main.storyboard */,
+				0736B2CB24E953FC004DFA1E /* Assets.xcassets */,
+				0736B2CD24E953FC004DFA1E /* LaunchScreen.storyboard */,
+				0736B2D024E953FC004DFA1E /* Info.plist */,
+				0736B2D124E953FC004DFA1E /* main.m */,
+				078E705024E963BF000B064F /* MobileEbitenViewControllerWithErrorHandling.h */,
+				078E705124E963D3000B064F /* MobileEbitenViewControllerWithErrorHandling.m */,
+			);
+			path = godanmaku;
+			sourceTree = "<group>";
+		};
+		0736B2DA24E953FC004DFA1E /* godanmakuTests */ = {
+			isa = PBXGroup;
+			children = (
+				0736B2DB24E953FC004DFA1E /* godanmakuTests.m */,
+				0736B2DD24E953FC004DFA1E /* Info.plist */,
+			);
+			path = godanmakuTests;
+			sourceTree = "<group>";
+		};
+		0736B2E524E953FC004DFA1E /* godanmakuUITests */ = {
+			isa = PBXGroup;
+			children = (
+				0736B2E624E953FC004DFA1E /* godanmakuUITests.m */,
+				0736B2E824E953FC004DFA1E /* Info.plist */,
+			);
+			path = godanmakuUITests;
+			sourceTree = "<group>";
+		};
+		0736B2F424E954B4004DFA1E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				078E705924E9653B000B064F /* AVFoundation.framework */,
+				078E705724E96533000B064F /* OpenGLES.framework */,
+				078E705524E96528000B064F /* GLKit.framework */,
+				078E705324E96521000B064F /* AudioToolbox.framework */,
+				0736B2F524E954B5004DFA1E /* Mobile.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0736B2BB24E953FB004DFA1E /* godanmaku */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0736B2EB24E953FC004DFA1E /* Build configuration list for PBXNativeTarget "godanmaku" */;
+			buildPhases = (
+				0736B2B824E953FB004DFA1E /* Sources */,
+				0736B2B924E953FB004DFA1E /* Frameworks */,
+				0736B2BA24E953FB004DFA1E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = godanmaku;
+			productName = godanmaku;
+			productReference = 0736B2BC24E953FB004DFA1E /* godanmaku.app */;
+			productType = "com.apple.product-type.application";
+		};
+		0736B2D624E953FC004DFA1E /* godanmakuTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0736B2EE24E953FC004DFA1E /* Build configuration list for PBXNativeTarget "godanmakuTests" */;
+			buildPhases = (
+				0736B2D324E953FC004DFA1E /* Sources */,
+				0736B2D424E953FC004DFA1E /* Frameworks */,
+				0736B2D524E953FC004DFA1E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0736B2D924E953FC004DFA1E /* PBXTargetDependency */,
+			);
+			name = godanmakuTests;
+			productName = godanmakuTests;
+			productReference = 0736B2D724E953FC004DFA1E /* godanmakuTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		0736B2E124E953FC004DFA1E /* godanmakuUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0736B2F124E953FC004DFA1E /* Build configuration list for PBXNativeTarget "godanmakuUITests" */;
+			buildPhases = (
+				0736B2DE24E953FC004DFA1E /* Sources */,
+				0736B2DF24E953FC004DFA1E /* Frameworks */,
+				0736B2E024E953FC004DFA1E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0736B2E424E953FC004DFA1E /* PBXTargetDependency */,
+			);
+			name = godanmakuUITests;
+			productName = godanmakuUITests;
+			productReference = 0736B2E224E953FC004DFA1E /* godanmakuUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0736B2B424E953FB004DFA1E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = "Yota Hamada";
+				TargetAttributes = {
+					0736B2BB24E953FB004DFA1E = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					0736B2D624E953FC004DFA1E = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = 0736B2BB24E953FB004DFA1E;
+					};
+					0736B2E124E953FC004DFA1E = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = 0736B2BB24E953FB004DFA1E;
+					};
+				};
+			};
+			buildConfigurationList = 0736B2B724E953FB004DFA1E /* Build configuration list for PBXProject "godanmaku" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0736B2B324E953FB004DFA1E;
+			productRefGroup = 0736B2BD24E953FB004DFA1E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0736B2BB24E953FB004DFA1E /* godanmaku */,
+				0736B2D624E953FC004DFA1E /* godanmakuTests */,
+				0736B2E124E953FC004DFA1E /* godanmakuUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0736B2BA24E953FB004DFA1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0736B2CF24E953FC004DFA1E /* LaunchScreen.storyboard in Resources */,
+				0736B2CC24E953FC004DFA1E /* Assets.xcassets in Resources */,
+				0736B2CA24E953FB004DFA1E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0736B2D524E953FC004DFA1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0736B2E024E953FC004DFA1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0736B2B824E953FB004DFA1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				078E705224E963D3000B064F /* MobileEbitenViewControllerWithErrorHandling.m in Sources */,
+				0736B2C724E953FB004DFA1E /* ViewController.m in Sources */,
+				0736B2C124E953FB004DFA1E /* AppDelegate.m in Sources */,
+				0736B2D224E953FC004DFA1E /* main.m in Sources */,
+				0736B2C424E953FB004DFA1E /* SceneDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0736B2D324E953FC004DFA1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0736B2DC24E953FC004DFA1E /* godanmakuTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0736B2DE24E953FC004DFA1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0736B2E724E953FC004DFA1E /* godanmakuUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0736B2D924E953FC004DFA1E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0736B2BB24E953FB004DFA1E /* godanmaku */;
+			targetProxy = 0736B2D824E953FC004DFA1E /* PBXContainerItemProxy */;
+		};
+		0736B2E424E953FC004DFA1E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0736B2BB24E953FB004DFA1E /* godanmaku */;
+			targetProxy = 0736B2E324E953FC004DFA1E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0736B2C824E953FB004DFA1E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0736B2C924E953FB004DFA1E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		0736B2CD24E953FC004DFA1E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0736B2CE24E953FC004DFA1E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0736B2E924E953FC004DFA1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		0736B2EA24E953FC004DFA1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0736B2EC24E953FC004DFA1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R2LCFUU8PZ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = godanmaku/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yohamta.godanmaku.godanmaku;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0736B2ED24E953FC004DFA1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R2LCFUU8PZ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = godanmaku/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yohamta.godanmaku.godanmaku;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0736B2EF24E953FC004DFA1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R2LCFUU8PZ;
+				INFOPLIST_FILE = godanmakuTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yohamta.godanmaku.godanmakuTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/godanmaku.app/godanmaku";
+			};
+			name = Debug;
+		};
+		0736B2F024E953FC004DFA1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R2LCFUU8PZ;
+				INFOPLIST_FILE = godanmakuTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yohamta.godanmaku.godanmakuTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/godanmaku.app/godanmaku";
+			};
+			name = Release;
+		};
+		0736B2F224E953FC004DFA1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R2LCFUU8PZ;
+				INFOPLIST_FILE = godanmakuUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yohamta.godanmaku.godanmakuUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = godanmaku;
+			};
+			name = Debug;
+		};
+		0736B2F324E953FC004DFA1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R2LCFUU8PZ;
+				INFOPLIST_FILE = godanmakuUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yohamta.godanmaku.godanmakuUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = godanmaku;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0736B2B724E953FB004DFA1E /* Build configuration list for PBXProject "godanmaku" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0736B2E924E953FC004DFA1E /* Debug */,
+				0736B2EA24E953FC004DFA1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0736B2EB24E953FC004DFA1E /* Build configuration list for PBXNativeTarget "godanmaku" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0736B2EC24E953FC004DFA1E /* Debug */,
+				0736B2ED24E953FC004DFA1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0736B2EE24E953FC004DFA1E /* Build configuration list for PBXNativeTarget "godanmakuTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0736B2EF24E953FC004DFA1E /* Debug */,
+				0736B2F024E953FC004DFA1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0736B2F124E953FC004DFA1E /* Build configuration list for PBXNativeTarget "godanmakuUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0736B2F224E953FC004DFA1E /* Debug */,
+				0736B2F324E953FC004DFA1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0736B2B424E953FB004DFA1E /* Project object */;
+}
