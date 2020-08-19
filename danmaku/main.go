@@ -3,12 +3,15 @@ package danmaku
 import (
 	"bytes"
 	"image"
-	_ "image/jpeg"
+	_ "image/png"
 	"log"
 	"math"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/examples/resources/images"
+	// "github.com/hajimehoshi/ebiten/examples/resources/images"
+
+	"github.com/yohamta/godanmaku/danmaku/resources/images"
+	// "github.com/yohamta/godanmakug/danmaku/resources/images"
 )
 
 const (
@@ -62,7 +65,7 @@ func NewGame() (*Game, error) {
 	//    This works even on browsers.
 	// 3) Use ebitenutil.NewImageFromFile to create an ebiten.Image directly from a file.
 	//    This also works on browsers.
-	img, _, err := image.Decode(bytes.NewReader(images.Gophers_jpg))
+	img, _, err := image.Decode(bytes.NewReader(images.HIT))
 	if err != nil {
 		log.Fatal(err)
 	}
