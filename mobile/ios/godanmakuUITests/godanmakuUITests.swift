@@ -2,7 +2,7 @@
 //  godanmakuUITests.swift
 //  godanmakuUITests
 //
-//  Created by Yota Hamada on 2020/08/16.
+//  Created by Yota Hamada on 2020/08/20.
 //  Copyright © 2020 Yota Hamada. All rights reserved.
 //
 
