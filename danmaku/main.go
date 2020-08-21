@@ -21,15 +21,19 @@ var (
 	gophersImage *ebiten.Image
 )
 
+// Game implements ebiten.Game interface.
 type Game struct {
 	count int
 }
 
+// Update updates a game by one tick. The given argument represents a screen image.
 func (g *Game) Update(screen *ebiten.Image) error {
 	g.count++
 	return nil
 }
 
+// Draw draws the game screen.
+// Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
 	w, h := gophersImage.Size()
 	op := &ebiten.DrawImageOptions{}
@@ -49,10 +53,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(gophersImage, op)
 }
 
+// Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
+// If you don't have to adjust the screen size with the outside size, just return a fixed size.
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return screenWidth, screenHeight
 }
 
+// NewGame creates a game struct
 func NewGame() (*Game, error) {
 	// Decode image from a byte slice instead of a file so that
 	// this example works in any working directory.
