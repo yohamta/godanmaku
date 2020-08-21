@@ -3,9 +3,11 @@ package danmaku
 import (
 	"bytes"
 	"image"
-	_ "image/png"
 	"log"
 	"math"
+
+	// import for side effect
+	_ "image/png"
 
 	"github.com/hajimehoshi/ebiten"
 
