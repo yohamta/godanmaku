@@ -8,10 +8,8 @@ import (
 	"math"
 
 	"github.com/hajimehoshi/ebiten"
-	// "github.com/hajimehoshi/ebiten/examples/resources/images"
 
-	"github.com/yohamta/godanmaku/danmaku/resources/images"
-	// "github.com/yohamta/godanmakug/danmaku/resources/images"
+	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
 )
 
 const (
