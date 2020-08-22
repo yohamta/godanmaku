@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"image"
 	"log"
-	"math"
 
 	// import for side effect
 	_ "image/png"
@@ -12,6 +11,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 const (
@@ -21,38 +21,38 @@ const (
 
 var (
 	gophersImage *ebiten.Image
+	testSprite   *sprite.Sprite
 )
 
 // Game implements ebiten.Game interface.
 type Game struct {
-	count int
 }
 
 // Update updates a game by one tick. The given argument represents a screen image.
 func (g *Game) Update(screen *ebiten.Image) error {
-	g.count++
 	return nil
 }
 
 // Draw draws the game screen.
 // Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
-	w, h := gophersImage.Size()
-	op := &ebiten.DrawImageOptions{}
+	// w, h := gophersImage.Size()
+	// op := &ebiten.DrawImageOptions{}
 
-	// Move the image's center to the screen's upper-left corner.
-	// This is a preparation for rotating. When geometry matrices are applied,
-	// the origin point is the upper-left corner.
-	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
+	// // Move the image's center to the screen's upper-left corner.
+	// // This is a preparation for rotating. When geometry matrices are applied,
+	// // the origin point is the upper-left corner.
+	// op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 
-	// Rotate the image. As a result, the anchor point of this rotate is
-	// the center of the image.
-	op.GeoM.Rotate(float64(g.count%360) * 2 * math.Pi / 360)
+	// // Rotate the image. As a result, the anchor point of this rotate is
+	// // the center of the image.
+	// op.GeoM.Rotate(float64(g.count%360) * 2 * math.Pi / 360)
 
-	// Move the image to the screen's center.
-	op.GeoM.Translate(screenWidth/2, screenHeight/2)
+	// // Move the image to the screen's center.
+	// op.GeoM.Translate(screenWidth/2, screenHeight/2)
 
-	screen.DrawImage(gophersImage, op)
+	// screen.DrawImage(gophersImage, op)
+	testSprite.Draw(screen)
 }
 
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
@@ -77,6 +77,9 @@ func NewGame() (*Game, error) {
 		log.Fatal(err)
 	}
 	gophersImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
+
+	testSprite = sprite.New(gophersImage, 1)
+	testSprite.SetPosition(screenWidth/2, screenWidth/2)
 
 	ebiten.SetWindowSize(screenWidth*2, screenHeight*2)
 	ebiten.SetWindowTitle("Rotate (Ebiten Demo)")
