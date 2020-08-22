@@ -14,14 +14,11 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
-const (
-	screenWidth  = 240
-	screenHeight = 320
-)
-
 var (
 	gophersImage *ebiten.Image
 	testSprite   *sprite.Sprite
+	screenWidth  = 240
+	screenHeight = 320
 )
 
 // Game implements ebiten.Game interface.
@@ -30,6 +27,7 @@ type Game struct {
 
 // Update updates a game by one tick. The given argument represents a screen image.
 func (g *Game) Update(screen *ebiten.Image) error {
+	testSprite.SetPosition(float64(screenWidth/2), float64(screenHeight/2))
 	return nil
 }
 
@@ -58,6 +56,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
 // If you don't have to adjust the screen size with the outside size, just return a fixed size.
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
+	screenHeight = int(float64(screenWidth) / float64(outsideWidth) * float64(outsideHeight))
 	return screenWidth, screenHeight
 }
 
@@ -79,7 +78,6 @@ func NewGame() (*Game, error) {
 	gophersImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
 
 	testSprite = sprite.New(gophersImage, 1)
-	testSprite.SetPosition(screenWidth/2, screenWidth/2)
 
 	ebiten.SetWindowSize(screenWidth*2, screenHeight*2)
 	ebiten.SetWindowTitle("Rotate (Ebiten Demo)")
