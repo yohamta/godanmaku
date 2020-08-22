@@ -1,21 +1,13 @@
 package danmaku
 
 import (
-	"bytes"
-	"image"
-	"log"
-
-	// import for side effect
-	_ "image/png"
-
 	"github.com/hajimehoshi/ebiten"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/player"
 )
 
 var (
-	testSprite    *sprite.Sprite
+	myPlayer      *player.Player
 	screenWidth   = 240
 	screenHeight  = 320
 	isInitialized = false
@@ -28,22 +20,17 @@ type Game struct {
 // Update updates a game by one tick. The given argument represents a screen image.
 func (g *Game) Update(screen *ebiten.Image) error {
 	if !isInitialized {
-		img, _, err := image.Decode(bytes.NewReader(images.CURSOL1))
-		if err != nil {
-			log.Fatal(err)
-		}
-		testSprite = sprite.New(&img, 4)
-		testSprite.SetIndex(1)
+		myPlayer = player.New()
 		isInitialized = true
 		return nil
 	}
-	testSprite.SetPosition(float64(screenWidth/2), float64(screenHeight/2))
 	return nil
 }
 
 // Draw draws the game screen.
 // Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
+	myPlayer.Draw(screen)
 	// w, h := gophersImage.Size()
 	// op := &ebiten.DrawImageOptions{}
 
@@ -60,7 +47,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	// op.GeoM.Translate(screenWidth/2, screenHeight/2)
 
 	// screen.DrawImage(gophersImage, op)
-	testSprite.Draw(screen)
 }
 
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
