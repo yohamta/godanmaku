@@ -15,10 +15,10 @@ import (
 )
 
 var (
-	gophersImage *ebiten.Image
-	testSprite   *sprite.Sprite
-	screenWidth  = 240
-	screenHeight = 320
+	testSprite    *sprite.Sprite
+	screenWidth   = 240
+	screenHeight  = 320
+	isInitialized = false
 )
 
 // Game implements ebiten.Game interface.
@@ -27,6 +27,16 @@ type Game struct {
 
 // Update updates a game by one tick. The given argument represents a screen image.
 func (g *Game) Update(screen *ebiten.Image) error {
+	if !isInitialized {
+		img, _, err := image.Decode(bytes.NewReader(images.CURSOL1))
+		if err != nil {
+			log.Fatal(err)
+		}
+		testSprite = sprite.New(&img, 4)
+		testSprite.SetIndex(1)
+		isInitialized = true
+		return nil
+	}
 	testSprite.SetPosition(float64(screenWidth/2), float64(screenHeight/2))
 	return nil
 }
@@ -71,13 +81,6 @@ func NewGame() (*Game, error) {
 	//    This works even on browsers.
 	// 3) Use ebitenutil.NewImageFromFile to create an ebiten.Image directly from a file.
 	//    This also works on browsers.
-	img, _, err := image.Decode(bytes.NewReader(images.HIT))
-	if err != nil {
-		log.Fatal(err)
-	}
-	gophersImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
-
-	testSprite = sprite.New(gophersImage, 1)
 
 	ebiten.SetWindowSize(screenWidth*2, screenHeight*2)
 	ebiten.SetWindowTitle("Rotate (Ebiten Demo)")
