@@ -3,11 +3,13 @@ package danmaku
 import (
 	"github.com/hajimehoshi/ebiten"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/input"
 	"github.com/yohamta/godanmaku/danmaku/internal/player"
 )
 
 var (
 	myPlayer      *player.Player
+	myGameInput   *input.GameInput
 	screenWidth   = 240
 	screenHeight  = 320
 	isInitialized = false
@@ -21,9 +23,14 @@ type Game struct {
 func (g *Game) Update(screen *ebiten.Image) error {
 	if !isInitialized {
 		myPlayer = player.New()
+		myGameInput = &input.GameInput{}
 		isInitialized = true
 		return nil
 	}
+
+	myGameInput.Update()
+	myPlayer.Update(myGameInput)
+
 	return nil
 }
 
