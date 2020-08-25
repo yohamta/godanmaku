@@ -8,10 +8,8 @@ import (
 
 // GameInput represents the state of user's input
 type GameInput struct {
-	Up           float64
-	Left         float64
-	Down         float64
-	Right        float64
+	Horizontal   float64
+	Vertical     float64
 	Fire         bool
 	prevTickTime time.Time
 }
@@ -30,28 +28,20 @@ func (i *GameInput) Update() {
 	}
 	i.prevTickTime = time.Now()
 
-	if ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyUp) {
-		i.Up = 1
-	} else {
-		i.Up = 0
-	}
-
-	if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyLeft) {
-		i.Left = 1
-	} else {
-		i.Left = 0
-	}
-
 	if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyDown) {
-		i.Down = 1
+		i.Vertical = 1
+	} else if ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyUp) {
+		i.Vertical = -1
 	} else {
-		i.Down = 0
+		i.Vertical = 0
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyRight) {
-		i.Right = 1
+		i.Horizontal = 1
+	} else if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		i.Horizontal = -1
 	} else {
-		i.Right = 0
+		i.Horizontal = 0
 	}
 
 	i.Fire = ebiten.IsKeyPressed(ebiten.KeySpace)

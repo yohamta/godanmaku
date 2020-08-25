@@ -15,11 +15,6 @@ import (
 
 const (
 	initPlayerSpeed = 2
-	downSpeed       = 0.4
-)
-
-var (
-	spriteIndexMap = map[int]int{1: 5, 2: 4, 3: 3, 4: 6, 6: 2, 7: 7, 8: 0, 9: 1}
 )
 
 // Player represents player of the game
@@ -50,126 +45,27 @@ func New() *Player {
 // Draw draws this sprite
 func (p *Player) Draw(screen *ebiten.Image) {
 	p.sprite.SetPosition(p.actor.X, p.actor.Y)
-	p.sprite.SetIndex(spriteIndexMap[p.actor.Direction])
+	spriteIndex := int(float64(((p.actor.Deg+90)+360)%360) / 45)
+	p.sprite.SetIndex(spriteIndex)
 	p.sprite.Draw(screen)
 }
 
 // Update updates the player's state
 func (p *Player) Update(input *input.GameInput) {
-	isMoving := false
-
-	// Up
-	if input.Up != 0 && (input.Right+input.Left == 0 || input.Right+input.Left == 2) {
-		p.vx = 0
-		p.vy = -p.actor.Speed
-		p.actor.Y = p.actor.Y - p.actor.Speed
-
-		if input.Fire == false {
-			p.actor.SetDirection(8)
-		}
-		isMoving = true
-	}
-
-	// Down
-	if input.Down != 0 && (input.Right+input.Left == 0 || input.Right+input.Left == 2) {
-		p.vx = 0
-		p.vy = p.actor.Speed
-		p.actor.Y = p.actor.Y + p.actor.Speed
-
-		if input.Fire == false {
-			p.actor.SetDirection(2)
-		}
-		isMoving = true
-	}
-
-	// Left
-	if input.Left != 0 && (input.Up+input.Down == 0 || input.Up+input.Down == 2) {
-		p.vx = -p.actor.Speed
-		p.vy = 0
-		p.actor.X = p.actor.X - p.actor.Speed
-
-		if input.Fire == false {
-			p.actor.SetDirection(4)
-		}
-		isMoving = true
-	}
-
-	// Right
-	if input.Right != 0 && (input.Up+input.Down == 0 || input.Up+input.Down == 2) {
-		p.vx = p.actor.Speed
-		p.vy = 0
-		p.actor.X = p.actor.X + p.actor.Speed
-
-		if input.Fire == false {
-			p.actor.SetDirection(6)
-		}
-		isMoving = true
-	}
-
-	// Diagonal
-	if isMoving == false {
-		if input.Up != 0 && input.Right != 0 {
-			p.vx = p.actor.NSpd
-			p.vy = -p.actor.NSpd
-			p.actor.X = p.actor.X + p.actor.NSpd
-			p.actor.Y = p.actor.Y - p.actor.NSpd
-
-			if input.Fire == false {
-				p.actor.SetDirection(9)
-			}
-			isMoving = true
-		}
-		if input.Up != 0 && input.Left != 0 {
-			p.vx = -p.actor.NSpd
-			p.vy = -p.actor.NSpd
-			p.actor.X = p.actor.X - p.actor.NSpd
-			p.actor.Y = p.actor.Y - p.actor.NSpd
-
-			if input.Fire == false {
-				p.actor.SetDirection(7)
-			}
-			isMoving = true
-		}
-		if input.Down != 0 && input.Right != 0 {
-			p.vx = p.actor.NSpd
-			p.vy = p.actor.NSpd
-			p.actor.X = p.actor.X + p.actor.NSpd
-			p.actor.Y = p.actor.Y + p.actor.NSpd
-			if input.Fire == false {
-				p.actor.SetDirection(3)
-			}
-			isMoving = true
-		}
-		if input.Down != 0 && input.Left != 0 {
-			p.vx = -p.actor.NSpd
-			p.vy = p.actor.NSpd
-			p.actor.X = p.actor.X - p.actor.NSpd
-			p.actor.Y = p.actor.Y + p.actor.NSpd
-			if input.Fire == false {
-				p.actor.SetDirection(1)
-			}
-			isMoving = true
-		}
-	}
-
-	// Inertia
-	if isMoving == false {
-		vx := p.vx
-		vy := p.vy
-
-		if vx > 0 {
-			p.vx = math.Max(vx-downSpeed, 0)
-		} else {
-			p.vx = math.Min(vx+downSpeed, 0)
-		}
-		if vy > 0 {
-			p.vy = math.Max(vy-downSpeed, 0)
-		} else {
-			p.vy = math.Min(vy+downSpeed, 0)
-		}
-
-		p.actor.X = p.actor.X + p.vx
+	if input.Vertical != 0 {
+		p.vy = input.Vertical * p.actor.Speed
 		p.actor.Y = p.actor.Y + p.vy
 	}
 
+	if input.Horizontal != 0 {
+		p.vx = input.Horizontal * p.actor.Speed
+		p.actor.X = p.actor.X + p.vx
+	}
+
+	if input.Vertical != 0 || input.Horizontal != 0 {
+		degree := int(math.Atan2(input.Vertical, input.Horizontal) * 180 / math.Pi)
+		if input.Fire == false {
+			p.actor.SetDeg(degree)
+		}
+	}
 }
