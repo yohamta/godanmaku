@@ -13,6 +13,12 @@ type GameInput struct {
 	Fire  bool
 }
 
+// New creates new GameInput
+func New() *GameInput {
+	gameInput := &GameInput{}
+	return gameInput
+}
+
 // Update updates the input state
 func (i *GameInput) Update() {
 	if ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyUp) {
