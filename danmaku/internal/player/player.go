@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	initPlayerSpeed = 5.8
-	downSpeed       = 1.2
+	initPlayerSpeed = 2
+	downSpeed       = 0.4
 )
 
 // Player represents player of the game
