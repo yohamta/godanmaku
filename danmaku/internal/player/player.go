@@ -18,6 +18,10 @@ const (
 	downSpeed       = 0.4
 )
 
+var (
+	spriteIndexMap = map[int]int{1: 5, 2: 4, 3: 3, 4: 6, 6: 2, 7: 7, 8: 0, 9: 1}
+)
+
 // Player represents player of the game
 type Player struct {
 	sprite *sprite.Sprite
@@ -46,6 +50,7 @@ func New() *Player {
 // Draw draws this sprite
 func (p *Player) Draw(screen *ebiten.Image) {
 	p.sprite.SetPosition(p.actor.X, p.actor.Y)
+	p.sprite.SetIndex(spriteIndexMap[p.actor.Direction])
 	p.sprite.Draw(screen)
 }
 
@@ -131,7 +136,7 @@ func (p *Player) Update(input *input.GameInput) {
 			p.actor.X = p.actor.X + p.actor.NSpd
 			p.actor.Y = p.actor.Y + p.actor.NSpd
 			if input.Fire == false {
-				p.actor.SetDirection(4)
+				p.actor.SetDirection(3)
 			}
 			isMoving = true
 		}
