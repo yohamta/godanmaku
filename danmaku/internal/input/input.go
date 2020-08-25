@@ -23,6 +23,7 @@ func New() *GameInput {
 
 // Update updates the input state
 func (i *GameInput) Update() {
+	// Adjust sensitivity for keyboard input
 	if time.Since(i.prevTickTime).Milliseconds() < 50 {
 		return
 	}
