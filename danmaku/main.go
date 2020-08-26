@@ -1,6 +1,8 @@
 package danmaku
 
 import (
+	"image/color"
+
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/input"
@@ -10,6 +12,7 @@ import (
 var (
 	myPlayer      *player.Player
 	myInput       *input.Input
+	myInputPanel  *input.Panel
 	screenWidth   = 240
 	screenHeight  = 320
 	isInitialized = false
@@ -24,11 +27,13 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if !isInitialized {
 		myPlayer = player.New()
 		myInput = input.New()
+		myInputPanel = input.NewPanel(screenWidth, screenHeight)
 		isInitialized = true
 		return nil
 	}
 
 	myInput.Update()
+	myInputPanel.UpdatePanel()
 	myPlayer.Update(myInput)
 
 	return nil
@@ -37,7 +42,9 @@ func (g *Game) Update(screen *ebiten.Image) error {
 // Draw draws the game screen.
 // Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
+	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
 	myPlayer.Draw(screen)
+	myInputPanel.DrawPanel(screen)
 }
 
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
