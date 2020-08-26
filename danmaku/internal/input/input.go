@@ -6,23 +6,27 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-// GameInput represents the state of user's input
-type GameInput struct {
+// Input represents the state of user's input
+type Input struct {
 	Horizontal   float64
 	Vertical     float64
 	Fire         bool
 	prevTickTime time.Time
 }
 
-// New creates new GameInput
-func New() *GameInput {
-	gameInput := &GameInput{}
+// New creates new Input
+func New() *Input {
+	gameInput := &Input{}
 	gameInput.prevTickTime = time.Now()
 	return gameInput
 }
 
 // Update updates the input state
-func (i *GameInput) Update() {
+func (i *Input) Update() {
+	i.takeKeyboardInput()
+}
+
+func (i *Input) takeKeyboardInput() {
 	// Adjust sensitivity for keyboard input
 	if time.Since(i.prevTickTime).Milliseconds() < 50 {
 		return

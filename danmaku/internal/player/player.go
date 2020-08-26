@@ -51,7 +51,7 @@ func (p *Player) Draw(screen *ebiten.Image) {
 }
 
 // Update updates the player's state
-func (p *Player) Update(input *input.GameInput) {
+func (p *Player) Update(input *input.Input) {
 	if input.Vertical != 0 {
 		p.vy = input.Vertical * p.actor.Speed
 		p.actor.Y = p.actor.Y + p.vy

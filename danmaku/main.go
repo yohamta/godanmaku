@@ -9,7 +9,7 @@ import (
 
 var (
 	myPlayer      *player.Player
-	myGameInput   *input.GameInput
+	myInput       *input.Input
 	screenWidth   = 240
 	screenHeight  = 320
 	isInitialized = false
@@ -23,13 +23,13 @@ type Game struct {
 func (g *Game) Update(screen *ebiten.Image) error {
 	if !isInitialized {
 		myPlayer = player.New()
-		myGameInput = input.New()
+		myInput = input.New()
 		isInitialized = true
 		return nil
 	}
 
-	myGameInput.Update()
-	myPlayer.Update(myGameInput)
+	myInput.Update()
+	myPlayer.Update(myInput)
 
 	return nil
 }
