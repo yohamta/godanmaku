@@ -15,8 +15,6 @@ const (
 
 // Panel represents virtual keyboard
 type Panel struct {
-	screenWidth  int
-	screenHeight int
 	panelSize    int
 	keySize      int
 	panelNum     int
@@ -27,11 +25,8 @@ type Panel struct {
 }
 
 // NewPanel returns Panel
-func NewPanel(screenWidth, screenHeight int) *Panel {
+func NewPanel() *Panel {
 	p := &Panel{}
-
-	p.screenWidth = screenWidth
-	p.screenHeight = screenHeight
 
 	// Prepare an offset image for Panel
 	p.keySize = 20
@@ -40,7 +35,7 @@ func NewPanel(screenWidth, screenHeight int) *Panel {
 
 	// color setting
 	p.color = color.RGBA{0, 0xff, 0, 0xff}
-	p.animateAlpha = -2
+	p.animateAlpha = -3
 	p.lastTickTime = time.Now()
 
 	p.preparePanel()
@@ -82,11 +77,11 @@ func (p *Panel) updateColor() {
 }
 
 // DrawPanel draws panel
-func (p *Panel) DrawPanel(screen *ebiten.Image) {
+func (p *Panel) DrawPanel(screen *ebiten.Image, x, y int) {
 	op := &ebiten.DrawImageOptions{}
 
 	// set position
-	op.GeoM.Translate(0, float64(p.screenHeight-p.panelSize))
+	op.GeoM.Translate(float64(x-p.panelSize/2), float64(y-p.panelSize/2))
 
 	// set color
 	c := p.color

@@ -45,7 +45,8 @@ func New() *Player {
 // Draw draws this sprite
 func (p *Player) Draw(screen *ebiten.Image) {
 	p.sprite.SetPosition(p.actor.X, p.actor.Y)
-	spriteIndex := int(float64(((p.actor.Deg+90)+360)%360) / 45)
+	adjust := 22.5
+	spriteIndex := int(float64(p.actor.Deg)+90.0+360.0+adjust) % 360 / 45
 	p.sprite.SetIndex(spriteIndex)
 	p.sprite.Draw(screen)
 }

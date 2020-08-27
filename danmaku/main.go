@@ -27,7 +27,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if !isInitialized {
 		myPlayer = player.New()
 		myInput = input.New()
-		myInputPanel = input.NewPanel(screenWidth, screenHeight)
+		myInputPanel = input.NewPanel()
 		isInitialized = true
 		return nil
 	}
@@ -44,7 +44,11 @@ func (g *Game) Update(screen *ebiten.Image) error {
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
 	myPlayer.Draw(screen)
-	myInputPanel.DrawPanel(screen)
+
+	if myInput.IsJoyStickUsing() {
+		joyStickX, joyStickY := myInput.GetJoyStickPosition()
+		myInputPanel.DrawPanel(screen, joyStickX, joyStickY)
+	}
 }
 
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
