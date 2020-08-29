@@ -39,8 +39,8 @@ func New(screenWidth, screenHeight int) *FireButton {
 		color.RGBA{0, 0xff, 0, 0x50},
 		color.RGBA{0, 0xcc, 0, 0x60})
 	fButton.onImage = initOffsetImage(
-		color.RGBA{0xff, 0, 0, 0x50},
-		color.RGBA{0xcc, 0, 0, 0x60})
+		color.RGBA{0xff, 0xff, 0, 0x50},
+		color.RGBA{0xcc, 0xcc, 0, 0x60})
 
 	return fButton
 }

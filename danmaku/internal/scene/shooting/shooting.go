@@ -33,7 +33,7 @@ func New(options NewOptions) *Shooting {
 	screenHeight = options.ScreenHeight
 
 	myPlayer = player.New()
-	myInput = input.New(screenWidth, screenHeight)
+	myInput = input.NewInput(screenWidth, screenHeight)
 
 	return shooting
 }

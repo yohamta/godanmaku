@@ -21,8 +21,8 @@ type Input struct {
 	fireButton   *firebutton.FireButton
 }
 
-// New creates new Input
-func New(screenWidth, screenHeight int) *Input {
+// NewInput creates new Input
+func NewInput(screenWidth, screenHeight int) *Input {
 	input := &Input{}
 	input.prevTickTime = time.Now()
 	input.joystick = joystick.New()
@@ -38,7 +38,6 @@ func (input *Input) Update() {
 		input.joystick.Update()
 		input.fireButton.Update()
 	} else {
-		input.fireButton.Update()
 		input.readKeyboardInput()
 	}
 }
@@ -48,7 +47,9 @@ func (input *Input) Draw(screen *ebiten.Image) {
 	if input.joystick.IsReadingTouch() {
 		input.joystick.Draw(screen)
 	}
-	input.fireButton.Draw(screen)
+	if touch.IsTouchPrimaryInput() {
+		input.fireButton.Draw(screen)
+	}
 }
 
 func (input *Input) readTouchInput() {
@@ -68,9 +69,11 @@ func (input *Input) readTouchInput() {
 		}
 	}
 
-	if fButton.IsPressing() {
+	isFire := fButton.IsPressing()
+	if isFire {
 		fButton.CheckIsTouchRelased()
 	}
+	input.Fire = isFire
 
 	if jStick.IsReadingTouch() {
 		if inpututil.IsTouchJustReleased(jStick.GetTouchID()) {
