@@ -6,13 +6,14 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/input"
+	"github.com/yohamta/godanmaku/danmaku/internal/input/panel"
 	"github.com/yohamta/godanmaku/danmaku/internal/player"
 )
 
 var (
 	myPlayer      *player.Player
 	myInput       *input.Input
-	myInputPanel  *input.Panel
+	myInputPanel  *panel.Panel
 	screenWidth   = 240
 	screenHeight  = 320
 	isInitialized = false
@@ -27,13 +28,13 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if !isInitialized {
 		myPlayer = player.New()
 		myInput = input.New()
-		myInputPanel = input.NewPanel()
+		myInputPanel = panel.New()
 		isInitialized = true
 		return nil
 	}
 
 	myInput.Update()
-	myInputPanel.UpdatePanel()
+	myInputPanel.Update()
 	myPlayer.Update(myInput)
 
 	return nil
@@ -47,7 +48,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	if myInput.IsJoyStickUsing() {
 		joyStickX, joyStickY := myInput.GetJoyStickPosition()
-		myInputPanel.DrawPanel(screen, joyStickX, joyStickY)
+		myInputPanel.Draw(screen, joyStickX, joyStickY)
 	}
 }
 

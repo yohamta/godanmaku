@@ -1,4 +1,4 @@
-package input
+package panel
 
 import (
 	"image/color"
@@ -24,8 +24,8 @@ type Panel struct {
 	lastTickTime time.Time
 }
 
-// NewPanel returns Panel
-func NewPanel() *Panel {
+// New returns Panel
+func New() *Panel {
 	p := &Panel{}
 
 	// Prepare an offset image for Panel
@@ -58,8 +58,8 @@ func (p *Panel) preparePanel() {
 	p.offsetImage = offsetImage
 }
 
-// UpdatePanel updates the state of the panel
-func (p *Panel) UpdatePanel() {
+// Update updates the state of the panel
+func (p *Panel) Update() {
 	p.updateColor()
 }
 
@@ -76,8 +76,8 @@ func (p *Panel) updateColor() {
 
 }
 
-// DrawPanel draws panel
-func (p *Panel) DrawPanel(screen *ebiten.Image, x, y int) {
+// Draw draws panel
+func (p *Panel) Draw(screen *ebiten.Image, x, y int) {
 	op := &ebiten.DrawImageOptions{}
 
 	// set position
