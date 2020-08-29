@@ -26,7 +26,6 @@ func NewInput(screenWidth, screenHeight int) *Input {
 	input := &Input{}
 	input.prevTickTime = time.Now()
 	input.joystick = joystick.New()
-	println("input New", screenWidth, screenHeight)
 	input.fireButton = firebutton.New(screenWidth, screenHeight)
 	return input
 }
