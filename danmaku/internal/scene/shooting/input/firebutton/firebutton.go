@@ -49,6 +49,7 @@ func initOffsetImage(bgClr, bdrClr color.RGBA) *ebiten.Image {
 	offImage, _ := ebiten.NewImage(width, height, ebiten.FilterDefault)
 	paint.FillRect(offImage, paint.Rect{X: 0, Y: 0, W: width, H: height}, bgClr)
 	paint.DrawRect(offImage, paint.Rect{X: 0, Y: 0, W: width, H: height}, bdrClr, 1)
+	paint.DrawText(offImage, "Attack", width/2-34, height/2+8, color.White, paint.FontSizeXLarge)
 	return offImage
 }
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 	"github.com/yohamta/godanmaku/danmaku/internal/scene"
 	"github.com/yohamta/godanmaku/danmaku/internal/scene/shooting"
 )
@@ -25,6 +26,7 @@ type Game struct {
 // Update updates a game by one tick. The given argument represents a screen image.
 func (g *Game) Update(screen *ebiten.Image) error {
 	if isWindowSizeSet && !isInitialized {
+		paint.LoadFonts()
 		currentScene = shooting.New(shooting.NewOptions(shooting.NewOptions{
 			ScreenWidth:  screenWidth,
 			ScreenHeight: screenHeight,
