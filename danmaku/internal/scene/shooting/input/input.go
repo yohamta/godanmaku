@@ -6,6 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/scene/shooting/input/firebutton"
 	"github.com/yohamta/godanmaku/danmaku/internal/touch"
 	"github.com/yohamta/godanmaku/danmaku/internal/ui/joystick"
 )
@@ -17,21 +18,23 @@ type Input struct {
 	Fire         bool
 	prevTickTime time.Time
 	joystick     *joystick.Joystick
+	fireButton   *firebutton.FireButton
 }
 
 // New creates new Input
 func New() *Input {
-	gameInput := &Input{}
-	gameInput.prevTickTime = time.Now()
-	gameInput.joystick = joystick.New()
-	return gameInput
+	input := &Input{}
+	input.prevTickTime = time.Now()
+	input.joystick = joystick.New()
+	input.fireButton = firebutton.New()
+	return input
 }
 
 // Update updates the input state
 func (input *Input) Update() {
 	if touch.IsTouchPrimaryInput() {
 		input.readTouchInput()
-		input.joystick.Update()
+		input.fireButton.Update()
 	} else {
 		input.readKeyboardInput()
 	}
@@ -42,27 +45,37 @@ func (input *Input) Draw(screen *ebiten.Image) {
 	if input.joystick.IsReadingTouch() {
 		input.joystick.Draw(screen)
 	}
+	input.fireButton.Draw(screen)
 }
 
 func (input *Input) readTouchInput() {
-
-	// touchIDs := ebiten.TouchIDs()
-
 	justPressedTouchIds := inpututil.JustPressedTouchIDs()
+	jStick := input.joystick
+	fButton := input.fireButton
 
 	if justPressedTouchIds != nil {
-		if input.joystick.IsReadingTouch() == false {
-			input.joystick.StartReadingTouch(justPressedTouchIds[0])
+		for i := 0; i < len(justPressedTouchIds); i++ {
+			touchID := justPressedTouchIds[i]
+			if fButton.HandleTouch(touchID) {
+				continue
+			}
+			if jStick.IsReadingTouch() == false {
+				jStick.StartReadingTouch(justPressedTouchIds[0])
+			}
 		}
 	}
 
-	if input.joystick.IsReadingTouch() {
-		if inpututil.IsTouchJustReleased(input.joystick.GetTouchID()) {
-			input.joystick.EndReadingTouch()
+	if fButton.IsPressing() {
+		fButton.CheckIsTouchRelased()
+	}
+
+	if jStick.IsReadingTouch() {
+		if inpututil.IsTouchJustReleased(jStick.GetTouchID()) {
+			jStick.EndReadingTouch()
 			input.Horizontal = 0
 			input.Vertical = 0
 		} else {
-			input.Horizontal, input.Vertical = input.joystick.ReadInput()
+			input.Horizontal, input.Vertical = jStick.ReadInput()
 		}
 	}
 }

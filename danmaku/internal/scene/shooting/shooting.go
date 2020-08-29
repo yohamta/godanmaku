@@ -17,8 +17,7 @@ var (
 )
 
 // Shooting represents shooting scene
-type Shooting struct {
-}
+type Shooting struct{}
 
 // NewOptions represents options for New func
 type NewOptions struct {
