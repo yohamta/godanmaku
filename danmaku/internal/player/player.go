@@ -8,7 +8,6 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/actor"
-	"github.com/yohamta/godanmaku/danmaku/internal/input"
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
@@ -51,21 +50,21 @@ func (p *Player) Draw(screen *ebiten.Image) {
 	p.sprite.Draw(screen)
 }
 
-// Update updates the player's state
-func (p *Player) Update(input *input.Input) {
-	if input.Vertical != 0 {
-		p.vy = input.Vertical * p.actor.Speed
+// Move moves player
+func (p *Player) Move(horizontal float64, vertical float64, isFire bool) {
+	if vertical != 0 {
+		p.vy = vertical * p.actor.Speed
 		p.actor.Y = p.actor.Y + p.vy
 	}
 
-	if input.Horizontal != 0 {
-		p.vx = input.Horizontal * p.actor.Speed
+	if horizontal != 0 {
+		p.vx = horizontal * p.actor.Speed
 		p.actor.X = p.actor.X + p.vx
 	}
 
-	if input.Vertical != 0 || input.Horizontal != 0 {
-		degree := int(math.Atan2(input.Vertical, input.Horizontal) * 180 / math.Pi)
-		if input.Fire == false {
+	if vertical != 0 || horizontal != 0 {
+		degree := int(math.Atan2(vertical, horizontal) * 180 / math.Pi)
+		if isFire == false {
 			p.actor.SetDeg(degree)
 		}
 	}
