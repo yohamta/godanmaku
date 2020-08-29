@@ -37,5 +37,6 @@ func (fButton *FireButton) Update() {
 func (fButton *FireButton) Draw(screen *ebiten.Image) {
 	x, y := fButton.GetPosition()
 	w, h := fButton.GetSize()
+	// TODO: use offset image for perfomance
 	paint.FillRect(screen, paint.Rect{X: x, Y: y, W: w, H: h}, fButton.color)
 }

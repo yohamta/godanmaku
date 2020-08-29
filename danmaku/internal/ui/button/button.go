@@ -45,6 +45,7 @@ func (button *Button) Draw(screen *ebiten.Image) {
 	y := button.position.y
 	w := button.size.w
 	h := button.size.h
+	// TODO: use offset image for perfomance
 	paint.DrawRect(screen, paint.Rect{X: x, Y: y, W: w, H: h}, color.RGBA{0, 0xff, 0, 0xff}, 1)
 }
 
