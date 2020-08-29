@@ -6,12 +6,29 @@ import (
 	"github.com/yohamta/godanmaku/danmaku"
 )
 
+type size struct {
+	width  int
+	height int
+}
+
+var (
+	window size
+	game   *danmaku.Game
+)
+
 func init() {
 	game, err := danmaku.NewGame()
 	if err != nil {
 		panic(err)
 	}
 	mobile.SetGame(game)
+}
+
+// SetWindowSize sets the window size
+func SetWindowSize(width, height int) {
+	window.width = width
+	window.height = height
+	game.SetWindowSize(width, height)
 }
 
 // dummy code for binding test

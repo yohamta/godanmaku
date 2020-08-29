@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	minAlphaTranslate         = 0xcc
-	joyStickRadius    float64 = 50
+	maxAlpha               = 0xcc
+	joyStickRadius float64 = 50
 )
 
 type position struct {
@@ -76,13 +76,12 @@ func (joystick *Joystick) updateColor() {
 	// animate the panel color
 	clr := joystick.color
 	a := clr.A
-	a = uint8(math.Min(math.Max(float64(a)+float64(joystick.animateAlpha), 0), minAlphaTranslate))
+	a = uint8(math.Min(math.Max(float64(a)+float64(joystick.animateAlpha), 0), maxAlpha))
 	clr.A = a
-	if a == minAlphaTranslate || a == 0 {
+	if a == maxAlpha || a == 0 {
 		joystick.animateAlpha *= -1
 	}
 	joystick.color = clr
-
 }
 
 // StartReadingTouch sets the touchID of this joystick read

@@ -29,8 +29,11 @@ type NewOptions struct {
 func New(options NewOptions) *Shooting {
 	shooting := &Shooting{}
 
+	screenWidth = options.ScreenWidth
+	screenHeight = options.ScreenHeight
+
 	myPlayer = player.New()
-	myInput = input.New()
+	myInput = input.New(screenWidth, screenHeight)
 
 	return shooting
 }
