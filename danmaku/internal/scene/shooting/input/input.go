@@ -34,6 +34,7 @@ func New() *Input {
 func (input *Input) Update() {
 	if touch.IsTouchPrimaryInput() {
 		input.readTouchInput()
+		input.joystick.Update()
 		input.fireButton.Update()
 	} else {
 		input.readKeyboardInput()
