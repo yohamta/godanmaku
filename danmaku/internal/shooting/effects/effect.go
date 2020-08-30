@@ -5,7 +5,6 @@ type Effect struct {
 	x        float64
 	y        float64
 	isActive bool
-	lifeSpan int
 }
 
 // IsActive returns if this is active

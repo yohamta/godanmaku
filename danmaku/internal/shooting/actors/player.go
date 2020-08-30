@@ -30,6 +30,7 @@ func NewPlayer() *Player {
 	p.height = playerHeight
 	p.setPosition(initPositionX, initPositionY)
 	p.setSpeed(initPlayerSpeed)
+	p.deg = 270
 
 	return p
 }

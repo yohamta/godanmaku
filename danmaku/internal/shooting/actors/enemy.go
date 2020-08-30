@@ -82,6 +82,11 @@ func (e *Enemy) IsActive() bool {
 	return e.isActive
 }
 
+// IsDead returns if this is active
+func (e *Enemy) IsDead() bool {
+	return e.life <= 0
+}
+
 func (e *Enemy) updateMoveTo() {
 	x, y := getRandomLocation()
 	e.moveTo.x = x
@@ -100,4 +105,7 @@ func getRandomLocation() (float64, float64) {
 // AddDamage adds damage to this enemy
 func (e *Enemy) AddDamage(damage int) {
 	e.life -= damage
+	if e.IsDead() {
+		e.isActive = false
+	}
 }

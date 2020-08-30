@@ -13,12 +13,13 @@ import (
 )
 
 var (
-	Background,
-	Player,
-	PlayerBullet,
-	Enemy1,
-	Enemy2,
-	Hit *Sprite
+	Background   *Sprite
+	Player       *Sprite
+	PlayerBullet *Sprite
+	Enemy1       *Sprite
+	Enemy2       *Sprite
+	Hit          *Sprite
+	Explosion    *Sprite
 )
 
 type frame struct {
@@ -96,7 +97,7 @@ func (s *Sprite) Index() int {
 
 // Length returns the length of the Sprite
 func (s *Sprite) Length() int {
-	return s.index
+	return s.length
 }
 
 // Draw draws this sprite
@@ -118,6 +119,7 @@ func LoadSprites() {
 	Enemy1 = createSprite(&images.ENEMY1, 8)
 	Enemy2 = createSprite(&images.ENEMY2, 1)
 	Hit = createSprite(&images.HIT, 1)
+	Explosion = createSprite(&images.EXPLODE1, 10)
 }
 
 func createSprite(rawImage *[]byte, frameNum int) *Sprite {

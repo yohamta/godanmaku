@@ -9,6 +9,7 @@ import (
 // Hit represents player of the game
 type Hit struct {
 	Effect
+	lifeSpan int
 }
 
 // NewHit returns initialized Hit

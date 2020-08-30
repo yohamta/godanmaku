@@ -19,7 +19,8 @@ import (
 const (
 	maxPlayerBulletsNum = 80
 	maxEnemyNum         = 50
-	maxHitEffects       = 50
+	maxHitEffects       = 30
+	maxExplosions       = 30
 )
 
 type gameState int
@@ -50,6 +51,7 @@ var (
 	playerShots [maxPlayerBulletsNum]*actors.PlayerBullet
 	enemies     [maxEnemyNum]*actors.Enemy
 	hitEffects  [maxHitEffects]*effects.Hit
+	explosions  [maxExplosions]*effects.Explosion
 
 	state gameState = gameStateLoading
 )
@@ -103,6 +105,9 @@ func initGame() {
 	for i := 0; i < len(hitEffects); i++ {
 		hitEffects[i] = effects.NewHit()
 	}
+	for i := 0; i < len(explosions); i++ {
+		explosions[i] = effects.NewExplosion()
+	}
 }
 
 // Update updates the scene
@@ -144,6 +149,15 @@ func (stg *Shooting) Update() {
 		}
 		h.Update()
 	}
+
+	// explosions
+	for i := 0; i < len(explosions); i++ {
+		e := explosions[i]
+		if e.IsActive() == false {
+			continue
+		}
+		e.Update()
+	}
 }
 
 // Draw draws the scene
@@ -172,6 +186,15 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 
 	player.Draw(screen)
 
+	// explosions
+	for i := 0; i < len(explosions); i++ {
+		e := explosions[i]
+		if e.IsActive() == false {
+			continue
+		}
+		e.Draw(screen)
+	}
+
 	// hitEffects
 	for i := 0; i < len(hitEffects); i++ {
 		h := hitEffects[i]
@@ -186,7 +209,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 }
 
 func initEnemies() {
-	enemyCount := 1
+	enemyCount := 20
 
 	for i := 0; i < enemyCount; i++ {
 		enemy := enemies[i]
@@ -212,6 +235,9 @@ func checkCollision() {
 			e.AddDamage(1)
 			p.SetInactive()
 			createHitEffect(p.GetX(), p.GetY())
+			if e.IsDead() {
+				createExplosion(e.GetX(), e.GetY())
+			}
 		}
 	}
 }
@@ -223,6 +249,17 @@ func createHitEffect(x, y int) {
 			continue
 		}
 		h.StartEffect(x, y)
+		break
+	}
+}
+
+func createExplosion(x, y int) {
+	for i := 0; i < len(explosions); i++ {
+		e := explosions[i]
+		if e.IsActive() {
+			continue
+		}
+		e.StartEffect(x, y)
 		break
 	}
 }
