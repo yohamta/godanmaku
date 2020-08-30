@@ -97,8 +97,8 @@ func (joystick *Joystick) ReadInput() (float64, float64) {
 	x, y := ebiten.TouchPosition(joystick.touchID)
 	dx := x - joystick.center.x
 	dy := y - joystick.center.y
-	horizontal := float64(dx) / joyStickRadius
-	vertical := float64(dy) / joyStickRadius
+	horizontal := math.Min(math.Max(float64(dx)/joyStickRadius, -1.0), 1.0)
+	vertical := math.Min(math.Max(float64(dy)/joyStickRadius, -1.0), 1.0)
 	return horizontal, vertical
 }
 
