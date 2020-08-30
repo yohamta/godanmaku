@@ -10,6 +10,8 @@ github.com/hajimehoshi/ebiten v1.11.7/go.mod h1:/cgFsE6vG9LItlxHpVqb33Pcw7DrJFOz
 github.com/hajimehoshi/go-mp3 v0.2.1/go.mod h1:Rr+2P46iH6PwTPVgSsEwBkon0CK5DxCAeX/Rp65DCTE=
 github.com/hajimehoshi/oto v0.3.4/go.mod h1:PgjqsBJff0efqL2nlMJidJgVJywLn6M4y8PI4TfeWfA=
 github.com/hajimehoshi/oto v0.6.3/go.mod h1:0QXGEkbuJRohbJaxr7ZQSxnju7hEhseiPx2hrh6raOI=
+github.com/hajimehoshi/wasmserve v0.0.0-20200812063057-947821f8a49c h1:QKZDQOILjjnB6bwUY2wktUjVFk5Nv47UXL/BFqnnLWM=
+github.com/hajimehoshi/wasmserve v0.0.0-20200812063057-947821f8a49c/go.mod h1:DI8IeyYdAkNS/K9JvLFBab7cmOkvoLCvMS9U8hLP2tw=
 github.com/jakecoffman/cp v0.1.0/go.mod h1:a3xPx9N8RyFAACD644t2dj/nK4SuLg1v+jL61m2yVo4=
 github.com/jfreymuth/oggvorbis v1.0.0/go.mod h1:abe6F9QRjuU9l+2jek3gj46lu40N4qlYxh2grqkLEDM=
 github.com/jfreymuth/vorbis v1.0.0/go.mod h1:8zy3lUAm9K/rJJk223RKy6vjCZTWC61NA2QD06bfOE0=
