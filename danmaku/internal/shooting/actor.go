@@ -2,6 +2,14 @@ package shooting
 
 import "math"
 
+// Boundary represents the boundary of the field the actor can move inside
+type Boundary interface {
+	GetLeft() int
+	GetTop() int
+	GetRight() int
+	GetBottom() int
+}
+
 // Actor represents the base of player, enemy, shots
 type Actor struct {
 	x      float64
@@ -25,6 +33,28 @@ func (a *Actor) setPosition(x, y float64) {
 
 func (a *Actor) setDeg(degree int) {
 	a.deg = degree
+}
+
+func (a *Actor) getCenter() (int, int) {
+	x := int(a.x)
+	y := int(a.y)
+	return x, y
+}
+
+func (a *Actor) isOutOfBoundary(boundary Boundary) bool {
+	if int(a.x)+a.width/2 < boundary.GetLeft() {
+		return true
+	}
+	if int(a.x)-a.width > boundary.GetRight() {
+		return true
+	}
+	if int(a.y)+a.height < boundary.GetTop() {
+		return true
+	}
+	if int(a.y)-a.height/2 > boundary.GetBottom() {
+		return true
+	}
+	return false
 }
 
 func degreeToDirectionIndex(degree int) int {

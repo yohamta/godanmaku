@@ -11,13 +11,13 @@ const (
 )
 
 var (
-	myInput      *Input
+	input        *Input
 	screenWidth  = 0
 	screenHeight = 0
 
-	// actors
-	myPlayer      *Player
-	playerBullets [maxPlayerBulletsNum]*PlayerBullet
+	field       *Field
+	player      *Player
+	playerShots [maxPlayerBulletsNum]*PlayerBullet
 )
 
 // Shooting represents shooting scene
@@ -36,12 +36,13 @@ func NewShooting(options NewShootingOptions) *Shooting {
 	screenWidth = options.ScreenWidth
 	screenHeight = options.ScreenHeight
 
-	myInput = NewInput(screenWidth, screenHeight)
+	input = NewInput(screenWidth, screenHeight)
+	field = NewField()
 
 	// init actors
-	myPlayer = NewPlayer()
+	player = NewPlayer()
 	for i := 0; i < maxPlayerBulletsNum; i++ {
-		playerBullets[i] = NewPlayerBullet()
+		playerShots[i] = NewPlayerShot()
 	}
 
 	return stg
@@ -49,14 +50,35 @@ func NewShooting(options NewShootingOptions) *Shooting {
 
 // Update updates the scene
 func (stg *Shooting) Update() {
-	myInput.update()
-	myPlayer.move(myInput.Horizontal, myInput.Vertical, myInput.Fire)
-	myPlayer.fire()
+	input.update()
+	player.move(input.Horizontal, input.Vertical, input.Fire, field)
+	if input.Fire {
+		player.weapon.shot()
+	}
+
+	for i := 0; i < len(playerShots); i++ {
+		p := playerShots[i]
+		if p.isActive == false {
+			continue
+		}
+		p.move(field)
+	}
 }
 
 // Draw draws the scene
 func (stg *Shooting) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
-	myPlayer.draw(screen)
-	myInput.draw(screen)
+
+	field.draw(screen)
+	player.draw(screen)
+	input.draw(screen)
+
+	for i := 0; i < len(playerShots); i++ {
+		p := playerShots[i]
+		if p.isActive == false {
+			continue
+		}
+		p.draw(screen)
+	}
+
 }

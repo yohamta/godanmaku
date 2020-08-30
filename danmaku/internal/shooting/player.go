@@ -12,11 +12,14 @@ const (
 	initPlayerSpeed = 2
 	initPositionX   = 120
 	initPositionY   = 160
+	playerWidth     = 10
+	playerHeight    = 10
 )
 
 // Player represents player of the game
 type Player struct {
 	Actor
+	weapon PlayerWeapon
 }
 
 // NewPlayer returns initialized Player
@@ -24,8 +27,12 @@ func NewPlayer() *Player {
 	actor := &Actor{}
 	p := &Player{Actor: *actor}
 
+	p.width = playerWidth
+	p.height = playerHeight
 	p.setPosition(initPositionX, initPositionY)
 	p.setSpeed(initPlayerSpeed)
+
+	p.weapon = &PlayerWeapon1{}
 
 	return p
 }
@@ -36,15 +43,19 @@ func (p *Player) draw(screen *ebiten.Image) {
 	sprite.Player.Draw(screen)
 }
 
-func (p *Player) move(horizontal float64, vertical float64, isFire bool) {
+func (p *Player) move(horizontal float64, vertical float64, isFire bool, boundary Boundary) {
 	if vertical != 0 {
 		p.vy = vertical * p.speed
 		p.y = p.y + p.vy
+		p.y = math.Max(float64(boundary.GetTop()+p.height/2), p.y)
+		p.y = math.Min(float64(boundary.GetBottom()-p.height/2), p.y)
 	}
 
 	if horizontal != 0 {
 		p.vx = horizontal * p.speed
 		p.x = p.x + p.vx
+		p.x = math.Max(float64(boundary.GetLeft()+p.width/2), p.x)
+		p.x = math.Min(float64(boundary.GetRight()-p.width/2), p.x)
 	}
 
 	if vertical != 0 || horizontal != 0 {
@@ -52,8 +63,4 @@ func (p *Player) move(horizontal float64, vertical float64, isFire bool) {
 			p.deg = radToDeg(math.Atan2(vertical, horizontal))
 		}
 	}
-}
-
-func (p *Player) fire() {
-	// TODO:
 }

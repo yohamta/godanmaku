@@ -6,17 +6,17 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/scenes"
+	"github.com/yohamta/godanmaku/danmaku/internal/scene"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 var (
-	currentScene    scenes.Scene = nil
-	screenWidth                  = 240
-	screenHeight                 = 320
-	isInitialized                = false
-	isWindowSizeSet              = false
+	currentScene    scene.Scene = nil
+	screenWidth                 = 240
+	screenHeight                = 320
+	isInitialized               = false
+	isWindowSizeSet             = false
 )
 
 // Game implements ebiten.Game interface.

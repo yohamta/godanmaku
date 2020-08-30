@@ -120,5 +120,5 @@ func LoadSprites() {
 
 func createSprite(rawImage *[]byte, frameNum int) *Sprite {
 	img, _, _ := image.Decode(bytes.NewReader(*rawImage))
-	return NewSprite(&img, 8)
+	return NewSprite(&img, frameNum)
 }
