@@ -26,8 +26,8 @@ const (
 	gameStatePlaying
 )
 
-// PlayerWeapon represents interface of Player Weapon
-type PlayerWeapon interface {
+// PlayerShooter represents interface of Player Weapon
+type PlayerShooter interface {
 	Shot(x, y float64, degree int, playerShots []*actors.PlayerBullet)
 }
 
@@ -42,7 +42,7 @@ var (
 	uiBackgroundColor = color.RGBA{0x20, 0x20, 0x40, 0xff}
 
 	player       *actors.Player
-	playerWeapon PlayerWeapon
+	playerWeapon PlayerShooter
 
 	playerShots [maxPlayerBulletsNum]*actors.PlayerBullet
 	enemies     [maxEnemyNum]*actors.Enemy
@@ -101,6 +101,8 @@ func initGame() {
 func (stg *Shooting) Update() {
 	input.Update()
 
+	checkCollision()
+
 	// player
 	player.Move(input.Horizontal, input.Vertical, input.Fire)
 	if input.Fire {
@@ -133,6 +135,15 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 
 	field.Draw(screen)
 
+	// player shots
+	for i := 0; i < len(playerShots); i++ {
+		p := playerShots[i]
+		if p.IsActive() == false {
+			continue
+		}
+		p.Draw(screen)
+	}
+
 	// enemies
 	for i := 0; i < len(enemies); i++ {
 		e := enemies[i]
@@ -143,15 +154,6 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	player.Draw(screen)
-
-	// player shots
-	for i := 0; i < len(playerShots); i++ {
-		p := playerShots[i]
-		if p.IsActive() == false {
-			continue
-		}
-		p.Draw(screen)
-	}
 
 	uiBackground.Draw(screen)
 	input.Draw(screen)
@@ -164,4 +166,26 @@ func initEnemies() {
 		enemy := enemies[i]
 		enemy.InitEnemy(actors.EnemyKindBall)
 	}
+}
+
+func checkCollision() {
+	// player shots
+	for i := 0; i < len(playerShots); i++ {
+		p := playerShots[i]
+		if p.IsActive() == false {
+			continue
+		}
+		for j := 0; j < len(enemies); j++ {
+			e := enemies[j]
+			if e.IsActive() == false {
+				continue
+			}
+			if actors.IsCollideWith(e, p) == false {
+				continue
+			}
+			e.AddDamage(1)
+			p.SetInactive()
+		}
+	}
+
 }

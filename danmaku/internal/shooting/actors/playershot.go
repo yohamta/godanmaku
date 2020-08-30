@@ -36,6 +36,11 @@ func (p *PlayerBullet) IsActive() bool {
 	return p.isActive
 }
 
+// SetInactive returns if the actor is active in bool
+func (p *PlayerBullet) SetInactive() {
+	p.isActive = false
+}
+
 // InitPlayerShot inits this
 func (p *PlayerBullet) InitPlayerShot(degree int, speed float64, x, y, size int) {
 	p.speed = speed
@@ -62,7 +67,7 @@ func (p *PlayerBullet) Draw(screen *ebiten.Image) {
 func (p *PlayerBullet) Move() {
 	p.x = p.x + p.vx
 	p.y = p.y + p.vy
-	if p.isOutOfBoundary(boundary) {
+	if p.isOutOfBoundary() {
 		p.isActive = false
 	}
 }

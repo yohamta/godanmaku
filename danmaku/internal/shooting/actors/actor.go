@@ -2,8 +2,8 @@ package actors
 
 import "math"
 
-// Boundary represents the boundary of the field the actor can move inside
-type Boundary interface {
+// Boundarizer represents the boundarizer of the field the actor can move inside
+type Boundarizer interface {
 	GetLeft() int
 	GetTop() int
 	GetRight() int
@@ -11,12 +11,12 @@ type Boundary interface {
 }
 
 var (
-	boundary Boundary
+	boundarizer Boundarizer
 )
 
-// SetBoundary sets the boundary of the field
-func SetBoundary(b Boundary) {
-	boundary = b
+// SetBoundary sets the boundarizer of the field
+func SetBoundary(b Boundarizer) {
+	boundarizer = b
 }
 
 type position struct {
@@ -60,20 +60,40 @@ func (a *Actor) GetNormalizedDegree() int {
 	return int((float64(((a.deg+360)%360))+adjust)/45) * 45
 }
 
-func (a *Actor) isOutOfBoundary(boundary Boundary) bool {
-	if int(a.x)+a.width/2 < boundary.GetLeft() {
+func (a *Actor) isOutOfBoundary() bool {
+	if int(a.x)+a.width/2 < boundarizer.GetLeft() {
 		return true
 	}
-	if int(a.x)-a.width > boundary.GetRight() {
+	if int(a.x)-a.width > boundarizer.GetRight() {
 		return true
 	}
-	if int(a.y)+a.height < boundary.GetTop() {
+	if int(a.y)+a.height < boundarizer.GetTop() {
 		return true
 	}
-	if int(a.y)-a.height/2 > boundary.GetBottom() {
+	if int(a.y)-a.height/2 > boundarizer.GetBottom() {
 		return true
 	}
 	return false
+}
+
+// GetX returns x
+func (a *Actor) GetX() int {
+	return int(a.x)
+}
+
+// GetY returns y
+func (a *Actor) GetY() int {
+	return int(a.y)
+}
+
+// GetWidth returns width
+func (a *Actor) GetWidth() int {
+	return a.width
+}
+
+// GetHeight returns height
+func (a *Actor) GetHeight() int {
+	return a.height
 }
 
 func degreeToDirectionIndex(degree int) int {
@@ -89,7 +109,18 @@ func degToRad(degree int) float64 {
 	return float64(degree) * math.Pi / 180
 }
 
-// Weapon represents weapon
-type Weapon interface {
-	shot(x, y, degree int)
+// Collider represents collidable struct
+type Collider interface {
+	GetX() int
+	GetY() int
+	GetWidth() int
+	GetHeight() int
+}
+
+// IsCollideWith returns if it collides with another actor
+func IsCollideWith(c1 Collider, c2 Collider) bool {
+	return c1.GetX() <= c2.GetX()+c2.GetWidth() &&
+		c2.GetX() <= c1.GetX()+c1.GetWidth() &&
+		c1.GetY() <= c2.GetY()+c2.GetHeight() &&
+		c2.GetY() <= c1.GetY()+c1.GetHeight()
 }

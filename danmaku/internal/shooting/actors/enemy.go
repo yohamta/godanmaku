@@ -35,7 +35,7 @@ func NewEnemy() *Enemy {
 
 // InitEnemy inits the enemy
 func (e *Enemy) InitEnemy(kind EnemyKind) {
-	fieldWidth := boundary.GetRight() - boundary.GetLeft()
+	fieldWidth := boundarizer.GetRight() - boundarizer.GetLeft()
 	switch kind {
 	case EnemyKindBall:
 		e.width = 8
@@ -92,7 +92,12 @@ func (e *Enemy) updateMoveTo() {
 }
 
 func getRandomLocation() (float64, float64) {
-	x := float64(boundary.GetRight()-boundary.GetLeft()) * rand.Float64()
-	y := float64(boundary.GetBottom()-boundary.GetTop()) * rand.Float64()
+	x := float64(boundarizer.GetRight()-boundarizer.GetLeft()) * rand.Float64()
+	y := float64(boundarizer.GetBottom()-boundarizer.GetTop()) * rand.Float64()
 	return x, y
+}
+
+// AddDamage adds damage to this enemy
+func (e *Enemy) AddDamage(damage int) {
+	e.life -= damage
 }

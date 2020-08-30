@@ -46,15 +46,15 @@ func (p *Player) Move(horizontal float64, vertical float64, isFire bool) {
 	if vertical != 0 {
 		p.vy = vertical * p.speed
 		p.y = p.y + p.vy
-		p.y = math.Max(float64(boundary.GetTop()+p.height/2), p.y)
-		p.y = math.Min(float64(boundary.GetBottom()-p.height/2), p.y)
+		p.y = math.Max(float64(boundarizer.GetTop()+p.height/2), p.y)
+		p.y = math.Min(float64(boundarizer.GetBottom()-p.height/2), p.y)
 	}
 
 	if horizontal != 0 {
 		p.vx = horizontal * p.speed
 		p.x = p.x + p.vx
-		p.x = math.Max(float64(boundary.GetLeft()+p.width/2), p.x)
-		p.x = math.Min(float64(boundary.GetRight()-p.width/2), p.x)
+		p.x = math.Max(float64(boundarizer.GetLeft()+p.width/2), p.x)
+		p.x = math.Min(float64(boundarizer.GetRight()-p.width/2), p.x)
 	}
 
 	if vertical != 0 || horizontal != 0 {
