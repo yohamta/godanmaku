@@ -66,7 +66,7 @@ func (stg *Shooting) Update() {
 	player.Move(input.Horizontal, input.Vertical, input.Fire, field)
 	if input.Fire {
 		x, y := player.GetPosition()
-		playerWeapon.Shot(x, y, player.GetDeg(), playerShots[:])
+		playerWeapon.Shot(x, y, player.GetNormalizedDegree(), playerShots[:])
 	}
 
 	for i := 0; i < len(playerShots); i++ {
