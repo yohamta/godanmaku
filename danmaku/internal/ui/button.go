@@ -1,12 +1,8 @@
 package ui
 
 import (
-	"image/color"
-
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 
 // Button represents button
@@ -31,12 +27,7 @@ func NewButton(x, y, w, h int) *Button {
 // Draw draws button to the screen
 // This method should be overrided by other struct
 func (button *Button) Draw(screen *ebiten.Image) {
-	x := button.position.x
-	y := button.position.y
-	w := button.size.w
-	h := button.size.h
-	// TODO: use offset image for perfomance
-	paint.DrawRect(screen, paint.Rect{X: x, Y: y, W: w, H: h}, color.RGBA{0, 0xff, 0, 0xff}, 1)
+	// To be implemented by other struct
 }
 
 // Update updates the state of the button
