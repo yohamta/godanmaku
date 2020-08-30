@@ -62,11 +62,13 @@ func (fButton *FireButton) updateColor() {
 	fButton.alpha = a
 }
 
-func (fButton *FireButton) update() {
+// Update updates the button
+func (fButton *FireButton) Update() {
 	fButton.updateColor()
 }
 
-func (fButton *FireButton) draw(screen *ebiten.Image) {
+// Draw draws the button
+func (fButton *FireButton) Draw(screen *ebiten.Image) {
 	x, y := fButton.GetPosition()
 
 	op := &ebiten.DrawImageOptions{}
