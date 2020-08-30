@@ -1,2 +1,2 @@
-# Example game using ebiten and Golang
+# Example simple game using ebiten and Golang
 
