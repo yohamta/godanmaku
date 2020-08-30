@@ -2,6 +2,8 @@ package shooting
 
 import (
 	"image/color"
+	"math/rand"
+	"time"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
@@ -14,6 +16,7 @@ import (
 
 const (
 	maxPlayerBulletsNum = 80
+	maxEnemyNum         = 50
 )
 
 type gameState int
@@ -42,6 +45,7 @@ var (
 	playerWeapon PlayerWeapon
 
 	playerShots [maxPlayerBulletsNum]*actors.PlayerBullet
+	enemies     [maxEnemyNum]*actors.Enemy
 
 	state gameState = gameStateLoading
 )
@@ -71,35 +75,55 @@ func NewShooting(options NewShootingOptions) *Shooting {
 }
 
 func initGame() {
+	rand.Seed(time.Now().Unix())
 	input = inputs.NewInput(screenWidth, screenHeight)
 	field = fields.NewField()
 	uiBackground = ui.NewBox(0, field.GetBottom(),
 		screenWidth, screenHeight-(field.GetBottom()-field.GetTop()),
 		uiBackgroundColor)
 
+	actors.SetBoundary(field)
 	player = actors.NewPlayer()
 	for i := 0; i < maxPlayerBulletsNum; i++ {
 		playerShots[i] = actors.NewPlayerShot()
 	}
 
+	for i := 0; i < maxEnemyNum; i++ {
+		enemies[i] = actors.NewEnemy()
+	}
+
 	playerWeapon = &weapons.PlayerWeapon1{}
+
+	initEnemies()
 }
 
 // Update updates the scene
 func (stg *Shooting) Update() {
 	input.Update()
-	player.Move(input.Horizontal, input.Vertical, input.Fire, field)
+
+	// player
+	player.Move(input.Horizontal, input.Vertical, input.Fire)
 	if input.Fire {
 		x, y := player.GetPosition()
 		playerWeapon.Shot(x, y, player.GetNormalizedDegree(), playerShots[:])
 	}
 
+	// player shots
 	for i := 0; i < len(playerShots); i++ {
 		p := playerShots[i]
 		if p.IsActive() == false {
 			continue
 		}
-		p.Move(field)
+		p.Move()
+	}
+
+	// enemies
+	for i := 0; i < len(enemies); i++ {
+		e := enemies[i]
+		if e.IsActive() == false {
+			continue
+		}
+		e.Move(player)
 	}
 }
 
@@ -108,8 +132,19 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
 
 	field.Draw(screen)
+
+	// enemies
+	for i := 0; i < len(enemies); i++ {
+		e := enemies[i]
+		if e.IsActive() == false {
+			continue
+		}
+		e.Draw(screen)
+	}
+
 	player.Draw(screen)
 
+	// player shots
 	for i := 0; i < len(playerShots); i++ {
 		p := playerShots[i]
 		if p.IsActive() == false {
@@ -120,4 +155,13 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 
 	uiBackground.Draw(screen)
 	input.Draw(screen)
+}
+
+func initEnemies() {
+	enemyCount := 1
+
+	for i := 0; i < enemyCount; i++ {
+		enemy := enemies[i]
+		enemy.InitEnemy(actors.EnemyKindBall)
+	}
 }

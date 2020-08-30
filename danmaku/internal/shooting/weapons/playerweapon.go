@@ -8,7 +8,7 @@ import (
 
 const (
 	weapon1ReloadTimeMs = 350
-	weapon1Speed        = 8
+	weapon1Speed        = 2.56
 	weapon1Size         = 4
 )
 
@@ -29,7 +29,7 @@ func (w *PlayerWeapon1) Shot(x, y float64, degree int, playerShots []*actors.Pla
 		if s.IsActive() {
 			continue
 		}
-		s.Init(degree, weapon1Speed, int(x), int(y), weapon1Size)
+		s.InitPlayerShot(degree, weapon1Speed, int(x), int(y), weapon1Size)
 		break
 	}
 

@@ -42,7 +42,7 @@ func (p *Player) Draw(screen *ebiten.Image) {
 }
 
 // Move moves the player
-func (p *Player) Move(horizontal float64, vertical float64, isFire bool, boundary Boundary) {
+func (p *Player) Move(horizontal float64, vertical float64, isFire bool) {
 	if vertical != 0 {
 		p.vy = vertical * p.speed
 		p.y = p.y + p.vy

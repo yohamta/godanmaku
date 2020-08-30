@@ -10,6 +10,19 @@ type Boundary interface {
 	GetBottom() int
 }
 
+var (
+	boundary Boundary
+)
+
+// SetBoundary sets the boundary of the field
+func SetBoundary(b Boundary) {
+	boundary = b
+}
+
+type position struct {
+	x, y float64
+}
+
 // Actor represents the base of player, enemy, shots
 type Actor struct {
 	x      float64
@@ -34,10 +47,6 @@ func (a *Actor) setPosition(x, y float64) {
 // GetPosition returns the position in (x, y)
 func (a *Actor) GetPosition() (float64, float64) {
 	return a.x, a.y
-}
-
-func (a *Actor) setDeg(degree int) {
-	a.deg = degree
 }
 
 // GetDeg returns the degree of the actor

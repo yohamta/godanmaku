@@ -36,8 +36,8 @@ func (p *PlayerBullet) IsActive() bool {
 	return p.isActive
 }
 
-// Init inits this
-func (p *PlayerBullet) Init(degree int, speed float64, x, y, size int) {
+// InitPlayerShot inits this
+func (p *PlayerBullet) InitPlayerShot(degree int, speed float64, x, y, size int) {
 	p.speed = speed
 	p.vx = math.Cos(degToRad(degree)) * speed
 	p.vy = math.Sin(degToRad(degree)) * speed
@@ -59,7 +59,7 @@ func (p *PlayerBullet) Draw(screen *ebiten.Image) {
 }
 
 // Move moves this
-func (p *PlayerBullet) Move(boundary Boundary) {
+func (p *PlayerBullet) Move() {
 	p.x = p.x + p.vx
 	p.y = p.y + p.vy
 	if p.isOutOfBoundary(boundary) {
