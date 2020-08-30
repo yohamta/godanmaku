@@ -3,6 +3,8 @@ package shooting
 import (
 	"image/color"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooting/actors"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooting/fields"
@@ -14,24 +16,39 @@ const (
 	maxPlayerBulletsNum = 80
 )
 
+type gameState int
+
+const (
+	gameStateLoading gameState = iota
+	gameStatePlaying
+)
+
 // PlayerWeapon represents interface of Player Weapon
 type PlayerWeapon interface {
 	Shot(x, y float64, degree int, playerShots []*actors.PlayerBullet)
 }
 
 var (
-	input        *inputs.Input
 	screenWidth  = 0
 	screenHeight = 0
 
-	field        *fields.Field
+	input *inputs.Input
+	field *fields.Field
+
+	uiBackground      *ui.Box
+	uiBackgroundColor = color.RGBA{0x20, 0x20, 0x40, 0xff}
+
 	player       *actors.Player
-	playerShots  [maxPlayerBulletsNum]*actors.PlayerBullet
 	playerWeapon PlayerWeapon
+
+	playerShots [maxPlayerBulletsNum]*actors.PlayerBullet
+
+	state gameState = gameStateLoading
 )
 
 // Shooting represents shooting scene
-type Shooting struct{}
+type Shooting struct {
+}
 
 // NewShootingOptions represents options for New func
 type NewShootingOptions struct {
@@ -46,18 +63,26 @@ func NewShooting(options NewShootingOptions) *Shooting {
 	screenWidth = options.ScreenWidth
 	screenHeight = options.ScreenHeight
 
+	state = gameStateLoading
+	initGame()
+	state = gameStatePlaying
+
+	return stg
+}
+
+func initGame() {
 	input = inputs.NewInput(screenWidth, screenHeight)
 	field = fields.NewField()
+	uiBackground = ui.NewBox(0, field.GetBottom(),
+		screenWidth, screenHeight-(field.GetBottom()-field.GetTop()),
+		uiBackgroundColor)
 
-	// init actors
 	player = actors.NewPlayer()
 	for i := 0; i < maxPlayerBulletsNum; i++ {
 		playerShots[i] = actors.NewPlayerShot()
 	}
 
 	playerWeapon = &weapons.PlayerWeapon1{}
-
-	return stg
 }
 
 // Update updates the scene
@@ -84,7 +109,6 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 
 	field.Draw(screen)
 	player.Draw(screen)
-	input.Draw(screen)
 
 	for i := 0; i < len(playerShots); i++ {
 		p := playerShots[i]
@@ -94,4 +118,6 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 		p.Draw(screen)
 	}
 
+	uiBackground.Draw(screen)
+	input.Draw(screen)
 }

@@ -24,18 +24,6 @@ func NewButton(x, y, w, h int) *Button {
 	return button
 }
 
-// Draw draws button to the screen
-// This method should be overrided by other struct
-func (button *Button) Draw(screen *ebiten.Image) {
-	// To be implemented by other struct
-}
-
-// Update updates the state of the button
-// This method should be overrided by expansion struct
-func (button *Button) Update() {
-	// To be implemented by other struct
-}
-
 // HandleTouch handle the touch and returns if it is handled or not
 func (button *Button) HandleTouch(touchID int) bool {
 	if button.isPressing {
