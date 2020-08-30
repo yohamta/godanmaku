@@ -3,6 +3,7 @@ package sprite
 import (
 	"bytes"
 	"image"
+	"math/rand"
 
 	// import for side effect
 	_ "image/png"
@@ -20,6 +21,7 @@ var (
 	Enemy2       *Sprite
 	Hit          *Sprite
 	Explosion    *Sprite
+	EnemyShots   []*Sprite
 )
 
 type frame struct {
@@ -120,9 +122,24 @@ func LoadSprites() {
 	Enemy2 = createSprite(&images.ENEMY2, 1)
 	Hit = createSprite(&images.HIT, 1)
 	Explosion = createSprite(&images.EXPLODE1, 10)
+
+	addEnemyShotSprite(createSprite(&images.SHOT1, 1))
+	addEnemyShotSprite(createSprite(&images.SHOT3, 1))
+	addEnemyShotSprite(createSprite(&images.SHOT4, 1))
+	addEnemyShotSprite(createSprite(&images.SHOT5, 1))
+	addEnemyShotSprite(createSprite(&images.SHOT6, 1))
+}
+
+// RandomEnemyShot returns random sprite for enemy shots
+func RandomEnemyShot() *Sprite {
+	return EnemyShots[int(rand.Float64()*float64(len(EnemyShots)))]
 }
 
 func createSprite(rawImage *[]byte, frameNum int) *Sprite {
 	img, _, _ := image.Decode(bytes.NewReader(*rawImage))
 	return NewSprite(&img, frameNum)
+}
+
+func addEnemyShotSprite(s *Sprite) {
+	EnemyShots = append(EnemyShots, s)
 }

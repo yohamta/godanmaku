@@ -8,42 +8,37 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
-var (
-	sharedSprite *sprite.Sprite = nil
-)
-
-// PlayerBullet represents player's bullet
-type PlayerBullet struct {
+// PlayerShot represents player's bullet
+type PlayerShot struct {
 	Actor
 	spriteIndex int
 	isActive    bool
 }
 
 // NewPlayerShot returns initialized struct
-func NewPlayerShot() *PlayerBullet {
+func NewPlayerShot() *PlayerShot {
 	actor := &Actor{}
-	p := &PlayerBullet{Actor: *actor}
+	p := &PlayerShot{Actor: *actor}
 	p.isActive = false
-
-	p.setPosition(120, 160)
-	p.setSpeed(initPlayerSpeed)
 
 	return p
 }
 
 // IsActive returns if the actor is active in bool
-func (p *PlayerBullet) IsActive() bool {
+func (p *PlayerShot) IsActive() bool {
 	return p.isActive
 }
 
 // SetInactive returns if the actor is active in bool
-func (p *PlayerBullet) SetInactive() {
+func (p *PlayerShot) SetInactive() {
 	p.isActive = false
 }
 
-// InitPlayerShot inits this
-func (p *PlayerBullet) InitPlayerShot(degree int, speed float64, x, y, size int) {
+// Init inits this
+func (p *PlayerShot) Init(degree int, speed float64, x, y, size int) {
 	p.speed = speed
+	p.deg = degree
+
 	p.vx = math.Cos(degToRad(degree)) * speed
 	p.vy = math.Sin(degToRad(degree)) * speed
 	p.spriteIndex = degreeToDirectionIndex(degree)
@@ -57,14 +52,14 @@ func (p *PlayerBullet) InitPlayerShot(degree int, speed float64, x, y, size int)
 }
 
 // Draw draws this
-func (p *PlayerBullet) Draw(screen *ebiten.Image) {
+func (p *PlayerShot) Draw(screen *ebiten.Image) {
 	sprite.PlayerBullet.SetPosition(p.x, p.y)
 	sprite.PlayerBullet.SetIndex(p.spriteIndex)
 	sprite.PlayerBullet.Draw(screen)
 }
 
 // Move moves this
-func (p *PlayerBullet) Move() {
+func (p *PlayerShot) Move() {
 	p.x = p.x + p.vx
 	p.y = p.y + p.vy
 	if p.isOutOfBoundary() {

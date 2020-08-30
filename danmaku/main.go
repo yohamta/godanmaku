@@ -6,23 +6,28 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/scene"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
-)
-
-var (
-	currentScene    scene.Scene = nil
-	screenWidth                 = 240
-	screenHeight                = 320
-	isInitialized               = false
-	isWindowSizeSet             = false
 )
 
 // Game implements ebiten.Game interface.
 type Game struct {
 	lcnt int
 }
+
+// Scene represents scene interface
+type Scene interface {
+	Update()
+	Draw(screen *ebiten.Image)
+}
+
+var (
+	currentScene    Scene = nil
+	screenWidth           = 240
+	screenHeight          = 320
+	isInitialized         = false
+	isWindowSizeSet       = false
+)
 
 // Update updates a game by one tick. The given argument represents a screen image.
 func (g *Game) Update(screen *ebiten.Image) error {

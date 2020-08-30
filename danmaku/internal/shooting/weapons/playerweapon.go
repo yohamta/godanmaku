@@ -18,7 +18,7 @@ type PlayerWeapon1 struct {
 }
 
 // Shot create shots
-func (w *PlayerWeapon1) Shot(x, y float64, degree int, playerShots []*actors.PlayerBullet) {
+func (w *PlayerWeapon1) Shot(x, y float64, degree int, playerShots []*actors.PlayerShot) {
 	if time.Since(w.lastShotTime).Milliseconds() < weapon1ReloadTimeMs {
 		return
 	}
@@ -29,7 +29,7 @@ func (w *PlayerWeapon1) Shot(x, y float64, degree int, playerShots []*actors.Pla
 		if s.IsActive() {
 			continue
 		}
-		s.InitPlayerShot(degree, weapon1Speed, int(x), int(y), weapon1Size)
+		s.Init(degree, weapon1Speed, int(x), int(y), weapon1Size)
 		break
 	}
 

@@ -17,10 +17,11 @@ import (
 )
 
 const (
-	maxPlayerBulletsNum = 80
-	maxEnemyNum         = 50
-	maxHitEffects       = 30
-	maxExplosions       = 30
+	maxPlayerShot = 80
+	maxEnemyShot  = 70
+	maxEnemy      = 50
+	maxHitEffects = 30
+	maxExplosions = 30
 )
 
 type gameState int
@@ -32,7 +33,7 @@ const (
 
 // PlayerShooter represents interface of Player Weapon
 type PlayerShooter interface {
-	Shot(x, y float64, degree int, playerShots []*actors.PlayerBullet)
+	Shot(x, y float64, degree int, playerShots []*actors.PlayerShot)
 }
 
 var (
@@ -48,8 +49,9 @@ var (
 	player       *actors.Player
 	playerWeapon PlayerShooter
 
-	playerShots [maxPlayerBulletsNum]*actors.PlayerBullet
-	enemies     [maxEnemyNum]*actors.Enemy
+	playerShots [maxPlayerShot]*actors.PlayerShot
+	enemyShots  [maxEnemyShot]*actors.EnemyShot
+	enemies     [maxEnemy]*actors.Enemy
 	hitEffects  [maxHitEffects]*effects.Hit
 	explosions  [maxExplosions]*effects.Explosion
 
@@ -88,18 +90,26 @@ func initGame() {
 		screenWidth, screenHeight-(field.GetBottom()-field.GetTop()),
 		uiBackgroundColor)
 
-	// actors
 	actors.SetBoundary(field)
+
+	// player
 	player = actors.NewPlayer()
-	for i := 0; i < len(playerShots); i++ {
-		playerShots[i] = actors.NewPlayerShot()
-	}
+	playerWeapon = &weapons.PlayerWeapon1{}
+
+	// enemies
 	for i := 0; i < len(enemies); i++ {
 		enemies[i] = actors.NewEnemy()
 	}
-	playerWeapon = &weapons.PlayerWeapon1{}
 
-	initEnemies()
+	// shots
+	for i := 0; i < len(playerShots); i++ {
+		playerShots[i] = actors.NewPlayerShot()
+	}
+
+	// enemyShots
+	for i := 0; i < len(enemyShots); i++ {
+		enemyShots[i] = actors.NewEnemyShot()
+	}
 
 	// effects
 	for i := 0; i < len(hitEffects); i++ {
@@ -108,6 +118,9 @@ func initGame() {
 	for i := 0; i < len(explosions); i++ {
 		explosions[i] = effects.NewExplosion()
 	}
+
+	// Setup stage
+	initEnemies()
 }
 
 // Update updates the scene
@@ -132,6 +145,15 @@ func (stg *Shooting) Update() {
 		p.Move()
 	}
 
+	// enemy shots
+	for i := 0; i < len(enemyShots); i++ {
+		e := enemyShots[i]
+		if e.IsActive() == false {
+			continue
+		}
+		e.Move()
+	}
+
 	// enemies
 	for i := 0; i < len(enemies); i++ {
 		e := enemies[i]
@@ -139,6 +161,9 @@ func (stg *Shooting) Update() {
 			continue
 		}
 		e.Move(player)
+		if e.ShouldAttack() {
+			weapons.EnemyAttack(e, player, enemyShots[:])
+		}
 	}
 
 	// hitEffects
@@ -173,6 +198,15 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 			continue
 		}
 		p.Draw(screen)
+	}
+
+	// enemy shots
+	for i := 0; i < len(enemyShots); i++ {
+		e := enemyShots[i]
+		if e.IsActive() == false {
+			continue
+		}
+		e.Draw(screen)
 	}
 
 	// enemies
@@ -213,7 +247,7 @@ func initEnemies() {
 
 	for i := 0; i < enemyCount; i++ {
 		enemy := enemies[i]
-		enemy.InitEnemy(actors.EnemyKindBall)
+		enemy.Init(actors.EnemyKindBall)
 	}
 }
 

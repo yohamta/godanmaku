@@ -19,10 +19,11 @@ const (
 // Enemy represents enemy of the game
 type Enemy struct {
 	Actor
-	moveTo   position
-	isActive bool
-	life     int
-	point    int
+	moveTo            position
+	isActive          bool
+	life              int
+	point             int
+	attackProbability float64
 }
 
 // NewEnemy returns initialized Enemy
@@ -33,8 +34,8 @@ func NewEnemy() *Enemy {
 	return e
 }
 
-// InitEnemy inits the enemy
-func (e *Enemy) InitEnemy(kind EnemyKind) {
+// Init inits the enemy
+func (e *Enemy) Init(kind EnemyKind) {
 	fieldWidth := boundarizer.GetRight() - boundarizer.GetLeft()
 	switch kind {
 	case EnemyKindBall:
@@ -48,6 +49,7 @@ func (e *Enemy) InitEnemy(kind EnemyKind) {
 		e.life = 1
 		e.point = 100
 		e.isActive = true
+		e.attackProbability = 0.008
 		e.updateMoveTo()
 	}
 }
@@ -85,6 +87,11 @@ func (e *Enemy) IsActive() bool {
 // IsDead returns if this is active
 func (e *Enemy) IsDead() bool {
 	return e.life <= 0
+}
+
+// ShouldAttack returns if thie enemy does attack
+func (e *Enemy) ShouldAttack() bool {
+	return rand.Float64() < e.attackProbability
 }
 
 func (e *Enemy) updateMoveTo() {
