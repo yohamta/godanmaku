@@ -17,7 +17,8 @@ var (
 	Player,
 	PlayerBullet,
 	Enemy1,
-	Enemy2 *Sprite
+	Enemy2,
+	Hit *Sprite
 )
 
 type frame struct {
@@ -116,6 +117,7 @@ func LoadSprites() {
 	PlayerBullet = createSprite(&images.SHOT2, 8)
 	Enemy1 = createSprite(&images.ENEMY1, 8)
 	Enemy2 = createSprite(&images.ENEMY2, 1)
+	Hit = createSprite(&images.HIT, 1)
 }
 
 func createSprite(rawImage *[]byte, frameNum int) *Sprite {

@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/shooting/effects"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
 	"github.com/hajimehoshi/ebiten"
@@ -17,6 +19,7 @@ import (
 const (
 	maxPlayerBulletsNum = 80
 	maxEnemyNum         = 50
+	maxHitEffects       = 50
 )
 
 type gameState int
@@ -46,6 +49,7 @@ var (
 
 	playerShots [maxPlayerBulletsNum]*actors.PlayerBullet
 	enemies     [maxEnemyNum]*actors.Enemy
+	hitEffects  [maxHitEffects]*effects.Hit
 
 	state gameState = gameStateLoading
 )
@@ -82,19 +86,23 @@ func initGame() {
 		screenWidth, screenHeight-(field.GetBottom()-field.GetTop()),
 		uiBackgroundColor)
 
+	// actors
 	actors.SetBoundary(field)
 	player = actors.NewPlayer()
-	for i := 0; i < maxPlayerBulletsNum; i++ {
+	for i := 0; i < len(playerShots); i++ {
 		playerShots[i] = actors.NewPlayerShot()
 	}
-
-	for i := 0; i < maxEnemyNum; i++ {
+	for i := 0; i < len(enemies); i++ {
 		enemies[i] = actors.NewEnemy()
 	}
-
 	playerWeapon = &weapons.PlayerWeapon1{}
 
 	initEnemies()
+
+	// effects
+	for i := 0; i < len(hitEffects); i++ {
+		hitEffects[i] = effects.NewHit()
+	}
 }
 
 // Update updates the scene
@@ -127,6 +135,15 @@ func (stg *Shooting) Update() {
 		}
 		e.Move(player)
 	}
+
+	// hitEffects
+	for i := 0; i < len(hitEffects); i++ {
+		h := hitEffects[i]
+		if h.IsActive() == false {
+			continue
+		}
+		h.Update()
+	}
 }
 
 // Draw draws the scene
@@ -154,6 +171,15 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	player.Draw(screen)
+
+	// hitEffects
+	for i := 0; i < len(hitEffects); i++ {
+		h := hitEffects[i]
+		if h.IsActive() == false {
+			continue
+		}
+		h.Draw(screen)
+	}
 
 	uiBackground.Draw(screen)
 	input.Draw(screen)
@@ -185,7 +211,18 @@ func checkCollision() {
 			}
 			e.AddDamage(1)
 			p.SetInactive()
+			createHitEffect(p.GetX(), p.GetY())
 		}
 	}
+}
 
+func createHitEffect(x, y int) {
+	for i := 0; i < len(hitEffects); i++ {
+		h := hitEffects[i]
+		if h.IsActive() {
+			continue
+		}
+		h.StartEffect(x, y)
+		break
+	}
 }
