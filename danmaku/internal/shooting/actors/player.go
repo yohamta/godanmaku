@@ -1,4 +1,4 @@
-package shooting
+package actors
 
 import (
 	"math"
@@ -19,7 +19,6 @@ const (
 // Player represents player of the game
 type Player struct {
 	Actor
-	weapon PlayerWeapon
 }
 
 // NewPlayer returns initialized Player
@@ -32,18 +31,18 @@ func NewPlayer() *Player {
 	p.setPosition(initPositionX, initPositionY)
 	p.setSpeed(initPlayerSpeed)
 
-	p.weapon = &PlayerWeapon1{}
-
 	return p
 }
 
-func (p *Player) draw(screen *ebiten.Image) {
+// Draw draws the player
+func (p *Player) Draw(screen *ebiten.Image) {
 	sprite.Player.SetPosition(p.x, p.y)
 	sprite.Player.SetIndex(degreeToDirectionIndex(p.deg))
 	sprite.Player.Draw(screen)
 }
 
-func (p *Player) move(horizontal float64, vertical float64, isFire bool, boundary Boundary) {
+// Move moves the player
+func (p *Player) Move(horizontal float64, vertical float64, isFire bool, boundary Boundary) {
 	if vertical != 0 {
 		p.vy = vertical * p.speed
 		p.y = p.y + p.vy
@@ -63,4 +62,5 @@ func (p *Player) move(horizontal float64, vertical float64, isFire bool, boundar
 			p.deg = radToDeg(math.Atan2(vertical, horizontal))
 		}
 	}
+
 }

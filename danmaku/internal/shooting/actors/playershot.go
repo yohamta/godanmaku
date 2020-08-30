@@ -1,4 +1,4 @@
-package shooting
+package actors
 
 import (
 	"math"
@@ -31,7 +31,13 @@ func NewPlayerShot() *PlayerBullet {
 	return p
 }
 
-func (p *PlayerBullet) initBullet(degree int, speed float64, x, y, size int) {
+// IsActive returns if the actor is active in bool
+func (p *PlayerBullet) IsActive() bool {
+	return p.isActive
+}
+
+// Init inits this
+func (p *PlayerBullet) Init(degree int, speed float64, x, y, size int) {
 	p.speed = speed
 	p.vx = math.Cos(degToRad(degree)) * speed
 	p.vy = math.Sin(degToRad(degree)) * speed
@@ -45,13 +51,15 @@ func (p *PlayerBullet) initBullet(degree int, speed float64, x, y, size int) {
 	p.isActive = true
 }
 
-func (p *PlayerBullet) draw(screen *ebiten.Image) {
+// Draw draws this
+func (p *PlayerBullet) Draw(screen *ebiten.Image) {
 	sprite.PlayerBullet.SetPosition(p.x, p.y)
 	sprite.PlayerBullet.SetIndex(p.spriteIndex)
 	sprite.PlayerBullet.Draw(screen)
 }
 
-func (p *PlayerBullet) move(boundary Boundary) {
+// Move moves this
+func (p *PlayerBullet) Move(boundary Boundary) {
 	p.x = p.x + p.vx
 	p.y = p.y + p.vy
 	if p.isOutOfBoundary(boundary) {

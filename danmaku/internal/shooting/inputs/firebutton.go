@@ -1,4 +1,4 @@
-package shooting
+package inputs
 
 import (
 	"image/color"

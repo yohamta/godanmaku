@@ -1,4 +1,4 @@
-package shooting
+package actors
 
 import "math"
 
@@ -31,14 +31,18 @@ func (a *Actor) setPosition(x, y float64) {
 	a.y = y
 }
 
+// GetPosition returns the position in (x, y)
+func (a *Actor) GetPosition() (float64, float64) {
+	return a.x, a.y
+}
+
 func (a *Actor) setDeg(degree int) {
 	a.deg = degree
 }
 
-func (a *Actor) getCenter() (int, int) {
-	x := int(a.x)
-	y := int(a.y)
-	return x, y
+// GetDeg returns the degree of the actor
+func (a *Actor) GetDeg() int {
+	return a.deg
 }
 
 func (a *Actor) isOutOfBoundary(boundary Boundary) bool {
@@ -68,4 +72,9 @@ func radToDeg(radian float64) int {
 
 func degToRad(degree int) float64 {
 	return float64(degree) * math.Pi / 180
+}
+
+// Weapon represents weapon
+type Weapon interface {
+	shot(x, y, degree int)
 }

@@ -1,4 +1,4 @@
-package shooting
+package inputs
 
 import (
 	"time"
@@ -29,7 +29,8 @@ func NewInput(screenWidth, screenHeight int) *Input {
 	return input
 }
 
-func (input *Input) update() {
+// Update updates the state of the input
+func (input *Input) Update() {
 	if touch.IsTouchPrimaryInput() {
 		input.readTouchInput()
 		input.joystick.Update()
@@ -39,7 +40,8 @@ func (input *Input) update() {
 	}
 }
 
-func (input *Input) draw(screen *ebiten.Image) {
+// Draw draws the input
+func (input *Input) Draw(screen *ebiten.Image) {
 	if input.joystick.IsReadingTouch() {
 		input.joystick.Draw(screen)
 	}

@@ -1,4 +1,4 @@
-package shooting
+package fields
 
 import (
 	"image/color"
@@ -38,7 +38,8 @@ func NewField() *Field {
 	return f
 }
 
-func (f *Field) draw(screen *ebiten.Image) {
+// Draw draws the field
+func (f *Field) Draw(screen *ebiten.Image) {
 	sprite.Background.SetPosition(float64(f.x), float64(f.y))
 	sprite.Background.Draw(screen)
 

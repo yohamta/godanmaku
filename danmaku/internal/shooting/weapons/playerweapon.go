@@ -1,7 +1,9 @@
-package shooting
+package weapons
 
 import (
 	"time"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/shooting/actors"
 )
 
 const (
@@ -10,29 +12,24 @@ const (
 	weapon1Size         = 4
 )
 
-// PlayerWeapon represents weapon
-type PlayerWeapon interface {
-	shot()
-}
-
 // PlayerWeapon1 represents player's weapon
 type PlayerWeapon1 struct {
 	lastShotTime time.Time
 }
 
-func (w *PlayerWeapon1) shot() {
+// Shot create shots
+func (w *PlayerWeapon1) Shot(x, y float64, degree int, playerShots []*actors.PlayerBullet) {
 	if time.Since(w.lastShotTime).Milliseconds() < weapon1ReloadTimeMs {
 		return
 	}
 	w.lastShotTime = time.Now()
-	x, y := player.getCenter()
 
 	for i := 0; i < len(playerShots); i++ {
 		s := playerShots[i]
-		if s.isActive {
+		if s.IsActive() {
 			continue
 		}
-		s.initBullet(player.deg, weapon1Speed, x, y, weapon1Size)
+		s.Init(degree, weapon1Speed, int(x), int(y), weapon1Size)
 		break
 	}
 
