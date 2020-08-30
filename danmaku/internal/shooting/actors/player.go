@@ -19,6 +19,7 @@ const (
 // Player represents player of the game
 type Player struct {
 	Actor
+	life int
 }
 
 // NewPlayer returns initialized Player
@@ -31,8 +32,19 @@ func NewPlayer() *Player {
 	p.setPosition(initPositionX, initPositionY)
 	p.setSpeed(initPlayerSpeed)
 	p.deg = 270
+	p.life = 1
 
 	return p
+}
+
+// AddDamage adds damage to this playe
+func (p *Player) AddDamage(damage int) {
+	p.life -= damage
+}
+
+// IsDead returns if this is active
+func (p *Player) IsDead() bool {
+	return p.life <= 0
 }
 
 // Draw draws the player

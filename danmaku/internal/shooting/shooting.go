@@ -130,10 +130,12 @@ func (stg *Shooting) Update() {
 	checkCollision()
 
 	// player
-	player.Move(input.Horizontal, input.Vertical, input.Fire)
-	if input.Fire {
-		x, y := player.GetPosition()
-		playerWeapon.Shot(x, y, player.GetNormalizedDegree(), playerShots[:])
+	if player.IsDead() == false {
+		player.Move(input.Horizontal, input.Vertical, input.Fire)
+		if input.Fire {
+			x, y := player.GetPosition()
+			playerWeapon.Shot(x, y, player.GetNormalizedDegree(), playerShots[:])
+		}
 	}
 
 	// player shots
@@ -218,7 +220,9 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	player.Draw(screen)
+	if player.IsDead() == false {
+		player.Draw(screen)
+	}
 
 	// explosions
 	for i := 0; i < len(explosions); i++ {
@@ -243,7 +247,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 }
 
 func initEnemies() {
-	enemyCount := 20
+	enemyCount := 30
 
 	for i := 0; i < enemyCount; i++ {
 		enemy := enemies[i]
@@ -271,6 +275,25 @@ func checkCollision() {
 			createHitEffect(p.GetX(), p.GetY())
 			if e.IsDead() {
 				createExplosion(e.GetX(), e.GetY())
+			}
+		}
+	}
+
+	// enemy shots
+	if player.IsDead() == false {
+		for i := 0; i < len(enemyShots); i++ {
+			e := enemyShots[i]
+			if e.IsActive() == false {
+				continue
+			}
+			if actors.IsCollideWith(e, player) == false {
+				continue
+			}
+			player.AddDamage(1)
+			e.SetInactive()
+			createHitEffect(player.GetX(), player.GetY())
+			if player.IsDead() {
+				createExplosion(player.GetX(), player.GetY())
 			}
 		}
 	}
