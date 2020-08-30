@@ -43,7 +43,7 @@ var (
 	field *fields.Field
 
 	uiBackground      *ui.Box
-	uiBackgroundColor = color.RGBA{0x20, 0x20, 0x40, 0xff}
+	uiBackgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
 
 	player       *actors.Player
 	playerWeapon PlayerShooter
