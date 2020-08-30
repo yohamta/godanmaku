@@ -163,7 +163,7 @@ func (stg *Shooting) Update() {
 			continue
 		}
 		e.Move(player)
-		if e.ShouldAttack() {
+		if player.IsDead() == false && e.ShouldAttack() {
 			weapons.EnemyAttack(e, player, enemyShots[:])
 		}
 	}
@@ -202,15 +202,6 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 		p.Draw(screen)
 	}
 
-	// enemy shots
-	for i := 0; i < len(enemyShots); i++ {
-		e := enemyShots[i]
-		if e.IsActive() == false {
-			continue
-		}
-		e.Draw(screen)
-	}
-
 	// enemies
 	for i := 0; i < len(enemies); i++ {
 		e := enemies[i]
@@ -222,6 +213,15 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 
 	if player.IsDead() == false {
 		player.Draw(screen)
+	}
+
+	// enemy shots
+	for i := 0; i < len(enemyShots); i++ {
+		e := enemyShots[i]
+		if e.IsActive() == false {
+			continue
+		}
+		e.Draw(screen)
 	}
 
 	// explosions
@@ -247,7 +247,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 }
 
 func initEnemies() {
-	enemyCount := 30
+	enemyCount := 20
 
 	for i := 0; i < enemyCount; i++ {
 		enemy := enemies[i]
