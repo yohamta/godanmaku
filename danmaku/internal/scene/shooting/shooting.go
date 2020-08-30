@@ -5,7 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/player"
+	"github.com/yohamta/godanmaku/danmaku/internal/actor/player"
 	"github.com/yohamta/godanmaku/danmaku/internal/scene/shooting/input"
 )
 
@@ -41,7 +41,7 @@ func New(options NewOptions) *Shooting {
 // Update updates the scene
 func (shooting *Shooting) Update() {
 	myInput.Update()
-	myPlayer.Move(myInput.Horizontal, myInput.Vertical, false)
+	myPlayer.Move(myInput.Horizontal, myInput.Vertical, myInput.Fire)
 }
 
 // Draw draws the scene
