@@ -1,11 +1,23 @@
 package sprite
 
 import (
+	"bytes"
 	"image"
+
 	// import for side effect
 	_ "image/png"
 
 	"github.com/hajimehoshi/ebiten"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
+)
+
+var (
+	Background,
+	Player,
+	PlayerBullet,
+	Enemy1,
+	Enemy2 *Sprite
 )
 
 type frame struct {
@@ -34,8 +46,8 @@ type Sprite struct {
 	length    int
 }
 
-// New create the Sprite struct
-func New(img *image.Image, frameNum int) *Sprite {
+// NewSprite create the Sprite struct
+func NewSprite(img *image.Image, frameNum int) *Sprite {
 	originalImage, _ := ebiten.NewImageFromImage(*img, ebiten.FilterDefault)
 
 	sprite := &Sprite{}
@@ -95,4 +107,18 @@ func (s *Sprite) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(x-float64(w)/2, y-float64(h)/2)
 
 	screen.DrawImage(s.subImages[s.index], op)
+}
+
+// LoadSprites loads sprites
+func LoadSprites() {
+	Player = createSprite(&images.PLAYER, 8)
+	Background = createSprite(&images.UTYUU_BG, 1)
+	PlayerBullet = createSprite(&images.SHOT2, 8)
+	Enemy1 = createSprite(&images.ENEMY1, 8)
+	Enemy2 = createSprite(&images.ENEMY2, 1)
+}
+
+func createSprite(rawImage *[]byte, frameNum int) *Sprite {
+	img, _, _ := image.Decode(bytes.NewReader(*rawImage))
+	return NewSprite(&img, 8)
 }

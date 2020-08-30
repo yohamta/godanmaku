@@ -1,4 +1,4 @@
-package button
+package ui
 
 import (
 	"image/color"
@@ -9,16 +9,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 
-type position struct {
-	x int
-	y int
-}
-
-type size struct {
-	w int
-	h int
-}
-
 // Button represents button
 type Button struct {
 	position   position
@@ -27,8 +17,8 @@ type Button struct {
 	touchID    int
 }
 
-// New returns new button
-func New(x, y, w, h int) *Button {
+// NewButton returns new button
+func NewButton(x, y, w, h int) *Button {
 	button := &Button{}
 	button.position.x = x
 	button.position.y = y

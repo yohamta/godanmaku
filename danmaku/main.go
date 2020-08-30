@@ -6,16 +6,17 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/scene"
-	"github.com/yohamta/godanmaku/danmaku/internal/scene/shooting"
+	"github.com/yohamta/godanmaku/danmaku/internal/scenes"
+	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 var (
-	currentScene    scene.Scene = nil
-	screenWidth                 = 240
-	screenHeight                = 320
-	isInitialized               = false
-	isWindowSizeSet             = false
+	currentScene    scenes.Scene = nil
+	screenWidth                  = 240
+	screenHeight                 = 320
+	isInitialized                = false
+	isWindowSizeSet              = false
 )
 
 // Game implements ebiten.Game interface.
@@ -27,10 +28,11 @@ type Game struct {
 func (g *Game) Update(screen *ebiten.Image) error {
 	if isWindowSizeSet && !isInitialized {
 		paint.LoadFonts()
-		currentScene = shooting.New(shooting.NewOptions(shooting.NewOptions{
+		sprite.LoadSprites()
+		currentScene = shooting.NewShooting(shooting.NewShootingOptions{
 			ScreenWidth:  screenWidth,
 			ScreenHeight: screenHeight,
-		}))
+		})
 		isInitialized = true
 		return nil
 	}

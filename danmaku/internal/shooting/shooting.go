@@ -5,13 +5,12 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/actor/player"
-	"github.com/yohamta/godanmaku/danmaku/internal/scene/shooting/input"
+	"github.com/yohamta/godanmaku/danmaku/internal/actors"
 )
 
 var (
-	myPlayer     *player.Player
-	myInput      *input.Input
+	myPlayer     *actors.Player
+	myInput      *Input
 	screenWidth  = 0
 	screenHeight = 0
 )
@@ -19,21 +18,21 @@ var (
 // Shooting represents shooting scene
 type Shooting struct{}
 
-// NewOptions represents options for New func
-type NewOptions struct {
+// NewShootingOptions represents options for New func
+type NewShootingOptions struct {
 	ScreenWidth  int
 	ScreenHeight int
 }
 
-// New returns new Shooting struct
-func New(options NewOptions) *Shooting {
+// NewShooting returns new Shooting struct
+func NewShooting(options NewShootingOptions) *Shooting {
 	shooting := &Shooting{}
 
 	screenWidth = options.ScreenWidth
 	screenHeight = options.ScreenHeight
 
-	myPlayer = player.New()
-	myInput = input.NewInput(screenWidth, screenHeight)
+	myPlayer = actors.NewPlayer()
+	myInput = NewInput(screenWidth, screenHeight)
 
 	return shooting
 }
@@ -42,6 +41,7 @@ func New(options NewOptions) *Shooting {
 func (shooting *Shooting) Update() {
 	myInput.Update()
 	myPlayer.Move(myInput.Horizontal, myInput.Vertical, myInput.Fire)
+
 }
 
 // Draw draws the scene

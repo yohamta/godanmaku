@@ -1,4 +1,4 @@
-package firebutton
+package shooting
 
 import (
 	"image/color"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui/button"
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 )
 
 const (
@@ -18,18 +18,18 @@ const (
 
 // FireButton represents Button
 type FireButton struct {
-	button.Button
+	ui.Button
 	onImage      *ebiten.Image
 	offImage     *ebiten.Image
 	alpha        uint8
 	animateAlpha int
 }
 
-// New returns new FireButton
-func New(screenWidth, screenHeight int) *FireButton {
+// NewFireButton returns new FireButton
+func NewFireButton(screenWidth, screenHeight int) *FireButton {
 	x := (screenWidth / 2) + (screenWidth / 4) - (width / 2)
 	y := screenHeight - height - bottom
-	baseButton := (button.New(x, y, width, height))
+	baseButton := (ui.NewButton(x, y, width, height))
 	fButton := &FireButton{Button: *baseButton}
 
 	// visual setting

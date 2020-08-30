@@ -1,4 +1,4 @@
-package input
+package shooting
 
 import (
 	"time"
@@ -6,9 +6,8 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/scene/shooting/input/firebutton"
 	"github.com/yohamta/godanmaku/danmaku/internal/touch"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui/joystick"
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 )
 
 // Input represents the state of user's input
@@ -17,16 +16,16 @@ type Input struct {
 	Vertical     float64
 	Fire         bool
 	prevTickTime time.Time
-	joystick     *joystick.Joystick
-	fireButton   *firebutton.FireButton
+	joystick     *ui.Joystick
+	fireButton   *FireButton
 }
 
 // NewInput creates new Input
 func NewInput(screenWidth, screenHeight int) *Input {
 	input := &Input{}
 	input.prevTickTime = time.Now()
-	input.joystick = joystick.New()
-	input.fireButton = firebutton.New(screenWidth, screenHeight)
+	input.joystick = ui.NewJoystick()
+	input.fireButton = NewFireButton(screenWidth, screenHeight)
 	return input
 }
 

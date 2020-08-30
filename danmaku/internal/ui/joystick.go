@@ -1,4 +1,4 @@
-package joystick
+package ui
 
 import (
 	"image/color"
@@ -13,10 +13,6 @@ const (
 	joyStickRadius float64 = 50
 )
 
-type position struct {
-	x, y int
-}
-
 // Joystick represents virtual keyboard
 type Joystick struct {
 	panelSize      int
@@ -30,8 +26,8 @@ type Joystick struct {
 	touchID        int
 }
 
-// New returns Joystick
-func New() *Joystick {
+// NewJoystick returns Joystick
+func NewJoystick() *Joystick {
 	p := &Joystick{}
 
 	// Prepare an offset image for Joystick
