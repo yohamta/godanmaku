@@ -47,7 +47,8 @@ func (a *Actor) GetDeg() int {
 
 // GetNormalizedDegree returns normalized degree
 func (a *Actor) GetNormalizedDegree() int {
-	return int(float64((a.deg+360)%360)/45) * 45
+	adjust := 22.5
+	return int((float64(((a.deg+360)%360))+adjust)/45) * 45
 }
 
 func (a *Actor) isOutOfBoundary(boundary Boundary) bool {
