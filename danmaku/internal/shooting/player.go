@@ -1,4 +1,4 @@
-package actors
+package shooting
 
 import (
 	"math"
@@ -24,34 +24,36 @@ func NewPlayer() *Player {
 	actor := &Actor{}
 	p := &Player{Actor: *actor}
 
-	p.SetPosition(initPositionX, initPositionY)
-	p.SetSpeed(initPlayerSpeed)
+	p.setPosition(initPositionX, initPositionY)
+	p.setSpeed(initPlayerSpeed)
 
 	return p
 }
 
-// Draw draws this sprite
-func (p *Player) Draw(screen *ebiten.Image) {
-	sprite.Player.SetPosition(p.X, p.Y)
-	sprite.Player.SetIndex(DegreeToDirectionIndex(p.Deg))
+func (p *Player) draw(screen *ebiten.Image) {
+	sprite.Player.SetPosition(p.x, p.y)
+	sprite.Player.SetIndex(degreeToDirectionIndex(p.deg))
 	sprite.Player.Draw(screen)
 }
 
-// Move moves player
-func (p *Player) Move(horizontal float64, vertical float64, isFire bool) {
+func (p *Player) move(horizontal float64, vertical float64, isFire bool) {
 	if vertical != 0 {
-		p.Vy = vertical * p.Speed
-		p.Y = p.Y + p.Vy
+		p.vy = vertical * p.speed
+		p.y = p.y + p.vy
 	}
 
 	if horizontal != 0 {
-		p.Vx = horizontal * p.Speed
-		p.X = p.X + p.Vx
+		p.vx = horizontal * p.speed
+		p.x = p.x + p.vx
 	}
 
 	if vertical != 0 || horizontal != 0 {
 		if isFire == false {
-			p.Deg = RadToDeg(math.Atan2(vertical, horizontal))
+			p.deg = radToDeg(math.Atan2(vertical, horizontal))
 		}
 	}
+}
+
+func (p *Player) fire() {
+	// TODO:
 }

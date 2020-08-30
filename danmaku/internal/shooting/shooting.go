@@ -4,15 +4,20 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten"
+)
 
-	"github.com/yohamta/godanmaku/danmaku/internal/actors"
+const (
+	maxPlayerBulletsNum = 80
 )
 
 var (
-	myPlayer     *actors.Player
 	myInput      *Input
 	screenWidth  = 0
 	screenHeight = 0
+
+	// actors
+	myPlayer      *Player
+	playerBullets [maxPlayerBulletsNum]*PlayerBullet
 )
 
 // Shooting represents shooting scene
@@ -26,27 +31,32 @@ type NewShootingOptions struct {
 
 // NewShooting returns new Shooting struct
 func NewShooting(options NewShootingOptions) *Shooting {
-	shooting := &Shooting{}
+	stg := &Shooting{}
 
 	screenWidth = options.ScreenWidth
 	screenHeight = options.ScreenHeight
 
-	myPlayer = actors.NewPlayer()
 	myInput = NewInput(screenWidth, screenHeight)
 
-	return shooting
+	// init actors
+	myPlayer = NewPlayer()
+	for i := 0; i < maxPlayerBulletsNum; i++ {
+		playerBullets[i] = NewPlayerBullet()
+	}
+
+	return stg
 }
 
 // Update updates the scene
-func (shooting *Shooting) Update() {
-	myInput.Update()
-	myPlayer.Move(myInput.Horizontal, myInput.Vertical, myInput.Fire)
-
+func (stg *Shooting) Update() {
+	myInput.update()
+	myPlayer.move(myInput.Horizontal, myInput.Vertical, myInput.Fire)
+	myPlayer.fire()
 }
 
 // Draw draws the scene
-func (shooting *Shooting) Draw(screen *ebiten.Image) {
+func (stg *Shooting) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
-	myPlayer.Draw(screen)
-	myInput.Draw(screen)
+	myPlayer.draw(screen)
+	myInput.draw(screen)
 }

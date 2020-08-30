@@ -62,13 +62,11 @@ func (fButton *FireButton) updateColor() {
 	fButton.alpha = a
 }
 
-// Update updates the color of bottom
-func (fButton *FireButton) Update() {
+func (fButton *FireButton) update() {
 	fButton.updateColor()
 }
 
-// Draw draws bottom to the screen
-func (fButton *FireButton) Draw(screen *ebiten.Image) {
+func (fButton *FireButton) draw(screen *ebiten.Image) {
 	x, y := fButton.GetPosition()
 
 	op := &ebiten.DrawImageOptions{}

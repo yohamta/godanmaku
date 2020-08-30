@@ -29,8 +29,7 @@ func NewInput(screenWidth, screenHeight int) *Input {
 	return input
 }
 
-// Update updates the input state
-func (input *Input) Update() {
+func (input *Input) update() {
 	if touch.IsTouchPrimaryInput() {
 		input.readTouchInput()
 		input.joystick.Update()
@@ -40,8 +39,7 @@ func (input *Input) Update() {
 	}
 }
 
-// Draw draws input UI
-func (input *Input) Draw(screen *ebiten.Image) {
+func (input *Input) draw(screen *ebiten.Image) {
 	if input.joystick.IsReadingTouch() {
 		input.joystick.Draw(screen)
 	}
