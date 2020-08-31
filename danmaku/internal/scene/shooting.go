@@ -1,19 +1,20 @@
-package shooting
+package scene
 
 import (
 	"image/color"
 	"math/rand"
 	"time"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting/effects"
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/effects"
+	"github.com/yohamta/godanmaku/danmaku/internal/movable"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting/actors"
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting/fields"
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting/inputs"
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting/weapons"
+	"github.com/yohamta/godanmaku/danmaku/internal/fields"
+	"github.com/yohamta/godanmaku/danmaku/internal/inputs"
+	"github.com/yohamta/godanmaku/danmaku/internal/weapons"
 )
 
 const (
@@ -33,7 +34,7 @@ const (
 
 // PlayerShooter represents interface of Player Weapon
 type PlayerShooter interface {
-	Shot(x, y float64, degree int, playerShots []*actors.PlayerShot)
+	Shot(x, y float64, degree int, playerShots []*movable.PlayerShot)
 }
 
 var (
@@ -46,12 +47,12 @@ var (
 	uiBackground      *ui.Box
 	uiBackgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
 
-	player       *actors.Player
+	player       *movable.Player
 	playerWeapon PlayerShooter
 
-	playerShots [maxPlayerShot]*actors.PlayerShot
-	enemyShots  [maxEnemyShot]*actors.EnemyShot
-	enemies     [maxEnemy]*actors.Enemy
+	playerShots [maxPlayerShot]*movable.PlayerShot
+	enemyShots  [maxEnemyShot]*movable.EnemyShot
+	enemies     [maxEnemy]*movable.Enemy
 	hitEffects  [maxHitEffects]*effects.Hit
 	explosions  [maxExplosions]*effects.Explosion
 
@@ -90,25 +91,25 @@ func initGame() {
 		screenWidth, screenHeight-(field.GetBottom()-field.GetTop()),
 		uiBackgroundColor)
 
-	actors.SetBoundary(field)
+	movable.SetBoundary(field)
 
 	// player
-	player = actors.NewPlayer()
+	player = movable.NewPlayer()
 	playerWeapon = &weapons.PlayerWeapon1{}
 
 	// enemies
 	for i := 0; i < len(enemies); i++ {
-		enemies[i] = actors.NewEnemy()
+		enemies[i] = movable.NewEnemy()
 	}
 
 	// shots
 	for i := 0; i < len(playerShots); i++ {
-		playerShots[i] = actors.NewPlayerShot()
+		playerShots[i] = movable.NewPlayerShot()
 	}
 
 	// enemyShots
 	for i := 0; i < len(enemyShots); i++ {
-		enemyShots[i] = actors.NewEnemyShot()
+		enemyShots[i] = movable.NewEnemyShot()
 	}
 
 	// effects
@@ -251,7 +252,7 @@ func initEnemies() {
 
 	for i := 0; i < enemyCount; i++ {
 		enemy := enemies[i]
-		enemy.Init(actors.EnemyKindBall)
+		enemy.Init(movable.EnemyKindBall)
 	}
 }
 
@@ -267,7 +268,7 @@ func checkCollision() {
 			if e.IsActive() == false {
 				continue
 			}
-			if actors.IsCollideWith(e, p) == false {
+			if collision.IsCollideWith(e, p) == false {
 				continue
 			}
 			e.AddDamage(1)
@@ -286,7 +287,7 @@ func checkCollision() {
 			if e.IsActive() == false {
 				continue
 			}
-			if actors.IsCollideWith(e, player) == false {
+			if collision.IsCollideWith(e, player) == false {
 				continue
 			}
 			player.AddDamage(1)

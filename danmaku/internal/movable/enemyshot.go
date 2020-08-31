@@ -1,4 +1,4 @@
-package actors
+package movable
 
 import (
 	"math"
@@ -6,6 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 const (
@@ -14,15 +15,15 @@ const (
 
 // EnemyShot represents player's bullet
 type EnemyShot struct {
-	Actor
+	ShObject
 	shotSprite *sprite.Sprite
 	isActive   bool
 }
 
 // NewEnemyShot returns initialized struct
 func NewEnemyShot() *EnemyShot {
-	actor := &Actor{}
-	e := &EnemyShot{Actor: *actor}
+	base := &ShObject{}
+	e := &EnemyShot{ShObject: *base}
 	e.isActive = false
 
 	return e
@@ -43,8 +44,8 @@ func (e *EnemyShot) Init(degree int, speed float64, x, y int) {
 	e.speed = speed
 	e.deg = degree
 
-	e.vx = math.Cos(degToRad(degree)) * speed
-	e.vy = math.Sin(degToRad(degree)) * speed
+	e.vx = math.Cos(util.DegToRad(degree)) * speed
+	e.vy = math.Sin(util.DegToRad(degree)) * speed
 
 	e.width = enemyShotSize
 	e.height = enemyShotSize

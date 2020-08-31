@@ -1,4 +1,4 @@
-package actors
+package movable
 
 import (
 	"math"
@@ -7,6 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 // EnemyKind represends the kind of enemy
@@ -18,8 +19,8 @@ const (
 
 // Enemy represents enemy of the game
 type Enemy struct {
-	Actor
-	moveTo            position
+	ShObject
+	moveTo            Position
 	isActive          bool
 	life              int
 	point             int
@@ -28,8 +29,8 @@ type Enemy struct {
 
 // NewEnemy returns initialized Enemy
 func NewEnemy() *Enemy {
-	actor := &Actor{}
-	e := &Enemy{Actor: *actor}
+	base := &ShObject{}
+	e := &Enemy{ShObject: *base}
 	e.isActive = false
 	return e
 }
@@ -57,7 +58,7 @@ func (e *Enemy) Init(kind EnemyKind) {
 // Draw draws the enemy
 func (e *Enemy) Draw(screen *ebiten.Image) {
 	sprite.Enemy1.SetPosition(e.x, e.y)
-	sprite.Enemy1.SetIndex(degreeToDirectionIndex(e.deg))
+	sprite.Enemy1.SetIndex(util.DegreeToDirectionIndex(e.deg))
 	sprite.Enemy1.Draw(screen)
 }
 
@@ -71,12 +72,12 @@ func (e *Enemy) Move(player *Player) {
 	}
 
 	rad := math.Atan2(player.x-e.x, player.y-e.y)
-	e.deg = radToDeg(rad)
+	e.deg = util.RadToDeg(rad)
 }
 
 func (e *Enemy) isArrived() bool {
-	return int(math.Abs(e.y-e.moveTo.y)) < e.height+10 &&
-		int(math.Abs(e.x-e.moveTo.x)) < e.width+10
+	return int(math.Abs(e.y-e.moveTo.y)) < e.height &&
+		int(math.Abs(e.x-e.moveTo.x)) < e.width
 }
 
 // IsActive returns if this is active

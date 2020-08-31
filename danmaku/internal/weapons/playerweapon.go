@@ -3,7 +3,7 @@ package weapons
 import (
 	"time"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting/actors"
+	"github.com/yohamta/godanmaku/danmaku/internal/movable"
 )
 
 const (
@@ -18,7 +18,7 @@ type PlayerWeapon1 struct {
 }
 
 // Shot create shots
-func (w *PlayerWeapon1) Shot(x, y float64, degree int, playerShots []*actors.PlayerShot) {
+func (w *PlayerWeapon1) Shot(x, y float64, degree int, playerShots []*movable.PlayerShot) {
 	if time.Since(w.lastShotTime).Milliseconds() < weapon1ReloadTimeMs {
 		return
 	}

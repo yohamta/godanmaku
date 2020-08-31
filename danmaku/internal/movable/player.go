@@ -1,4 +1,4 @@
-package actors
+package movable
 
 import (
 	"math"
@@ -6,6 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 const (
@@ -18,19 +19,19 @@ const (
 
 // Player represents player of the game
 type Player struct {
-	Actor
+	ShObject
 	life int
 }
 
 // NewPlayer returns initialized Player
 func NewPlayer() *Player {
-	actor := &Actor{}
-	p := &Player{Actor: *actor}
+	base := &ShObject{}
+	p := &Player{ShObject: *base}
 
 	p.width = playerWidth
 	p.height = playerHeight
-	p.setPosition(initPositionX, initPositionY)
-	p.setSpeed(initPlayerSpeed)
+	p.SetPosition(initPositionX, initPositionY)
+	p.SetSpeed(initPlayerSpeed)
 	p.deg = 270
 	p.life = 1
 
@@ -50,7 +51,7 @@ func (p *Player) IsDead() bool {
 // Draw draws the player
 func (p *Player) Draw(screen *ebiten.Image) {
 	sprite.Player.SetPosition(p.x, p.y)
-	sprite.Player.SetIndex(degreeToDirectionIndex(p.deg))
+	sprite.Player.SetIndex(util.DegreeToDirectionIndex(p.deg))
 	sprite.Player.Draw(screen)
 }
 
@@ -72,7 +73,7 @@ func (p *Player) Move(horizontal float64, vertical float64, isFire bool) {
 
 	if vertical != 0 || horizontal != 0 {
 		if isFire == false {
-			p.deg = radToDeg(math.Atan2(vertical, horizontal))
+			p.deg = util.RadToDeg(math.Atan2(vertical, horizontal))
 		}
 	}
 

@@ -1,4 +1,4 @@
-package actors
+package movable
 
 import (
 	"math"
@@ -6,19 +6,20 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 // PlayerShot represents player's bullet
 type PlayerShot struct {
-	Actor
+	ShObject
 	spriteIndex int
 	isActive    bool
 }
 
 // NewPlayerShot returns initialized struct
 func NewPlayerShot() *PlayerShot {
-	actor := &Actor{}
-	p := &PlayerShot{Actor: *actor}
+	base := &ShObject{}
+	p := &PlayerShot{ShObject: *base}
 	p.isActive = false
 
 	return p
@@ -39,9 +40,9 @@ func (p *PlayerShot) Init(degree int, speed float64, x, y, size int) {
 	p.speed = speed
 	p.deg = degree
 
-	p.vx = math.Cos(degToRad(degree)) * speed
-	p.vy = math.Sin(degToRad(degree)) * speed
-	p.spriteIndex = degreeToDirectionIndex(degree)
+	p.vx = math.Cos(util.DegToRad(degree)) * speed
+	p.vy = math.Sin(util.DegToRad(degree)) * speed
+	p.spriteIndex = util.DegreeToDirectionIndex(degree)
 
 	p.width = size
 	p.height = size

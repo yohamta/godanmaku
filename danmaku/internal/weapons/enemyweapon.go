@@ -3,7 +3,7 @@ package weapons
 import (
 	"math/rand"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting/actors"
+	"github.com/yohamta/godanmaku/danmaku/internal/movable"
 )
 
 const (
@@ -11,7 +11,7 @@ const (
 )
 
 // EnemyAttack make enemy attack the player
-func EnemyAttack(enemy *actors.Enemy, player *actors.Player, enemyShots []*actors.EnemyShot) {
+func EnemyAttack(enemy *movable.Enemy, player *movable.Player, enemyShots []*movable.EnemyShot) {
 
 	for i := 0; i < len(enemyShots); i++ {
 		s := enemyShots[i]
