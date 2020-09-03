@@ -35,7 +35,7 @@ func (e *Enemy) Init() {
 
 	width := 8.
 	height := 8.
-	e.SetSize(width, height)
+	e.setSize(width, height)
 	e.SetPosition(rand.Float64()*float64(fieldWidth-width)+float64(width/2), 30)
 	e.SetSpeed(0.96, 90)
 	e.SetMainWeapon(weapon.NewNormal(shot.KindEnemyNormal))

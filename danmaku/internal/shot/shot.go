@@ -45,13 +45,13 @@ func (sh *Shot) Init(kind Kind, degree int) {
 	switch kind {
 	case KindPlayerNormal:
 		sh.spr = sprite.PlayerBullet
-		sh.SetSize(4, 4)
-		sh.SetSpeed(2.56, degree)
+		sh.setSize(4, 4)
+		sh.setSpeed(2.56, degree)
 		break
 	case KindEnemyNormal:
 		sh.spr = sprite.RandomEnemyShot()
-		sh.SetSize(10, 10)
-		sh.SetSpeed(1.44, degree)
+		sh.setSize(10, 10)
+		sh.setSpeed(1.44, degree)
 	}
 }
 
@@ -80,23 +80,9 @@ func (sh *Shot) GetHeight() float64 {
 	return sh.height
 }
 
-// SetSpeed sets the speed
-func (sh *Shot) SetSpeed(speed float64, degree int) {
-	sh.speed = speed
-	sh.degree = degree
-	sh.vx = math.Cos(util.DegToRad(sh.degree)) * speed
-	sh.vy = math.Sin(util.DegToRad(sh.degree)) * speed
-}
-
 // GetDegree returns the degree
 func (sh *Shot) GetDegree() int {
 	return sh.degree
-}
-
-// SetSize returns the size
-func (sh *Shot) SetSize(width, height float64) {
-	sh.width = width
-	sh.height = height
 }
 
 // SetPosition sets the position
@@ -129,4 +115,16 @@ func (sh *Shot) SetField(f *field.Field) {
 // OnHit should be called on hit something
 func (sh *Shot) OnHit() {
 	sh.isActive = false
+}
+
+func (sh *Shot) setSize(width, height float64) {
+	sh.width = width
+	sh.height = height
+}
+
+func (sh *Shot) setSpeed(speed float64, degree int) {
+	sh.speed = speed
+	sh.degree = degree
+	sh.vx = math.Cos(util.DegToRad(sh.degree)) * speed
+	sh.vy = math.Sin(util.DegToRad(sh.degree)) * speed
 }

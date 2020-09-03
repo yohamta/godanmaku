@@ -111,12 +111,6 @@ func (sh *Shooter) SetMainWeapon(mainWeapon weapon.Weapon) {
 	sh.mainWeapon = mainWeapon
 }
 
-// SetSize returns the size
-func (sh *Shooter) SetSize(width, height float64) {
-	sh.width = width
-	sh.height = height
-}
-
 // SetPosition sets the position
 func (sh *Shooter) SetPosition(x, y float64) {
 	sh.x = x
@@ -136,4 +130,9 @@ func (sh *Shooter) SetField(f *field.Field) {
 // SetTarget sets the target
 func (sh *Shooter) SetTarget(target Target) {
 	sh.target = target
+}
+
+func (sh *Shooter) setSize(width, height float64) {
+	sh.width = width
+	sh.height = height
 }

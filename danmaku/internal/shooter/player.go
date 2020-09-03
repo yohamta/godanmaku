@@ -28,7 +28,7 @@ func NewPlayer() *Player {
 // Init inits the player
 func (p *Player) Init() {
 	p.life = 1
-	p.SetSize(10, 10)
+	p.setSize(10, 10)
 	p.SetPosition(120, 160)
 	p.SetSpeed(2, 270)
 	p.isActive = true
