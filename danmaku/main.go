@@ -6,7 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/scene"
+	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
@@ -34,10 +34,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if isWindowSizeSet && !isInitialized {
 		paint.LoadFonts()
 		sprite.LoadSprites()
-		currentScene = scene.NewShooting(scene.NewShootingOptions{
-			ScreenWidth:  screenWidth,
-			ScreenHeight: screenHeight,
-		})
+		currentScene = shooting.NewShooting(screenWidth, screenHeight)
 		isInitialized = true
 		return nil
 	}

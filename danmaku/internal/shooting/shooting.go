@@ -1,4 +1,4 @@
-package scene
+package shooting
 
 import (
 	"image/color"
@@ -40,9 +40,6 @@ type PlayerShooter interface {
 }
 
 var (
-	screenWidth  = 0
-	screenHeight = 0
-
 	input        *inputs.Input
 	currentField *field.Field
 
@@ -63,34 +60,32 @@ var (
 
 // Shooting represents shooting scene
 type Shooting struct {
-}
-
-// NewShootingOptions represents options for New func
-type NewShootingOptions struct {
-	ScreenWidth  int
-	ScreenHeight int
+	screenWidth  int
+	screenHeight int
 }
 
 // NewShooting returns new Shooting struct
-func NewShooting(options NewShootingOptions) *Shooting {
+func NewShooting(screenWidth, screenHeight int) *Shooting {
 	stg := &Shooting{}
 
-	screenWidth = options.ScreenWidth
-	screenHeight = options.ScreenHeight
+	stg.screenWidth = screenWidth
+	stg.screenHeight = screenHeight
 
 	state = gameStateLoading
-	initGame()
+	stg.initGame()
 	state = gameStatePlaying
 
 	return stg
 }
 
-func initGame() {
+func (stg *Shooting) initGame() {
 	rand.Seed(time.Now().Unix())
-	input = inputs.NewInput(screenWidth, screenHeight)
+	input = inputs.NewInput(stg.screenWidth, stg.screenHeight)
 	currentField = field.NewField()
+
 	uiBackground = ui.NewBox(0, int(currentField.GetBottom()),
-		screenWidth, screenHeight-int(currentField.GetBottom()-currentField.GetTop()),
+		stg.screenWidth,
+		stg.screenHeight-int(currentField.GetBottom()-currentField.GetTop()),
 		uiBackgroundColor)
 
 	// player
