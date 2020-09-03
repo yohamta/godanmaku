@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/effects"
@@ -94,6 +95,7 @@ func initGame() {
 
 	// player
 	player = shooter.NewPlayer()
+	player.Init()
 	player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
 	player.SetField(currentField)
 
@@ -271,11 +273,11 @@ func checkCollision() {
 			if e.IsActive() == false {
 				continue
 			}
-			if e.IsCollideWith(p.GetEntity()) == false {
+			if util.IsCollideWith(e, p) == false {
 				continue
 			}
 			e.AddDamage(1)
-			p.SetActive(false)
+			p.OnHit()
 			createHitEffect(p.GetX(), p.GetY())
 			if e.IsDead() {
 				createExplosion(e.GetX(), e.GetY())
@@ -290,11 +292,11 @@ func checkCollision() {
 			if e.IsActive() == false {
 				continue
 			}
-			if player.IsCollideWith(e.GetEntity()) == false {
+			if util.IsCollideWith(player, e) == false {
 				continue
 			}
 			player.AddDamage(1)
-			e.SetActive(false)
+			e.OnHit()
 			createHitEffect(player.GetX(), player.GetY())
 			if player.IsDead() {
 				createExplosion(player.GetX(), player.GetY())

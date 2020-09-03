@@ -4,7 +4,6 @@ import (
 	"math"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/entity"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
@@ -12,13 +11,16 @@ import (
 
 // Shot represents shooter
 type Shot struct {
-	entity          *entity.Entity
-	speed           float64
-	vx              float64
-	vy              float64
-	degree          int
-	mainSprite      *sprite.Sprite
-	mainSpriteIndex int
+	x, y          float64
+	width, height float64
+	currField     *field.Field
+	isActive      bool
+	speed         float64
+	vx            float64
+	vy            float64
+	degree        int
+	spr           *sprite.Sprite
+	sprIndex      int
 }
 
 // Kind represetns the kind of the shot
@@ -31,66 +33,51 @@ const (
 
 // NewShot returns initialized struct
 func NewShot() *Shot {
-	sh := &Shot{entity: entity.NewEntity()}
+	sh := &Shot{}
 
 	return sh
 }
 
 // Init inits the shot accoring to the kind
 func (sh *Shot) Init(kind Kind, degree int) {
-	sh.SetActive(true)
+	sh.isActive = true
 
 	switch kind {
 	case KindPlayerNormal:
-		sh.SetMainSprite(sprite.PlayerBullet)
+		sh.spr = sprite.PlayerBullet
 		sh.SetSize(4, 4)
 		sh.SetSpeed(2.56, degree)
 		break
 	case KindEnemyNormal:
-		sh.SetMainSprite(sprite.RandomEnemyShot())
+		sh.spr = sprite.RandomEnemyShot()
 		sh.SetSize(10, 10)
 		sh.SetSpeed(1.44, degree)
 	}
 }
 
-// IsActive returns if this entity is active
+// IsActive returns if this is active
 func (sh *Shot) IsActive() bool {
-	return sh.entity.IsActive()
+	return sh.isActive
 }
 
 // GetX returns x
 func (sh *Shot) GetX() float64 {
-	return sh.entity.GetX()
+	return sh.x
 }
 
 // GetY returns y
 func (sh *Shot) GetY() float64 {
-	return sh.entity.GetY()
+	return sh.y
 }
 
-// SetActive sets if this entity is active
-func (sh *Shot) SetActive(isActive bool) {
-	sh.entity.SetActive(isActive)
+// GetWidth returns width
+func (sh *Shot) GetWidth() float64 {
+	return sh.width
 }
 
-// GetMainSprite returns sprite
-func (sh *Shot) GetMainSprite() *sprite.Sprite {
-	return sh.mainSprite
-}
-
-// SetMainSprite sets the sprite
-func (sh *Shot) SetMainSprite(mainSprite *sprite.Sprite) {
-	sh.mainSprite = mainSprite
-}
-
-// GetMainSpriteIndex returns sprite
-func (sh *Shot) GetMainSpriteIndex() int {
-	return sh.mainSpriteIndex
-}
-
-// SetMainSpriteIndex sets the sprite index
-func (sh *Shot) SetMainSpriteIndex(index int) {
-	sh.mainSpriteIndex = index
+// GetHeight returns height
+func (sh *Shot) GetHeight() float64 {
+	return sh.height
 }
 
 // SetSpeed sets the speed
@@ -101,11 +88,6 @@ func (sh *Shot) SetSpeed(speed float64, degree int) {
 	sh.vy = math.Sin(util.DegToRad(sh.degree)) * speed
 }
 
-// GetEntity returns the degree
-func (sh *Shot) GetEntity() *entity.Entity {
-	return sh.entity
-}
-
 // GetDegree returns the degree
 func (sh *Shot) GetDegree() int {
 	return sh.degree
@@ -113,30 +95,38 @@ func (sh *Shot) GetDegree() int {
 
 // SetSize returns the size
 func (sh *Shot) SetSize(width, height float64) {
-	sh.entity.SetSize(width, height)
+	sh.width = width
+	sh.height = height
 }
 
 // SetPosition sets the position
 func (sh *Shot) SetPosition(x, y float64) {
-	sh.entity.SetPosition(x, y)
+	sh.x = x
+	sh.y = y
 }
 
 // Draw draws this
 func (sh *Shot) Draw(screen *ebiten.Image) {
-	sh.GetMainSprite().SetPosition(sh.entity.GetX(), sh.entity.GetY())
-	sh.GetMainSprite().SetIndex(sh.GetMainSpriteIndex())
-	sh.GetMainSprite().Draw(screen)
+	spr := sh.spr
+	spr.SetPosition(sh.x, sh.y)
+	spr.SetIndex(sh.sprIndex)
+	spr.Draw(screen)
 }
 
 // Move moves this
 func (sh *Shot) Move() {
-	sh.entity.SetPosition(sh.entity.GetX()+sh.vx, sh.entity.GetY()+sh.vy)
-	if sh.entity.IsOutOfField() {
-		sh.SetActive(false)
+	sh.SetPosition(sh.x+sh.vx, sh.y+sh.vy)
+	if util.IsOutOfArea(sh, sh.currField) {
+		sh.isActive = false
 	}
 }
 
 // SetField returns field
 func (sh *Shot) SetField(f *field.Field) {
-	sh.entity.SetField(f)
+	sh.currField = f
+}
+
+// OnHit should be called on hit something
+func (sh *Shot) OnHit() {
+	sh.isActive = false
 }

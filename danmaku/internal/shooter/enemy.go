@@ -30,8 +30,8 @@ func NewEnemy() *Enemy {
 
 // Init inits the enemy
 func (e *Enemy) Init() {
-	field := e.entity.GetField()
-	fieldWidth := field.GetRight() - field.GetLeft()
+	f := e.currField
+	fieldWidth := f.GetRight() - f.GetLeft()
 
 	width := 8.
 	height := 8.
@@ -41,42 +41,42 @@ func (e *Enemy) Init() {
 	e.SetMainWeapon(weapon.NewNormal(shot.KindEnemyNormal))
 
 	e.life = 1
-	e.SetActive(true)
-	e.SetMainSprite(sprite.Enemy1)
+	e.isActive = true
+	e.spr = sprite.Enemy1
 	e.updateMoveTo()
 }
 
 // Draw draws the enemy
 func (e *Enemy) Draw(screen *ebiten.Image) {
-	sprite.Enemy1.SetPosition(e.GetX(), e.GetY())
+	sprite.Enemy1.SetPosition(e.x, e.y)
 	sprite.Enemy1.SetIndex(util.DegreeToDirectionIndex(e.degree))
 	sprite.Enemy1.Draw(screen)
 }
 
 // Move moves the enemy
 func (e *Enemy) Move() {
-	e.SetPosition(e.GetX()+e.vx, e.GetY()+e.vy)
+	e.SetPosition(e.x+e.vx, e.y+e.vy)
 
 	if e.isArrived() {
 		e.updateMoveTo()
 	}
 
 	target := e.target
-	e.degree = util.RadToDeg(math.Atan2(target.GetY()-e.GetY(), target.GetX()-e.GetX()))
+	e.degree = util.RadToDeg(math.Atan2(target.GetY()-e.y, target.GetX()-e.x))
 }
 
 func (e *Enemy) isArrived() bool {
-	return math.Abs(e.GetY()-e.moveTo.y) < e.GetHeight() &&
-		math.Abs(e.GetX()-e.moveTo.x) < e.GetWidth()
+	return math.Abs(e.y-e.moveTo.y) < e.GetHeight() &&
+		math.Abs(e.x-e.moveTo.x) < e.GetWidth()
 }
 
 func (e *Enemy) updateMoveTo() {
-	field := e.entity.GetField()
-	x := (field.GetRight() - field.GetLeft()) * rand.Float64()
-	y := (field.GetBottom() - field.GetTop()) * rand.Float64()
+	f := e.currField
+	x := (f.GetRight() - f.GetLeft()) * rand.Float64()
+	y := (f.GetBottom() - f.GetTop()) * rand.Float64()
 	e.moveTo.x = x
 	e.moveTo.y = y
-	rad := math.Atan2(y-e.GetY(), x-e.GetX())
+	rad := math.Atan2(y-e.y, x-e.x)
 	e.vx = math.Cos(rad) * e.speed
 	e.vy = math.Sin(rad) * e.speed
 }

@@ -22,40 +22,44 @@ type Player struct {
 func NewPlayer() *Player {
 	p := &Player{Shooter: *NewShooter()}
 
+	return p
+}
+
+// Init inits the player
+func (p *Player) Init() {
 	p.life = 1
 	p.SetSize(10, 10)
 	p.SetPosition(120, 160)
 	p.SetSpeed(2, 270)
-	p.SetActive(true)
-
-	return p
+	p.isActive = true
+	p.spr = sprite.Player
 }
 
 // Draw draws the player
 func (p *Player) Draw(screen *ebiten.Image) {
-	sprite.Player.SetPosition(p.GetX(), p.GetY())
-	sprite.Player.SetIndex(util.DegreeToDirectionIndex(p.degree))
-	sprite.Player.Draw(screen)
+	p.spr.SetPosition(p.GetX(), p.GetY())
+	p.spr.SetIndex(util.DegreeToDirectionIndex(p.degree))
+	p.spr.Draw(screen)
 }
 
 // Move moves the player
 func (p *Player) Move(horizontal float64, vertical float64, isFire bool) {
 	x := p.GetX()
 	y := p.GetY()
-	field := p.entity.GetField()
+	f := p.currField
 
 	if vertical != 0 {
 		p.vy = vertical * p.speed
 		y = y + p.vy
-		y = math.Max(field.GetTop()+p.GetHeight()/2, y)
-		y = math.Min(field.GetBottom()-p.GetHeight()/2, y)
+		y = math.Max(f.GetTop()+p.GetHeight()/2, y)
+		y = math.Min(f.GetBottom()-p.GetHeight()/2, y)
 	}
 
 	if horizontal != 0 {
 		p.vx = horizontal * p.speed
 		x = x + p.vx
-		x = math.Max(field.GetLeft()+p.GetWidth()/2, x)
-		x = math.Min(field.GetRight()-p.GetWidth()/2, x)
+		x = math.Max(f.GetLeft()+p.GetWidth()/2, x)
+		x = math.Min(f.GetRight()-p.GetWidth()/2, x)
 	}
 
 	p.SetPosition(x, y)
