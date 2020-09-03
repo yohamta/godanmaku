@@ -22,7 +22,7 @@ func NewHit() *Hit {
 }
 
 // StartEffect starts the effect
-func (h *Hit) StartEffect(x, y int) {
+func (h *Hit) StartEffect(x, y float64) {
 	h.lifeSpan = 20
 	h.isActive = true
 	h.x = float64(x)

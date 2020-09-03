@@ -5,16 +5,17 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/effects"
-	"github.com/yohamta/godanmaku/danmaku/internal/movable"
+	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
+	"github.com/yohamta/godanmaku/danmaku/internal/shot"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/fields"
 	"github.com/yohamta/godanmaku/danmaku/internal/inputs"
-	"github.com/yohamta/godanmaku/danmaku/internal/weapons"
 )
 
 const (
@@ -34,25 +35,25 @@ const (
 
 // PlayerShooter represents interface of Player Weapon
 type PlayerShooter interface {
-	Shot(x, y float64, degree int, playerShots []*movable.PlayerShot)
+	Shot(x, y float64, degree int, playerShots []*shot.Shot)
 }
 
 var (
 	screenWidth  = 0
 	screenHeight = 0
 
-	input *inputs.Input
-	field *fields.Field
+	input        *inputs.Input
+	currentField *field.Field
 
 	uiBackground      *ui.Box
 	uiBackgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
 
-	player       *movable.Player
+	player       *shooter.Player
 	playerWeapon PlayerShooter
 
-	playerShots [maxPlayerShot]*movable.PlayerShot
-	enemyShots  [maxEnemyShot]*movable.EnemyShot
-	enemies     [maxEnemy]*movable.Enemy
+	playerShots [maxPlayerShot]*shot.Shot
+	enemyShots  [maxEnemyShot]*shot.Shot
+	enemies     [maxEnemy]*shooter.Enemy
 	hitEffects  [maxHitEffects]*effects.Hit
 	explosions  [maxExplosions]*effects.Explosion
 
@@ -86,30 +87,32 @@ func NewShooting(options NewShootingOptions) *Shooting {
 func initGame() {
 	rand.Seed(time.Now().Unix())
 	input = inputs.NewInput(screenWidth, screenHeight)
-	field = fields.NewField()
-	uiBackground = ui.NewBox(0, field.GetBottom(),
-		screenWidth, screenHeight-(field.GetBottom()-field.GetTop()),
+	currentField = field.NewField()
+	uiBackground = ui.NewBox(0, int(currentField.GetBottom()),
+		screenWidth, screenHeight-int(currentField.GetBottom()-currentField.GetTop()),
 		uiBackgroundColor)
 
-	movable.SetBoundary(field)
-
 	// player
-	player = movable.NewPlayer()
-	playerWeapon = &weapons.PlayerWeapon1{}
+	player = shooter.NewPlayer()
+	player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
+	player.SetField(currentField)
 
 	// enemies
 	for i := 0; i < len(enemies); i++ {
-		enemies[i] = movable.NewEnemy()
+		enemies[i] = shooter.NewEnemy()
+		enemies[i].SetField(currentField)
 	}
 
 	// shots
 	for i := 0; i < len(playerShots); i++ {
-		playerShots[i] = movable.NewPlayerShot()
+		playerShots[i] = shot.NewShot()
+		playerShots[i].SetField(currentField)
 	}
 
 	// enemyShots
 	for i := 0; i < len(enemyShots); i++ {
-		enemyShots[i] = movable.NewEnemyShot()
+		enemyShots[i] = shot.NewShot()
+		enemyShots[i].SetField(currentField)
 	}
 
 	// effects
@@ -134,8 +137,7 @@ func (stg *Shooting) Update() {
 	if player.IsDead() == false {
 		player.Move(input.Horizontal, input.Vertical, input.Fire)
 		if input.Fire {
-			x, y := player.GetPosition()
-			playerWeapon.Shot(x, y, player.GetNormalizedDegree(), playerShots[:])
+			player.FireWeapon(playerShots[:])
 		}
 	}
 
@@ -163,9 +165,9 @@ func (stg *Shooting) Update() {
 		if e.IsActive() == false {
 			continue
 		}
-		e.Move(player)
-		if player.IsDead() == false && e.ShouldAttack() {
-			weapons.EnemyAttack(e, player, enemyShots[:])
+		e.Move()
+		if player.IsDead() == false {
+			e.FireWeapon(enemyShots[:])
 		}
 	}
 
@@ -192,7 +194,7 @@ func (stg *Shooting) Update() {
 func (stg *Shooting) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
 
-	field.Draw(screen)
+	currentField.Draw(screen)
 
 	// player shots
 	for i := 0; i < len(playerShots); i++ {
@@ -252,7 +254,8 @@ func initEnemies() {
 
 	for i := 0; i < enemyCount; i++ {
 		enemy := enemies[i]
-		enemy.Init(movable.EnemyKindBall)
+		enemy.Init()
+		enemy.SetTarget(player)
 	}
 }
 
@@ -268,11 +271,11 @@ func checkCollision() {
 			if e.IsActive() == false {
 				continue
 			}
-			if collision.IsCollideWith(e, p) == false {
+			if e.IsCollideWith(p.GetEntity()) == false {
 				continue
 			}
 			e.AddDamage(1)
-			p.SetInactive()
+			p.SetActive(false)
 			createHitEffect(p.GetX(), p.GetY())
 			if e.IsDead() {
 				createExplosion(e.GetX(), e.GetY())
@@ -287,11 +290,11 @@ func checkCollision() {
 			if e.IsActive() == false {
 				continue
 			}
-			if collision.IsCollideWith(e, player) == false {
+			if player.IsCollideWith(e.GetEntity()) == false {
 				continue
 			}
 			player.AddDamage(1)
-			e.SetInactive()
+			e.SetActive(false)
 			createHitEffect(player.GetX(), player.GetY())
 			if player.IsDead() {
 				createExplosion(player.GetX(), player.GetY())
@@ -300,7 +303,7 @@ func checkCollision() {
 	}
 }
 
-func createHitEffect(x, y int) {
+func createHitEffect(x, y float64) {
 	for i := 0; i < len(hitEffects); i++ {
 		h := hitEffects[i]
 		if h.IsActive() {
@@ -311,7 +314,7 @@ func createHitEffect(x, y int) {
 	}
 }
 
-func createExplosion(x, y int) {
+func createExplosion(x, y float64) {
 	for i := 0; i < len(explosions); i++ {
 		e := explosions[i]
 		if e.IsActive() {

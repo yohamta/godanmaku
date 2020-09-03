@@ -23,12 +23,12 @@ func NewExplosion() *Explosion {
 }
 
 // StartEffect starts the effect
-func (h *Explosion) StartEffect(x, y int) {
+func (h *Explosion) StartEffect(x, y float64) {
 	h.spriteFrame = 0
 	h.updateCount = 0
 	h.isActive = true
-	h.x = float64(x)
-	h.y = float64(y)
+	h.x = x
+	h.y = y
 }
 
 // Draw draws the player

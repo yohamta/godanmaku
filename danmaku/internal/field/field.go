@@ -1,4 +1,4 @@
-package fields
+package field
 
 import (
 	"image/color"
@@ -15,10 +15,10 @@ const (
 
 // Field represents the game field
 type Field struct {
-	x             int
-	y             int
-	width         int
-	height        int
+	x             float64
+	y             float64
+	width         float64
+	height        float64
 	boundaryImage *ebiten.Image
 }
 
@@ -31,8 +31,8 @@ func NewField() *Field {
 	f.height = fieldHeight
 
 	borderColor := color.RGBA{0xff, 0, 0, 0x50}
-	offsetImage, _ := ebiten.NewImage(f.width, f.height, ebiten.FilterDefault)
-	paint.DrawRect(offsetImage, paint.Rect{X: 0, Y: 0, W: f.width, H: f.height}, borderColor, 1)
+	offsetImage, _ := ebiten.NewImage(int(f.width), int(f.height), ebiten.FilterDefault)
+	paint.DrawRect(offsetImage, paint.Rect{X: 0, Y: 0, W: int(f.width), H: int(f.height)}, borderColor, 1)
 	f.boundaryImage = offsetImage
 
 	return f
@@ -48,21 +48,21 @@ func (f *Field) Draw(screen *ebiten.Image) {
 }
 
 // GetLeft returns left
-func (f *Field) GetLeft() int {
+func (f *Field) GetLeft() float64 {
 	return f.x - f.width/2
 }
 
 // GetTop returns top
-func (f *Field) GetTop() int {
+func (f *Field) GetTop() float64 {
 	return f.y - f.height/2
 }
 
 // GetRight returns right
-func (f *Field) GetRight() int {
+func (f *Field) GetRight() float64 {
 	return f.x + f.width/2
 }
 
 // GetBottom returns bottom
-func (f *Field) GetBottom() int {
+func (f *Field) GetBottom() float64 {
 	return f.y + f.height/2
 }
