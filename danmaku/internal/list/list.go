@@ -20,6 +20,11 @@ func NewList() *List {
 	return l
 }
 
+// Length returns length
+func (l *List) Length() int {
+	return l.length
+}
+
 // AddValue returns the value
 func (l *List) AddValue(value unsafe.Pointer) {
 	e := NewElement(value)

@@ -62,11 +62,8 @@ func (f *Pool) CreateFromPool() unsafe.Pointer {
 
 // Sweep remove non active objects from active list
 func (f *Pool) Sweep() {
-	ite := f.actives.GetIterator()
-	if ite.HasNext() == false {
-		return
-	}
-	for elem := ite.Next(); ite.HasNext(); elem = ite.Next() {
+	for ite := f.actives.GetIterator(); ite.HasNext(); {
+		elem := ite.Next()
 		o := (*Object)(elem.GetValue())
 		if o.isActive == false {
 			f.actives.RemoveElement(elem)

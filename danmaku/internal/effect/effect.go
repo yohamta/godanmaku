@@ -20,7 +20,7 @@ func NewEffect() *Effect {
 }
 
 // Init inits the effect
-func (e *Effect) Init(c Controller, x, y float64) {
+func (e *Effect) init(c Controller, x, y float64) {
 	e.x = x
 	e.y = y
 	e.isActive = true

@@ -184,9 +184,6 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
-		if p.IsActive() == false {
-			continue
-		}
 		p.Draw(screen)
 	}
 
@@ -194,9 +191,6 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
 		e := (*shooter.Enemy)(obj.GetData())
-		if e.IsActive() == false {
-			continue
-		}
 		e.Draw(screen)
 	}
 
@@ -207,18 +201,12 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	// enemy shots
 	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 		e := (*shot.Shot)(ite.Next().GetData())
-		if e.IsActive() == false {
-			continue
-		}
 		e.Draw(screen)
 	}
 
 	// effects
 	for ite := shared.Effects.GetIterator(); ite.HasNext(); {
 		e := (*effect.Effect)(ite.Next().GetData())
-		if e.IsActive() == false {
-			continue
-		}
 		e.Draw(screen)
 	}
 
@@ -243,14 +231,8 @@ func checkCollision() {
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
-		if p.IsActive() == false {
-			continue
-		}
 		for ite2 := shared.Enemies.GetIterator(); ite2.HasNext(); {
 			e := (*shooter.Enemy)(ite2.Next().GetData())
-			if e.IsActive() == false {
-				continue
-			}
 			if util.IsCollideWith(e, p) == false {
 				continue
 			}
@@ -263,9 +245,6 @@ func checkCollision() {
 	if player.IsDead() == false {
 		for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 			e := (*shot.Shot)(ite.Next().GetData())
-			if e.IsActive() == false {
-				continue
-			}
 			if util.IsCollideWith(player, e) == false {
 				continue
 			}

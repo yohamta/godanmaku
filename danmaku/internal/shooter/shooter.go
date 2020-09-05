@@ -105,8 +105,8 @@ func (sh *Shooter) AddDamage(damage int) {
 	sh.life -= damage
 	if sh.life <= 0 {
 		sh.isActive = false
+		effect.CreateExplosion(sh.x, sh.y)
 	}
-	effect.CreateExplosion(sh.x, sh.y)
 }
 
 // IsDead returns if this is active

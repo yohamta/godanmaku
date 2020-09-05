@@ -23,7 +23,7 @@ func CreateHitEffect(x, y float64) {
 	if e == nil {
 		return
 	}
-	e.Init(hit, x, y)
+	e.init(hit, x, y)
 }
 
 // CreateExplosion creates an effect
@@ -32,5 +32,5 @@ func CreateExplosion(x, y float64) {
 	if e == nil {
 		return
 	}
-	e.Init(explosion, x, y)
+	e.init(explosion, x, y)
 }
