@@ -256,10 +256,6 @@ func checkCollision() {
 			}
 			e.AddDamage(1)
 			p.OnHit()
-			createHitEffect(p.GetX(), p.GetY())
-			if e.IsDead() {
-				createExplosion(e.GetX(), e.GetY())
-			}
 		}
 	}
 
@@ -275,26 +271,6 @@ func checkCollision() {
 			}
 			player.AddDamage(1)
 			e.OnHit()
-			createHitEffect(player.GetX(), player.GetY())
-			if player.IsDead() {
-				createExplosion(player.GetX(), player.GetY())
-			}
 		}
 	}
-}
-
-func createHitEffect(x, y float64) {
-	e := (*effect.Effect)(shared.Effects.CreateFromPool())
-	if e == nil {
-		return
-	}
-	e.Init(effect.Hit, x, y)
-}
-
-func createExplosion(x, y float64) {
-	e := (*effect.Effect)(shared.Effects.CreateFromPool())
-	if e == nil {
-		return
-	}
-	e.Init(effect.Explosion, x, y)
 }

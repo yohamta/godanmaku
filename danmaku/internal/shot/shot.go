@@ -3,6 +3,8 @@ package shot
 import (
 	"math"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
@@ -116,6 +118,7 @@ func (sh *Shot) SetField(f *field.Field) {
 // OnHit should be called on hit something
 func (sh *Shot) OnHit() {
 	sh.isActive = false
+	effect.CreateHitEffect(sh.x, sh.y)
 }
 
 func (sh *Shot) setSize(width, height float64) {

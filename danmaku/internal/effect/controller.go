@@ -1,6 +1,9 @@
 package effect
 
-import "github.com/hajimehoshi/ebiten"
+import (
+	"github.com/hajimehoshi/ebiten"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+)
 
 // Controller represents effect controller
 type Controller interface {
@@ -10,8 +13,24 @@ type Controller interface {
 }
 
 var (
-	// Hit effect
-	Hit = new(HitController)
-	// Explosion effect
-	Explosion = new(ExplosionController)
+	hit       = new(HitController)
+	explosion = new(ExplosionController)
 )
+
+// CreateHitEffect creates an effect
+func CreateHitEffect(x, y float64) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.Init(hit, x, y)
+}
+
+// CreateExplosion creates an effect
+func CreateExplosion(x, y float64) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.Init(explosion, x, y)
+}
