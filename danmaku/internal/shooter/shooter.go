@@ -35,6 +35,7 @@ type Shooter struct {
 	mainWeapon    weapon.Weapon
 	target        Target
 	movdweTo      struct{ x, y float64 }
+	shotsPool     *flyweight.Pool
 }
 
 // NewShooter creates shooter struct
@@ -119,8 +120,8 @@ func (sh *Shooter) SetPosition(x, y float64) {
 }
 
 // FireWeapon fire the weapon
-func (sh *Shooter) FireWeapon(shots *flyweight.Pool) {
-	sh.mainWeapon.Fire(sh, shots)
+func (sh *Shooter) FireWeapon() {
+	sh.mainWeapon.Fire(sh, sh.shotsPool)
 }
 
 // SetField returns field

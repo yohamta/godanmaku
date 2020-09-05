@@ -1,8 +1,6 @@
 package weapon
 
-import (
-	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
-)
+import "github.com/yohamta/godanmaku/danmaku/internal/flyweight"
 
 // Shooter represents shooter
 type Shooter interface {
@@ -13,5 +11,5 @@ type Shooter interface {
 
 // Weapon represents weapon
 type Weapon interface {
-	Fire(shooter Shooter, shots *flyweight.Pool)
+	Fire(shooter Shooter, shotsPool *flyweight.Pool)
 }

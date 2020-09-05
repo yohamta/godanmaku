@@ -5,6 +5,7 @@ import (
 	"math/rand"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
 
@@ -25,9 +26,11 @@ type Enemy struct {
 }
 
 // NewEnemy returns initialized Enemy
-func NewEnemy(f *field.Field) *Enemy {
+func NewEnemy(f *field.Field, shotsPool *flyweight.Pool) *Enemy {
 	e := &Enemy{Shooter: *NewShooter()}
 	e.currField = f
+	e.shotsPool = shotsPool
+
 	return e
 }
 

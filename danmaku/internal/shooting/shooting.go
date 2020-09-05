@@ -7,8 +7,7 @@ import (
 	"unsafe"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
@@ -46,11 +45,6 @@ var (
 
 	player *shooter.Player
 
-	playerShots *flyweight.Pool
-	enemyShots  *flyweight.Pool
-	enemies     *flyweight.Pool
-	effects     *flyweight.Pool
-
 	state gameState = gameStateLoading
 )
 
@@ -84,33 +78,29 @@ func (stg *Shooting) initGame() {
 		backgroundColor)
 
 	// player
-	player = shooter.NewPlayer(currentField)
+	player = shooter.NewPlayer(currentField, shared.PlayerShots)
 	player.Init()
 	player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
 	player.SetField(currentField)
 
 	// enemies
-	enemies = flyweight.NewPool()
 	for i := 0; i < maxEnemy; i++ {
-		enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(currentField)))
+		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(currentField, shared.EnemyShots)))
 	}
 
 	// shots
-	playerShots = flyweight.NewPool()
 	for i := 0; i < maxPlayerShot; i++ {
-		playerShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
+		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
 	}
 
 	// enemyShots
-	enemyShots = flyweight.NewPool()
 	for i := 0; i < maxEnemyShot; i++ {
-		enemyShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
+		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
 	}
 
 	// effects
-	effects = flyweight.NewPool()
 	for i := 0; i < maxEffects; i++ {
-		effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
+		shared.Effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
 
 	// Setup stage
@@ -128,12 +118,12 @@ func (stg *Shooting) Update() {
 	if player.IsDead() == false {
 		player.Move(input.Horizontal, input.Vertical, input.Fire)
 		if input.Fire {
-			player.FireWeapon(playerShots)
+			player.FireWeapon()
 		}
 	}
 
 	// player shots
-	for ite := playerShots.GetIterator(); ite.HasNext(); {
+	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
 		p := (*shot.Shot)(obj.GetData())
 		if p.IsActive() == false {
@@ -144,7 +134,7 @@ func (stg *Shooting) Update() {
 	}
 
 	// enemy shots
-	for ite := enemyShots.GetIterator(); ite.HasNext(); {
+	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
 		e := (*shot.Shot)(obj.GetData())
 		if e.IsActive() == false {
@@ -155,7 +145,7 @@ func (stg *Shooting) Update() {
 	}
 
 	// enemies
-	for ite := enemies.GetIterator(); ite.HasNext(); {
+	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
 		e := (*shooter.Enemy)(obj.GetData())
 		if e.IsActive() == false {
@@ -164,12 +154,12 @@ func (stg *Shooting) Update() {
 		}
 		e.Move()
 		if player.IsDead() == false {
-			e.FireWeapon(enemyShots)
+			e.FireWeapon()
 		}
 	}
 
 	// effects
-	for ite := effects.GetIterator(); ite.HasNext(); {
+	for ite := shared.Effects.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
 		e := (*effect.Effect)(obj.GetData())
 		if e.IsActive() == false {
@@ -179,10 +169,10 @@ func (stg *Shooting) Update() {
 		e.Update()
 	}
 
-	enemyShots.Sweep()
-	playerShots.Sweep()
-	enemies.Sweep()
-	effects.Sweep()
+	shared.EnemyShots.Sweep()
+	shared.PlayerShots.Sweep()
+	shared.Enemies.Sweep()
+	shared.Effects.Sweep()
 }
 
 // Draw draws the scene
@@ -192,7 +182,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	currentField.Draw(screen)
 
 	// player shots
-	for ite := playerShots.GetIterator(); ite.HasNext(); {
+	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
 		if p.IsActive() == false {
 			continue
@@ -201,7 +191,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	// enemies
-	for ite := enemies.GetIterator(); ite.HasNext(); {
+	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
 		e := (*shooter.Enemy)(obj.GetData())
 		if e.IsActive() == false {
@@ -215,7 +205,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	// enemy shots
-	for ite := enemyShots.GetIterator(); ite.HasNext(); {
+	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 		e := (*shot.Shot)(ite.Next().GetData())
 		if e.IsActive() == false {
 			continue
@@ -224,7 +214,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	// effects
-	for ite := effects.GetIterator(); ite.HasNext(); {
+	for ite := shared.Effects.GetIterator(); ite.HasNext(); {
 		e := (*effect.Effect)(ite.Next().GetData())
 		if e.IsActive() == false {
 			continue
@@ -240,7 +230,7 @@ func initEnemies() {
 	enemyCount := 20
 
 	for i := 0; i < enemyCount; i++ {
-		enemy := (*shooter.Enemy)(enemies.CreateFromPool())
+		enemy := (*shooter.Enemy)(shared.Enemies.CreateFromPool())
 		if enemy == nil {
 			return
 		}
@@ -251,12 +241,12 @@ func initEnemies() {
 
 func checkCollision() {
 	// player shots
-	for ite := playerShots.GetIterator(); ite.HasNext(); {
+	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
 		if p.IsActive() == false {
 			continue
 		}
-		for ite2 := enemies.GetIterator(); ite2.HasNext(); {
+		for ite2 := shared.Enemies.GetIterator(); ite2.HasNext(); {
 			e := (*shooter.Enemy)(ite2.Next().GetData())
 			if e.IsActive() == false {
 				continue
@@ -275,7 +265,7 @@ func checkCollision() {
 
 	// enemy shots
 	if player.IsDead() == false {
-		for ite := enemyShots.GetIterator(); ite.HasNext(); {
+		for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 			e := (*shot.Shot)(ite.Next().GetData())
 			if e.IsActive() == false {
 				continue
@@ -294,7 +284,7 @@ func checkCollision() {
 }
 
 func createHitEffect(x, y float64) {
-	e := (*effect.Effect)(effects.CreateFromPool())
+	e := (*effect.Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
 		return
 	}
@@ -302,7 +292,7 @@ func createHitEffect(x, y float64) {
 }
 
 func createExplosion(x, y float64) {
-	e := (*effect.Effect)(effects.CreateFromPool())
+	e := (*effect.Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
 		return
 	}

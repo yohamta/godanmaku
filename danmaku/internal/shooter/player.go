@@ -3,6 +3,8 @@ package shooter
 import (
 	"math"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
+
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
@@ -20,9 +22,10 @@ type Player struct {
 }
 
 // NewPlayer returns initialized Player
-func NewPlayer(f *field.Field) *Player {
+func NewPlayer(f *field.Field, shotsPool *flyweight.Pool) *Player {
 	p := &Player{Shooter: *NewShooter()}
 	p.currField = f
+	p.shotsPool = shotsPool
 
 	return p
 }

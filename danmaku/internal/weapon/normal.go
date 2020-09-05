@@ -23,13 +23,13 @@ func NewNormal(shotKind shot.Kind) *Normal {
 }
 
 // Fire create shots
-func (w *Normal) Fire(shooter Shooter, shots *flyweight.Pool) {
+func (w *Normal) Fire(shooter Shooter, shotsPool *flyweight.Pool) {
 	if time.Since(w.lastShotTime).Milliseconds() < 350 {
 		return
 	}
 	w.lastShotTime = time.Now()
 
-	s := (*shot.Shot)(shots.CreateFromPool())
+	s := (*shot.Shot)(shotsPool.CreateFromPool())
 	if s == nil {
 		return
 	}
