@@ -48,9 +48,9 @@ var (
 
 	playerShots *flyweight.Factory
 	enemyShots  *flyweight.Factory
-	enemies     [maxEnemy]*shooter.Enemy
-	hitEffects  [maxHitEffects]*effects.Hit
-	explosions  [maxExplosions]*effects.Explosion
+	enemies     *flyweight.Factory
+	hitEffects  *flyweight.Factory
+	explosions  *flyweight.Factory
 
 	state gameState = gameStateLoading
 )
@@ -85,39 +85,37 @@ func (stg *Shooting) initGame() {
 		backgroundColor)
 
 	// player
-	player = shooter.NewPlayer()
+	player = shooter.NewPlayer(currentField)
 	player.Init()
 	player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
 	player.SetField(currentField)
 
 	// enemies
-	for i := 0; i < len(enemies); i++ {
-		enemies[i] = shooter.NewEnemy()
-		enemies[i].SetField(currentField)
+	enemies = flyweight.NewFactory()
+	for i := 0; i < maxEnemy; i++ {
+		enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(currentField)))
 	}
 
 	// shots
 	playerShots = flyweight.NewFactory()
 	for i := 0; i < maxPlayerShot; i++ {
-		sh := shot.NewShot()
-		sh.SetField(currentField)
-		playerShots.AddToPool(unsafe.Pointer(sh))
+		playerShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
 	}
 
 	// enemyShots
 	enemyShots = flyweight.NewFactory()
 	for i := 0; i < maxEnemyShot; i++ {
-		sh := shot.NewShot()
-		sh.SetField(currentField)
-		enemyShots.AddToPool(unsafe.Pointer(sh))
+		enemyShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
 	}
 
 	// effects
-	for i := 0; i < len(hitEffects); i++ {
-		hitEffects[i] = effects.NewHit()
+	hitEffects = flyweight.NewFactory()
+	for i := 0; i < maxHitEffects; i++ {
+		hitEffects.AddToPool(unsafe.Pointer(effects.NewHit()))
 	}
-	for i := 0; i < len(explosions); i++ {
-		explosions[i] = effects.NewExplosion()
+	explosions = flyweight.NewFactory()
+	for i := 0; i < maxExplosions; i++ {
+		explosions.AddToPool(unsafe.Pointer(effects.NewExplosion()))
 	}
 
 	// Setup stage
@@ -164,9 +162,11 @@ func (stg *Shooting) Update() {
 	enemyShots.Sweep()
 
 	// enemies
-	for i := 0; i < len(enemies); i++ {
-		e := enemies[i]
+	for ite := enemies.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*shooter.Enemy)(obj.GetData())
 		if e.IsActive() == false {
+			obj.SetInactive()
 			continue
 		}
 		e.Move()
@@ -176,18 +176,22 @@ func (stg *Shooting) Update() {
 	}
 
 	// hitEffects
-	for i := 0; i < len(hitEffects); i++ {
-		h := hitEffects[i]
+	for ite := hitEffects.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		h := (*effects.Hit)(obj.GetData())
 		if h.IsActive() == false {
+			obj.SetInactive()
 			continue
 		}
 		h.Update()
 	}
 
 	// explosions
-	for i := 0; i < len(explosions); i++ {
-		e := explosions[i]
+	for ite := explosions.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*effects.Explosion)(obj.GetData())
 		if e.IsActive() == false {
+			obj.SetInactive()
 			continue
 		}
 		e.Update()
@@ -210,8 +214,9 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	// enemies
-	for i := 0; i < len(enemies); i++ {
-		e := enemies[i]
+	for ite := enemies.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*shooter.Enemy)(obj.GetData())
 		if e.IsActive() == false {
 			continue
 		}
@@ -232,8 +237,8 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	// explosions
-	for i := 0; i < len(explosions); i++ {
-		e := explosions[i]
+	for ite := explosions.GetIterator(); ite.HasNext(); {
+		e := (*effects.Explosion)(ite.Next().GetData())
 		if e.IsActive() == false {
 			continue
 		}
@@ -241,8 +246,8 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	// hitEffects
-	for i := 0; i < len(hitEffects); i++ {
-		h := hitEffects[i]
+	for ite := hitEffects.GetIterator(); ite.HasNext(); {
+		h := (*effects.Hit)(ite.Next().GetData())
 		if h.IsActive() == false {
 			continue
 		}
@@ -257,7 +262,10 @@ func initEnemies() {
 	enemyCount := 20
 
 	for i := 0; i < enemyCount; i++ {
-		enemy := enemies[i]
+		enemy := (*shooter.Enemy)(enemies.CreateFromPool())
+		if enemy == nil {
+			return
+		}
 		enemy.Init()
 		enemy.SetTarget(player)
 	}
@@ -270,8 +278,8 @@ func checkCollision() {
 		if p.IsActive() == false {
 			continue
 		}
-		for j := 0; j < len(enemies); j++ {
-			e := enemies[j]
+		for ite2 := enemies.GetIterator(); ite2.HasNext(); {
+			e := (*shooter.Enemy)(ite2.Next().GetData())
 			if e.IsActive() == false {
 				continue
 			}
@@ -308,23 +316,17 @@ func checkCollision() {
 }
 
 func createHitEffect(x, y float64) {
-	for i := 0; i < len(hitEffects); i++ {
-		h := hitEffects[i]
-		if h.IsActive() {
-			continue
-		}
-		h.StartEffect(x, y)
-		break
+	h := (*effects.Hit)(hitEffects.CreateFromPool())
+	if h == nil {
+		return
 	}
+	h.StartEffect(x, y)
 }
 
 func createExplosion(x, y float64) {
-	for i := 0; i < len(explosions); i++ {
-		e := explosions[i]
-		if e.IsActive() {
-			continue
-		}
-		e.StartEffect(x, y)
-		break
+	e := (*effects.Explosion)(explosions.CreateFromPool())
+	if e == nil {
+		return
 	}
+	e.StartEffect(x, y)
 }

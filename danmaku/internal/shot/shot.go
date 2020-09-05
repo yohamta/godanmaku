@@ -32,8 +32,9 @@ const (
 )
 
 // NewShot returns initialized struct
-func NewShot() *Shot {
+func NewShot(f *field.Field) *Shot {
 	sh := &Shot{}
+	sh.currField = f
 
 	return sh
 }

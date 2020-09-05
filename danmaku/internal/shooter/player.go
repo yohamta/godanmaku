@@ -5,6 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
@@ -19,8 +20,9 @@ type Player struct {
 }
 
 // NewPlayer returns initialized Player
-func NewPlayer() *Player {
+func NewPlayer(f *field.Field) *Player {
 	p := &Player{Shooter: *NewShooter()}
+	p.currField = f
 
 	return p
 }

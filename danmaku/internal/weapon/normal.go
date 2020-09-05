@@ -29,11 +29,10 @@ func (w *Normal) Fire(shooter Shooter, shots *flyweight.Factory) {
 	}
 	w.lastShotTime = time.Now()
 
-	obj := shots.CreateFromPool()
-	if obj == nil {
+	s := (*shot.Shot)(shots.CreateFromPool())
+	if s == nil {
 		return
 	}
-	s := (*shot.Shot)(obj.GetData())
 	s.Init(w.shotKind, shooter.GetDegree())
 	s.SetPosition(shooter.GetX(), shooter.GetY())
 }

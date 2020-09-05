@@ -48,7 +48,7 @@ func (f *Factory) GetIterator() *Iterator {
 }
 
 // CreateFromPool adds resusable item
-func (f *Factory) CreateFromPool() *Object {
+func (f *Factory) CreateFromPool() unsafe.Pointer {
 	e := f.pool.GetFirstElement()
 	if e == nil {
 		return nil
@@ -57,7 +57,7 @@ func (f *Factory) CreateFromPool() *Object {
 	f.actives.AddElement(e)
 	o := (*Object)(e.GetValue())
 	o.isActive = true
-	return o
+	return o.GetData()
 }
 
 // Sweep remove non active objects from active list
