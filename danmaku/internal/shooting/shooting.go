@@ -46,10 +46,10 @@ var (
 
 	player *shooter.Player
 
-	playerShots *flyweight.Factory
-	enemyShots  *flyweight.Factory
-	enemies     *flyweight.Factory
-	effects     *flyweight.Factory
+	playerShots *flyweight.Pool
+	enemyShots  *flyweight.Pool
+	enemies     *flyweight.Pool
+	effects     *flyweight.Pool
 
 	state gameState = gameStateLoading
 )
@@ -90,25 +90,25 @@ func (stg *Shooting) initGame() {
 	player.SetField(currentField)
 
 	// enemies
-	enemies = flyweight.NewFactory()
+	enemies = flyweight.NewPool()
 	for i := 0; i < maxEnemy; i++ {
 		enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(currentField)))
 	}
 
 	// shots
-	playerShots = flyweight.NewFactory()
+	playerShots = flyweight.NewPool()
 	for i := 0; i < maxPlayerShot; i++ {
 		playerShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
 	}
 
 	// enemyShots
-	enemyShots = flyweight.NewFactory()
+	enemyShots = flyweight.NewPool()
 	for i := 0; i < maxEnemyShot; i++ {
 		enemyShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
 	}
 
 	// effects
-	effects = flyweight.NewFactory()
+	effects = flyweight.NewPool()
 	for i := 0; i < maxEffects; i++ {
 		effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}

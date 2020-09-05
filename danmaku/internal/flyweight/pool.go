@@ -11,16 +11,16 @@ type Item interface {
 	IsActive() bool
 }
 
-// Factory represents factory
-type Factory struct {
+// Pool represents factory
+type Pool struct {
 	actives *list.List
 	pool    *list.List
 	ite     *Iterator
 }
 
-// NewFactory creates new Factory
-func NewFactory() *Factory {
-	f := &Factory{}
+// NewPool creates new Pool
+func NewPool() *Pool {
+	f := &Pool{}
 	f.actives = list.NewList()
 	f.pool = list.NewList()
 	f.ite = &Iterator{}
@@ -29,7 +29,7 @@ func NewFactory() *Factory {
 }
 
 // AddToPool adds resusable item
-func (f *Factory) AddToPool(item unsafe.Pointer) {
+func (f *Pool) AddToPool(item unsafe.Pointer) {
 	o := &Object{}
 	o.data = item
 	o.isActive = false
@@ -40,7 +40,7 @@ func (f *Factory) AddToPool(item unsafe.Pointer) {
 }
 
 // GetIterator adds resusable item
-func (f *Factory) GetIterator() *Iterator {
+func (f *Pool) GetIterator() *Iterator {
 	ite := f.ite
 	ite.current = f.actives.GetFirstElement()
 
@@ -48,7 +48,7 @@ func (f *Factory) GetIterator() *Iterator {
 }
 
 // CreateFromPool adds resusable item
-func (f *Factory) CreateFromPool() unsafe.Pointer {
+func (f *Pool) CreateFromPool() unsafe.Pointer {
 	e := f.pool.GetFirstElement()
 	if e == nil {
 		return nil
@@ -61,7 +61,7 @@ func (f *Factory) CreateFromPool() unsafe.Pointer {
 }
 
 // Sweep remove non active objects from active list
-func (f *Factory) Sweep() {
+func (f *Pool) Sweep() {
 	ite := f.actives.GetIterator()
 	if ite.HasNext() == false {
 		return

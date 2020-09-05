@@ -119,7 +119,7 @@ func (sh *Shooter) SetPosition(x, y float64) {
 }
 
 // FireWeapon fire the weapon
-func (sh *Shooter) FireWeapon(shots *flyweight.Factory) {
+func (sh *Shooter) FireWeapon(shots *flyweight.Pool) {
 	sh.mainWeapon.Fire(sh, shots)
 }
 

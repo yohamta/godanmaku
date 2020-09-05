@@ -23,7 +23,7 @@ func NewNormal(shotKind shot.Kind) *Normal {
 }
 
 // Fire create shots
-func (w *Normal) Fire(shooter Shooter, shots *flyweight.Factory) {
+func (w *Normal) Fire(shooter Shooter, shots *flyweight.Pool) {
 	if time.Since(w.lastShotTime).Milliseconds() < 350 {
 		return
 	}

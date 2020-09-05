@@ -13,5 +13,5 @@ type Shooter interface {
 
 // Weapon represents weapon
 type Weapon interface {
-	Fire(shooter Shooter, shots *flyweight.Factory)
+	Fire(shooter Shooter, shots *flyweight.Pool)
 }
