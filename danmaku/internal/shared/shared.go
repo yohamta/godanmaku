@@ -13,4 +13,9 @@ var (
 	Effects *flyweight.Pool = flyweight.NewPool()
 	// Enemies is a pool
 	Enemies *flyweight.Pool = flyweight.NewPool()
+
+	// OffsetX is screen offset
+	OffsetX float64
+	// OffsetY is screen offset
+	OffsetY float64
 )

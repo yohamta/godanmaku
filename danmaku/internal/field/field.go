@@ -3,14 +3,16 @@ package field
 import (
 	"image/color"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 const (
-	fieldWidth  = 240
-	fieldHeight = 260
+	fieldWidth  = 1000
+	fieldHeight = 1000
 )
 
 // Field represents the game field
@@ -20,15 +22,19 @@ type Field struct {
 	width         float64
 	height        float64
 	boundaryImage *ebiten.Image
+	windowWidth   float64
+	windowHeight  float64
 }
 
 // NewField creates new field
-func NewField() *Field {
+func NewField(windowWidth, windowHeight float64) *Field {
 	f := &Field{}
 	f.x = fieldWidth / 2
 	f.y = fieldHeight / 2
 	f.width = fieldWidth
 	f.height = fieldHeight
+	f.windowWidth = windowWidth
+	f.windowHeight = windowHeight
 
 	borderColor := color.RGBA{0xff, 0, 0, 0x50}
 	offsetImage, _ := ebiten.NewImage(int(f.width), int(f.height), ebiten.FilterDefault)
@@ -40,10 +46,12 @@ func NewField() *Field {
 
 // Draw draws the field
 func (f *Field) Draw(screen *ebiten.Image) {
-	sprite.Background.SetPosition(float64(f.x), float64(f.y))
-	sprite.Background.Draw(screen)
+	_, h := sprite.Background.Size()
+	sprite.Background.SetPosition(f.windowWidth/2, f.windowHeight/2)
+	sprite.Background.DrawWithScale(screen, (f.windowHeight / float64(h)))
 
 	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(-shared.OffsetX, -shared.OffsetY)
 	screen.DrawImage(f.boundaryImage, op)
 }
 
@@ -65,4 +73,14 @@ func (f *Field) GetRight() float64 {
 // GetBottom returns bottom
 func (f *Field) GetBottom() float64 {
 	return f.y + f.height/2
+}
+
+// GetCenterX returns center x
+func (f *Field) GetCenterX() float64 {
+	return f.width / 2
+}
+
+// GetCenterY returns center x
+func (f *Field) GetCenterY() float64 {
+	return f.height / 2
 }

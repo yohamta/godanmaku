@@ -1,15 +1,17 @@
 package weapon
 
-import "github.com/yohamta/godanmaku/danmaku/internal/flyweight"
-
-// Shooter represents shooter
-type Shooter interface {
-	GetX() float64
-	GetY() float64
-	GetDegree() int
-}
+import (
+	"time"
+)
 
 // Weapon represents weapon
 type Weapon interface {
-	Fire(shooter Shooter, shotsPool *flyweight.Pool)
+	Fire(x, y float64, degree int)
+}
+
+type shotFactoryFunction func(x, y float64, degree int)
+
+type baseWeapon struct {
+	shotFactory  shotFactoryFunction
+	lastShotTime time.Time
 }

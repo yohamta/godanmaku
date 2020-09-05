@@ -4,6 +4,8 @@ import (
 	"math"
 	"math/rand"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
 
@@ -28,7 +30,7 @@ type Enemy struct {
 // NewEnemy returns initialized Enemy
 func NewEnemy(f *field.Field, shotsPool *flyweight.Pool) *Enemy {
 	e := &Enemy{Shooter: *NewShooter()}
-	e.currField = f
+	e.field = f
 	e.shotsPool = shotsPool
 
 	return e
@@ -36,7 +38,7 @@ func NewEnemy(f *field.Field, shotsPool *flyweight.Pool) *Enemy {
 
 // Init inits the enemy
 func (e *Enemy) Init() {
-	f := e.currField
+	f := e.field
 	fieldWidth := f.GetRight() - f.GetLeft()
 
 	width := 8.
@@ -44,7 +46,7 @@ func (e *Enemy) Init() {
 	e.setSize(width, height)
 	e.SetPosition(rand.Float64()*float64(fieldWidth-width)+float64(width/2), 30)
 	e.SetSpeed(0.96, 90)
-	e.SetMainWeapon(weapon.NewNormal(shot.KindEnemyNormal))
+	e.SetWeapon(weapon.NewNormal(shot.NormalEnemyShot))
 
 	e.life = 1
 	e.isActive = true
@@ -54,13 +56,13 @@ func (e *Enemy) Init() {
 
 // Draw draws the enemy
 func (e *Enemy) Draw(screen *ebiten.Image) {
-	sprite.Enemy1.SetPosition(e.x, e.y)
+	sprite.Enemy1.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
 	sprite.Enemy1.SetIndex(util.DegreeToDirectionIndex(e.degree))
 	sprite.Enemy1.Draw(screen)
 }
 
-// Move moves the enemy
-func (e *Enemy) Move() {
+// Update moves the enemy
+func (e *Enemy) Update() {
 	e.SetPosition(e.x+e.vx, e.y+e.vy)
 
 	if e.isArrived() {
@@ -77,7 +79,7 @@ func (e *Enemy) isArrived() bool {
 }
 
 func (e *Enemy) updateMoveTo() {
-	f := e.currField
+	f := e.field
 	x := (f.GetRight() - f.GetLeft()) * rand.Float64()
 	y := (f.GetBottom() - f.GetTop()) * rand.Float64()
 	e.moveTo.x = x

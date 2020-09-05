@@ -12,7 +12,7 @@ import (
 const (
 	width    = 80
 	height   = 40
-	bottom   = 20
+	bottom   = 10
 	maxAlpha = 0x30
 )
 
@@ -27,7 +27,7 @@ type FireButton struct {
 
 // NewFireButton returns new FireButton
 func NewFireButton(screenWidth, screenHeight int) *FireButton {
-	x := (screenWidth / 2) - width/2
+	x := (screenWidth / 2) + width/2 - 10
 	y := screenHeight - height - bottom
 	baseButton := (ui.NewButton(x, y, width, height))
 	fButton := &FireButton{Button: *baseButton}

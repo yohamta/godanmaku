@@ -3,20 +3,23 @@ package shooter
 import (
 	"math"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/shot"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
+	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
-	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 )
 
 // Player represents player of the game
 type Player struct {
 	Shooter
-	wep       weapon.Weapon
 	shotSpeed float64
 	shotSize  float64
 }
@@ -24,7 +27,7 @@ type Player struct {
 // NewPlayer returns initialized Player
 func NewPlayer(f *field.Field, shotsPool *flyweight.Pool) *Player {
 	p := &Player{Shooter: *NewShooter()}
-	p.currField = f
+	p.field = f
 	p.shotsPool = shotsPool
 
 	return p
@@ -34,24 +37,25 @@ func NewPlayer(f *field.Field, shotsPool *flyweight.Pool) *Player {
 func (p *Player) Init() {
 	p.life = 1
 	p.setSize(10, 10)
-	p.SetPosition(120, 160)
+	p.SetPosition(p.field.GetCenterX()/2, p.field.GetCenterY()/2)
 	p.SetSpeed(2, 270)
 	p.isActive = true
 	p.spr = sprite.Player
+	p.SetWeapon(weapon.NewNormal(shot.NormalPlayerShot))
 }
 
 // Draw draws the player
 func (p *Player) Draw(screen *ebiten.Image) {
-	p.spr.SetPosition(p.GetX(), p.GetY())
+	p.spr.SetPosition(p.GetX()-shared.OffsetX, p.GetY()-shared.OffsetY)
 	p.spr.SetIndex(util.DegreeToDirectionIndex(p.degree))
 	p.spr.Draw(screen)
 }
 
-// Move moves the player
-func (p *Player) Move(horizontal float64, vertical float64, isFire bool) {
+// Update moves the player
+func (p *Player) Update(horizontal float64, vertical float64, isFire bool) {
 	x := p.GetX()
 	y := p.GetY()
-	f := p.currField
+	f := p.field
 
 	if vertical != 0 {
 		p.vy = vertical * p.speed

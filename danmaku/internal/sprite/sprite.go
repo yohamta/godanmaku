@@ -113,6 +113,18 @@ func (s *Sprite) Draw(screen *ebiten.Image) {
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
+// DrawWithScale draws this sprite
+func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
+	w, h := s.Size()
+	x := s.position.x
+	y := s.position.y
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(x-float64(w)*scale/2, y-float64(h)*scale/2)
+	op.GeoM.Scale(scale, scale)
+
+	screen.DrawImage(s.subImages[s.index], op)
+}
+
 // LoadSprites loads sprites
 func LoadSprites() {
 	Player = createSprite(&images.PLAYER, 8)

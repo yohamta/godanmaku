@@ -25,7 +25,7 @@ type Target interface {
 type Shooter struct {
 	x, y          float64
 	width, height float64
-	currField     *field.Field
+	field         *field.Field
 	isActive      bool
 	speed         float64
 	vx            float64
@@ -114,8 +114,8 @@ func (sh *Shooter) IsDead() bool {
 	return sh.life <= 0
 }
 
-// SetMainWeapon adds damage to this playe
-func (sh *Shooter) SetMainWeapon(mainWeapon weapon.Weapon) {
+// SetWeapon adds damage to this playe
+func (sh *Shooter) SetWeapon(mainWeapon weapon.Weapon) {
 	sh.mainWeapon = mainWeapon
 }
 
@@ -125,14 +125,9 @@ func (sh *Shooter) SetPosition(x, y float64) {
 	sh.y = y
 }
 
-// FireWeapon fire the weapon
-func (sh *Shooter) FireWeapon() {
-	sh.mainWeapon.Fire(sh, sh.shotsPool)
-}
-
-// SetField returns field
-func (sh *Shooter) SetField(f *field.Field) {
-	sh.currField = f
+// Fire fire the weapon
+func (sh *Shooter) Fire() {
+	sh.mainWeapon.Fire(sh.x, sh.y, sh.degree)
 }
 
 // SetTarget sets the target

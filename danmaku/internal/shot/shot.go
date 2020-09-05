@@ -13,9 +13,10 @@ import (
 
 // Shot represents shooter
 type Shot struct {
+	controller    controller
 	x, y          float64
 	width, height float64
-	currField     *field.Field
+	field         *field.Field
 	isActive      bool
 	speed         float64
 	vx            float64
@@ -25,110 +26,77 @@ type Shot struct {
 	sprIndex      int
 }
 
-// Kind represetns the kind of the shot
-type Kind int
-
-const (
-	KindPlayerNormal Kind = iota
-	KindEnemyNormal
-)
-
 // NewShot returns initialized struct
 func NewShot(f *field.Field) *Shot {
-	sh := &Shot{}
-	sh.currField = f
+	s := &Shot{}
+	s.field = f
 
-	return sh
-}
-
-// Init inits the shot accoring to the kind
-func (sh *Shot) Init(kind Kind, degree int) {
-	sh.isActive = true
-
-	switch kind {
-	case KindPlayerNormal:
-		sh.spr = sprite.PlayerBullet
-		sh.setSize(4, 4)
-		sh.setSpeed(2.56, degree)
-		break
-	case KindEnemyNormal:
-		sh.spr = sprite.RandomEnemyShot()
-		sh.setSize(10, 10)
-		sh.setSpeed(1.44, degree)
-	}
+	return s
 }
 
 // IsActive returns if this is active
-func (sh *Shot) IsActive() bool {
-	return sh.isActive
+func (s *Shot) IsActive() bool {
+	return s.isActive
 }
 
 // GetX returns x
-func (sh *Shot) GetX() float64 {
-	return sh.x
+func (s *Shot) GetX() float64 {
+	return s.x
 }
 
 // GetY returns y
-func (sh *Shot) GetY() float64 {
-	return sh.y
+func (s *Shot) GetY() float64 {
+	return s.y
 }
 
 // GetWidth returns width
-func (sh *Shot) GetWidth() float64 {
-	return sh.width
+func (s *Shot) GetWidth() float64 {
+	return s.width
 }
 
 // GetHeight returns height
-func (sh *Shot) GetHeight() float64 {
-	return sh.height
-}
-
-// GetDegree returns the degree
-func (sh *Shot) GetDegree() int {
-	return sh.degree
-}
-
-// SetPosition sets the position
-func (sh *Shot) SetPosition(x, y float64) {
-	sh.x = x
-	sh.y = y
+func (s *Shot) GetHeight() float64 {
+	return s.height
 }
 
 // Draw draws this
-func (sh *Shot) Draw(screen *ebiten.Image) {
-	spr := sh.spr
-	spr.SetPosition(sh.x, sh.y)
-	spr.SetIndex(sh.sprIndex)
-	spr.Draw(screen)
+func (s *Shot) Draw(screen *ebiten.Image) {
+	s.controller.draw(s, screen)
 }
 
-// Move moves this
-func (sh *Shot) Move() {
-	sh.SetPosition(sh.x+sh.vx, sh.y+sh.vy)
-	if util.IsOutOfArea(sh, sh.currField) {
-		sh.isActive = false
-	}
-}
-
-// SetField returns field
-func (sh *Shot) SetField(f *field.Field) {
-	sh.currField = f
+// Update updates this shot
+func (s *Shot) Update() {
+	s.controller.update(s)
 }
 
 // OnHit should be called on hit something
-func (sh *Shot) OnHit() {
-	sh.isActive = false
-	effect.CreateHitEffect(sh.x, sh.y)
+func (s *Shot) OnHit() {
+	s.isActive = false
+	effect.CreateHitEffect(s.x, s.y)
 }
 
-func (sh *Shot) setSize(width, height float64) {
-	sh.width = width
-	sh.height = height
+func (s *Shot) setSize(width, height float64) {
+	s.width = width
+	s.height = height
 }
 
-func (sh *Shot) setSpeed(speed float64, degree int) {
-	sh.speed = speed
-	sh.degree = degree
-	sh.vx = math.Cos(util.DegToRad(sh.degree)) * speed
-	sh.vy = math.Sin(util.DegToRad(sh.degree)) * speed
+func (s *Shot) setSpeed(speed float64, degree int) {
+	s.speed = speed
+	s.degree = degree
+	s.vx = math.Cos(util.DegToRad(s.degree)) * speed
+	s.vy = math.Sin(util.DegToRad(s.degree)) * speed
+}
+
+func (s *Shot) init(controller controller, x, y float64, degree int) {
+	s.isActive = true
+	s.x = x
+	s.y = y
+	s.degree = degree
+	s.controller = controller
+	controller.init(s)
+}
+
+func (s *Shot) setPosition(x, y float64) {
+	s.x = x
+	s.y = y
 }

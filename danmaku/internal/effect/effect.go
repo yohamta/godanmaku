@@ -7,7 +7,7 @@ type Effect struct {
 	x           float64
 	y           float64
 	isActive    bool
-	controller  Controller
+	controller  controller
 	updateCount int
 	spriteFrame int
 }
@@ -17,17 +17,6 @@ func NewEffect() *Effect {
 	e := &Effect{}
 
 	return e
-}
-
-// Init inits the effect
-func (e *Effect) init(c Controller, x, y float64) {
-	e.x = x
-	e.y = y
-	e.isActive = true
-	e.controller = c
-	e.updateCount = 0
-	e.spriteFrame = 0
-	c.init(e)
 }
 
 // IsActive returns if this is active
@@ -44,4 +33,14 @@ func (e *Effect) Draw(screen *ebiten.Image) {
 func (e *Effect) Update() {
 	e.controller.update(e)
 	e.updateCount++
+}
+
+func (e *Effect) init(c controller, x, y float64) {
+	e.x = x
+	e.y = y
+	e.isActive = true
+	e.controller = c
+	e.updateCount = 0
+	e.spriteFrame = 0
+	c.init(e)
 }

@@ -5,16 +5,15 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 )
 
-// Controller represents effect controller
-type Controller interface {
+type controller interface {
 	init(e *Effect)
 	update(e *Effect)
 	draw(e *Effect, screen *ebiten.Image)
 }
 
 var (
-	hit       = new(HitController)
-	explosion = new(ExplosionController)
+	hitController       = new(hit)
+	explosionController = new(explosion)
 )
 
 // CreateHitEffect creates an effect
@@ -23,7 +22,7 @@ func CreateHitEffect(x, y float64) {
 	if e == nil {
 		return
 	}
-	e.init(hit, x, y)
+	e.init(hitController, x, y)
 }
 
 // CreateExplosion creates an effect
@@ -32,5 +31,5 @@ func CreateExplosion(x, y float64) {
 	if e == nil {
 		return
 	}
-	e.init(explosion, x, y)
+	e.init(explosionController, x, y)
 }

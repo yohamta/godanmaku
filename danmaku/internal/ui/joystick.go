@@ -28,20 +28,20 @@ type Joystick struct {
 
 // NewJoystick returns Joystick
 func NewJoystick() *Joystick {
-	p := &Joystick{}
+	joystick := &Joystick{}
 
 	// Prepare an offset image for Joystick
-	p.keySize = 20
-	p.panelNum = 5
-	p.panelSize = p.keySize * p.panelNum
+	joystick.keySize = 20
+	joystick.panelNum = 5
+	joystick.panelSize = joystick.keySize * joystick.panelNum
 
 	// color setting
-	p.color = color.RGBA{0, 0xff, 0, 0xff}
-	p.animateAlpha = -3
+	joystick.color = color.RGBA{0, 0xff, 0, 0xff}
+	joystick.animateAlpha = -3
 
-	p.preparePanel()
+	joystick.preparePanel()
 
-	return p
+	return joystick
 }
 
 func (joystick *Joystick) preparePanel() {

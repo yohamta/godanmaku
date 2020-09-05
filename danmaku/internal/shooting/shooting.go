@@ -1,7 +1,6 @@
 package shooting
 
 import (
-	"image/color"
 	"math/rand"
 	"time"
 	"unsafe"
@@ -11,12 +10,9 @@ import (
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
-	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/inputs"
@@ -27,10 +23,6 @@ const (
 	maxEnemyShot  = 70
 	maxEnemy      = 50
 	maxEffects    = 100
-)
-
-var (
-	backgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
 )
 
 type gameState int
@@ -46,9 +38,8 @@ type Shooting struct {
 	screenHeight int
 	player       *shooter.Player
 	state        gameState
-	background   *ui.Box
 	input        *inputs.Input
-	fld          *field.Field
+	field        *field.Field
 }
 
 // NewShooting returns new Shooting struct
@@ -70,27 +61,22 @@ func (s *Shooting) init() {
 	rand.Seed(time.Now().Unix())
 	s.input = inputs.NewInput(s.screenWidth, s.screenHeight)
 
-	fld := field.NewField()
-	s.fld = fld
-
-	s.background = ui.NewBox(0, int(fld.GetBottom()),
-		s.screenWidth,
-		s.screenHeight-int(fld.GetBottom()-fld.GetTop()),
-		backgroundColor)
+	f := field.NewField(float64(s.screenWidth), float64(s.screenHeight))
+	s.field = f
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
-		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(fld, shared.EnemyShots)))
+		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(f, shared.EnemyShots)))
 	}
 
 	// shots
 	for i := 0; i < maxPlayerShot; i++ {
-		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(fld)))
+		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(f)))
 	}
 
 	// enemyShots
 	for i := 0; i < maxEnemyShot; i++ {
-		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(fld)))
+		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(f)))
 	}
 
 	// effects
@@ -107,10 +93,9 @@ func (s *Shooting) setupStage() {
 	shared.Effects.Clean()
 
 	// player
-	s.player = shooter.NewPlayer(s.fld, shared.PlayerShots)
+	f := s.field
+	s.player = shooter.NewPlayer(f, shared.PlayerShots)
 	s.player.Init()
-	s.player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
-	s.player.SetField(s.fld)
 
 	// enemies
 	s.initEnemies()
@@ -127,9 +112,9 @@ func (s *Shooting) Update() {
 
 	// player
 	if player.IsDead() == false {
-		player.Move(input.Horizontal, input.Vertical, input.Fire)
+		player.Update(input.Horizontal, input.Vertical, input.Fire)
 		if input.Fire {
-			player.FireWeapon()
+			player.Fire()
 		}
 	}
 
@@ -141,7 +126,7 @@ func (s *Shooting) Update() {
 			obj.SetInactive()
 			continue
 		}
-		p.Move()
+		p.Update()
 	}
 
 	// enemy shots
@@ -152,7 +137,7 @@ func (s *Shooting) Update() {
 			obj.SetInactive()
 			continue
 		}
-		e.Move()
+		e.Update()
 	}
 
 	// enemies
@@ -163,9 +148,9 @@ func (s *Shooting) Update() {
 			obj.SetInactive()
 			continue
 		}
-		e.Move()
+		e.Update()
 		if player.IsDead() == false {
-			e.FireWeapon()
+			e.Fire()
 		}
 	}
 
@@ -192,9 +177,12 @@ func (s *Shooting) Update() {
 
 // Draw draws the scene
 func (s *Shooting) Draw(screen *ebiten.Image) {
-	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
+	// update offset
+	shared.OffsetX = s.player.GetX() - float64(s.screenWidth/2)
+	shared.OffsetY = s.player.GetY() - float64(s.screenHeight/2)
 
-	s.fld.Draw(screen)
+	// draw background
+	s.field.Draw(screen)
 
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
@@ -225,7 +213,6 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	s.background.Draw(screen)
 	s.input.Draw(screen)
 }
 
