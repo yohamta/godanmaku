@@ -6,13 +6,14 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/effects"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
 
@@ -26,8 +27,7 @@ const (
 	maxPlayerShot = 80
 	maxEnemyShot  = 70
 	maxEnemy      = 50
-	maxHitEffects = 30
-	maxExplosions = 30
+	maxEffects    = 100
 )
 
 type gameState int
@@ -49,8 +49,7 @@ var (
 	playerShots *flyweight.Factory
 	enemyShots  *flyweight.Factory
 	enemies     *flyweight.Factory
-	hitEffects  *flyweight.Factory
-	explosions  *flyweight.Factory
+	effects     *flyweight.Factory
 
 	state gameState = gameStateLoading
 )
@@ -109,13 +108,9 @@ func (stg *Shooting) initGame() {
 	}
 
 	// effects
-	hitEffects = flyweight.NewFactory()
-	for i := 0; i < maxHitEffects; i++ {
-		hitEffects.AddToPool(unsafe.Pointer(effects.NewHit()))
-	}
-	explosions = flyweight.NewFactory()
-	for i := 0; i < maxExplosions; i++ {
-		explosions.AddToPool(unsafe.Pointer(effects.NewExplosion()))
+	effects = flyweight.NewFactory()
+	for i := 0; i < maxEffects; i++ {
+		effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
 
 	// Setup stage
@@ -147,7 +142,6 @@ func (stg *Shooting) Update() {
 		}
 		p.Move()
 	}
-	playerShots.Sweep()
 
 	// enemy shots
 	for ite := enemyShots.GetIterator(); ite.HasNext(); {
@@ -159,7 +153,6 @@ func (stg *Shooting) Update() {
 		}
 		e.Move()
 	}
-	enemyShots.Sweep()
 
 	// enemies
 	for ite := enemies.GetIterator(); ite.HasNext(); {
@@ -175,27 +168,21 @@ func (stg *Shooting) Update() {
 		}
 	}
 
-	// hitEffects
-	for ite := hitEffects.GetIterator(); ite.HasNext(); {
+	// effects
+	for ite := effects.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
-		h := (*effects.Hit)(obj.GetData())
-		if h.IsActive() == false {
-			obj.SetInactive()
-			continue
-		}
-		h.Update()
-	}
-
-	// explosions
-	for ite := explosions.GetIterator(); ite.HasNext(); {
-		obj := ite.Next()
-		e := (*effects.Explosion)(obj.GetData())
+		e := (*effect.Effect)(obj.GetData())
 		if e.IsActive() == false {
 			obj.SetInactive()
 			continue
 		}
 		e.Update()
 	}
+
+	enemyShots.Sweep()
+	playerShots.Sweep()
+	enemies.Sweep()
+	effects.Sweep()
 }
 
 // Draw draws the scene
@@ -236,22 +223,13 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	// explosions
-	for ite := explosions.GetIterator(); ite.HasNext(); {
-		e := (*effects.Explosion)(ite.Next().GetData())
+	// effects
+	for ite := effects.GetIterator(); ite.HasNext(); {
+		e := (*effect.Effect)(ite.Next().GetData())
 		if e.IsActive() == false {
 			continue
 		}
 		e.Draw(screen)
-	}
-
-	// hitEffects
-	for ite := hitEffects.GetIterator(); ite.HasNext(); {
-		h := (*effects.Hit)(ite.Next().GetData())
-		if h.IsActive() == false {
-			continue
-		}
-		h.Draw(screen)
 	}
 
 	background.Draw(screen)
@@ -316,17 +294,17 @@ func checkCollision() {
 }
 
 func createHitEffect(x, y float64) {
-	h := (*effects.Hit)(hitEffects.CreateFromPool())
-	if h == nil {
-		return
-	}
-	h.StartEffect(x, y)
-}
-
-func createExplosion(x, y float64) {
-	e := (*effects.Explosion)(explosions.CreateFromPool())
+	e := (*effect.Effect)(effects.CreateFromPool())
 	if e == nil {
 		return
 	}
-	e.StartEffect(x, y)
+	e.Init(effect.Hit, x, y)
+}
+
+func createExplosion(x, y float64) {
+	e := (*effect.Effect)(effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.Init(effect.Explosion, x, y)
 }
