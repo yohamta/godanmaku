@@ -29,6 +29,10 @@ const (
 	maxEffects    = 100
 )
 
+var (
+	backgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
+)
+
 type gameState int
 
 const (
@@ -36,62 +40,57 @@ const (
 	gameStatePlaying
 )
 
-var (
-	input        *inputs.Input
-	currentField *field.Field
-
-	background      *ui.Box
-	backgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
-
-	player *shooter.Player
-
-	state gameState = gameStateLoading
-)
-
 // Shooting represents shooting scene
 type Shooting struct {
 	screenWidth  int
 	screenHeight int
+	player       *shooter.Player
+	state        gameState
+	background   *ui.Box
+	input        *inputs.Input
+	fld          *field.Field
 }
 
 // NewShooting returns new Shooting struct
 func NewShooting(screenWidth, screenHeight int) *Shooting {
-	stg := &Shooting{}
+	s := &Shooting{}
 
-	stg.screenWidth = screenWidth
-	stg.screenHeight = screenHeight
+	s.screenWidth = screenWidth
+	s.screenHeight = screenHeight
 
-	state = gameStateLoading
-	stg.init()
-	stg.setupStage()
-	state = gameStatePlaying
+	s.state = gameStateLoading
+	s.init()
+	s.setupStage()
+	s.state = gameStatePlaying
 
-	return stg
+	return s
 }
 
-func (stg *Shooting) init() {
+func (s *Shooting) init() {
 	rand.Seed(time.Now().Unix())
-	input = inputs.NewInput(stg.screenWidth, stg.screenHeight)
-	currentField = field.NewField()
+	s.input = inputs.NewInput(s.screenWidth, s.screenHeight)
 
-	background = ui.NewBox(0, int(currentField.GetBottom()),
-		stg.screenWidth,
-		stg.screenHeight-int(currentField.GetBottom()-currentField.GetTop()),
+	fld := field.NewField()
+	s.fld = fld
+
+	s.background = ui.NewBox(0, int(fld.GetBottom()),
+		s.screenWidth,
+		s.screenHeight-int(fld.GetBottom()-fld.GetTop()),
 		backgroundColor)
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
-		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(currentField, shared.EnemyShots)))
+		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(fld, shared.EnemyShots)))
 	}
 
 	// shots
 	for i := 0; i < maxPlayerShot; i++ {
-		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
+		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(fld)))
 	}
 
 	// enemyShots
 	for i := 0; i < maxEnemyShot; i++ {
-		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(currentField)))
+		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(fld)))
 	}
 
 	// effects
@@ -100,7 +99,7 @@ func (stg *Shooting) init() {
 	}
 }
 
-func (stg *Shooting) setupStage() {
+func (s *Shooting) setupStage() {
 	// cleaning
 	shared.Enemies.Clean()
 	shared.PlayerShots.Clean()
@@ -108,20 +107,23 @@ func (stg *Shooting) setupStage() {
 	shared.Effects.Clean()
 
 	// player
-	player = shooter.NewPlayer(currentField, shared.PlayerShots)
-	player.Init()
-	player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
-	player.SetField(currentField)
+	s.player = shooter.NewPlayer(s.fld, shared.PlayerShots)
+	s.player.Init()
+	s.player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
+	s.player.SetField(s.fld)
 
 	// enemies
-	initEnemies()
+	s.initEnemies()
 }
 
 // Update updates the scene
-func (stg *Shooting) Update() {
-	input.Update()
+func (s *Shooting) Update() {
+	s.input.Update()
 
-	checkCollision()
+	s.checkCollision()
+
+	player := s.player
+	input := s.input
 
 	// player
 	if player.IsDead() == false {
@@ -184,15 +186,15 @@ func (stg *Shooting) Update() {
 	shared.Effects.Sweep()
 
 	if player.IsDead() && shared.Effects.GetActiveNum() == 0 {
-		stg.setupStage()
+		s.setupStage()
 	}
 }
 
 // Draw draws the scene
-func (stg *Shooting) Draw(screen *ebiten.Image) {
+func (s *Shooting) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
 
-	currentField.Draw(screen)
+	s.fld.Draw(screen)
 
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
@@ -207,8 +209,8 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	if player.IsDead() == false {
-		player.Draw(screen)
+	if s.player.IsDead() == false {
+		s.player.Draw(screen)
 	}
 
 	// enemy shots
@@ -223,11 +225,11 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	background.Draw(screen)
-	input.Draw(screen)
+	s.background.Draw(screen)
+	s.input.Draw(screen)
 }
 
-func initEnemies() {
+func (s *Shooting) initEnemies() {
 	enemyCount := 20
 
 	for i := 0; i < enemyCount; i++ {
@@ -236,11 +238,11 @@ func initEnemies() {
 			return
 		}
 		enemy.Init()
-		enemy.SetTarget(player)
+		enemy.SetTarget(s.player)
 	}
 }
 
-func checkCollision() {
+func (s *Shooting) checkCollision() {
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
@@ -255,13 +257,13 @@ func checkCollision() {
 	}
 
 	// enemy shots
-	if player.IsDead() == false {
+	if s.player.IsDead() == false {
 		for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 			e := (*shot.Shot)(ite.Next().GetData())
-			if util.IsCollideWith(player, e) == false {
+			if util.IsCollideWith(s.player, e) == false {
 				continue
 			}
-			player.AddDamage(1)
+			s.player.AddDamage(1)
 			e.OnHit()
 		}
 	}
