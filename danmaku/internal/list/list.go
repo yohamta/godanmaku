@@ -1,22 +1,28 @@
 package list
 
+import (
+	"unsafe"
+)
+
 // List represents container
 type List struct {
 	length int
 	first  *Element
 	last   *Element
+	ite    *Iterator
 }
 
 // NewList creates new element
 func NewList() *List {
 	l := &List{}
+	l.ite = &Iterator{}
 
 	return l
 }
 
 // AddValue returns the value
-func (l *List) AddValue(v Value) {
-	e := NewElement(v)
+func (l *List) AddValue(value unsafe.Pointer) {
+	e := NewElement(value)
 	l.AddElement(e)
 }
 
@@ -62,4 +68,11 @@ func (l *List) Clear() {
 	l.first = nil
 	l.last = nil
 	l.length = 0
+}
+
+// GetIterator retusn iterator
+func (l *List) GetIterator() *Iterator {
+	l.ite.list = l
+	l.ite.current = l.GetFirstElement()
+	return l.ite
 }

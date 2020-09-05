@@ -3,8 +3,9 @@ package shooter
 import (
 	"math"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
-	"github.com/yohamta/godanmaku/danmaku/internal/shot"
 	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
@@ -118,7 +119,7 @@ func (sh *Shooter) SetPosition(x, y float64) {
 }
 
 // FireWeapon fire the weapon
-func (sh *Shooter) FireWeapon(shots []*shot.Shot) {
+func (sh *Shooter) FireWeapon(shots *flyweight.Factory) {
 	sh.mainWeapon.Fire(sh, shots)
 }
 

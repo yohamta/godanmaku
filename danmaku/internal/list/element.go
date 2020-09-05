@@ -1,24 +1,29 @@
 package list
 
+import (
+	"unsafe"
+)
+
 // Value represents value to be stored
 type Value interface{}
 
 // Element represents container
 type Element struct {
-	value Value
+	value unsafe.Pointer
 	prev  *Element
 	next  *Element
 }
 
 // NewElement creates new element
-func NewElement(v Value) *Element {
-	e := &Element{value: v}
+func NewElement(value unsafe.Pointer) *Element {
+	e := &Element{}
+	e.value = value
 
 	return e
 }
 
 // GetValue returns the value
-func (e *Element) GetValue() Value {
+func (e *Element) GetValue() unsafe.Pointer {
 	return e.value
 }
 

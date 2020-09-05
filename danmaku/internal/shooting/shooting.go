@@ -4,6 +4,9 @@ import (
 	"image/color"
 	"math/rand"
 	"time"
+	"unsafe"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
@@ -34,23 +37,17 @@ const (
 	gameStatePlaying
 )
 
-// PlayerShooter represents interface of Player Weapon
-type PlayerShooter interface {
-	Shot(x, y float64, degree int, playerShots []*shot.Shot)
-}
-
 var (
 	input        *inputs.Input
 	currentField *field.Field
 
-	uiBackground      *ui.Box
-	uiBackgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
+	background      *ui.Box
+	backgroundColor = color.RGBA{0x00, 0x00, 0x00, 0xff}
 
-	player       *shooter.Player
-	playerWeapon PlayerShooter
+	player *shooter.Player
 
-	playerShots [maxPlayerShot]*shot.Shot
-	enemyShots  [maxEnemyShot]*shot.Shot
+	playerShots *flyweight.Factory
+	enemyShots  *flyweight.Factory
 	enemies     [maxEnemy]*shooter.Enemy
 	hitEffects  [maxHitEffects]*effects.Hit
 	explosions  [maxExplosions]*effects.Explosion
@@ -71,22 +68,21 @@ func NewShooting(screenWidth, screenHeight int) *Shooting {
 	stg.screenWidth = screenWidth
 	stg.screenHeight = screenHeight
 
-	state = gameStateLoading
 	stg.initGame()
-	state = gameStatePlaying
 
 	return stg
 }
 
 func (stg *Shooting) initGame() {
+	state = gameStateLoading
 	rand.Seed(time.Now().Unix())
 	input = inputs.NewInput(stg.screenWidth, stg.screenHeight)
 	currentField = field.NewField()
 
-	uiBackground = ui.NewBox(0, int(currentField.GetBottom()),
+	background = ui.NewBox(0, int(currentField.GetBottom()),
 		stg.screenWidth,
 		stg.screenHeight-int(currentField.GetBottom()-currentField.GetTop()),
-		uiBackgroundColor)
+		backgroundColor)
 
 	// player
 	player = shooter.NewPlayer()
@@ -101,15 +97,19 @@ func (stg *Shooting) initGame() {
 	}
 
 	// shots
-	for i := 0; i < len(playerShots); i++ {
-		playerShots[i] = shot.NewShot()
-		playerShots[i].SetField(currentField)
+	playerShots = flyweight.NewFactory()
+	for i := 0; i < maxPlayerShot; i++ {
+		sh := shot.NewShot()
+		sh.SetField(currentField)
+		playerShots.AddToPool(unsafe.Pointer(sh))
 	}
 
 	// enemyShots
-	for i := 0; i < len(enemyShots); i++ {
-		enemyShots[i] = shot.NewShot()
-		enemyShots[i].SetField(currentField)
+	enemyShots = flyweight.NewFactory()
+	for i := 0; i < maxEnemyShot; i++ {
+		sh := shot.NewShot()
+		sh.SetField(currentField)
+		enemyShots.AddToPool(unsafe.Pointer(sh))
 	}
 
 	// effects
@@ -122,6 +122,7 @@ func (stg *Shooting) initGame() {
 
 	// Setup stage
 	initEnemies()
+	state = gameStatePlaying
 }
 
 // Update updates the scene
@@ -134,27 +135,33 @@ func (stg *Shooting) Update() {
 	if player.IsDead() == false {
 		player.Move(input.Horizontal, input.Vertical, input.Fire)
 		if input.Fire {
-			player.FireWeapon(playerShots[:])
+			player.FireWeapon(playerShots)
 		}
 	}
 
 	// player shots
-	for i := 0; i < len(playerShots); i++ {
-		p := playerShots[i]
+	for ite := playerShots.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		p := (*shot.Shot)(obj.GetData())
 		if p.IsActive() == false {
+			obj.SetInactive()
 			continue
 		}
 		p.Move()
 	}
+	playerShots.Sweep()
 
 	// enemy shots
-	for i := 0; i < len(enemyShots); i++ {
-		e := enemyShots[i]
+	for ite := enemyShots.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*shot.Shot)(obj.GetData())
 		if e.IsActive() == false {
+			obj.SetInactive()
 			continue
 		}
 		e.Move()
 	}
+	enemyShots.Sweep()
 
 	// enemies
 	for i := 0; i < len(enemies); i++ {
@@ -164,7 +171,7 @@ func (stg *Shooting) Update() {
 		}
 		e.Move()
 		if player.IsDead() == false {
-			e.FireWeapon(enemyShots[:])
+			e.FireWeapon(enemyShots)
 		}
 	}
 
@@ -194,8 +201,8 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	currentField.Draw(screen)
 
 	// player shots
-	for i := 0; i < len(playerShots); i++ {
-		p := playerShots[i]
+	for ite := playerShots.GetIterator(); ite.HasNext(); {
+		p := (*shot.Shot)(ite.Next().GetData())
 		if p.IsActive() == false {
 			continue
 		}
@@ -216,8 +223,8 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	// enemy shots
-	for i := 0; i < len(enemyShots); i++ {
-		e := enemyShots[i]
+	for ite := enemyShots.GetIterator(); ite.HasNext(); {
+		e := (*shot.Shot)(ite.Next().GetData())
 		if e.IsActive() == false {
 			continue
 		}
@@ -242,7 +249,7 @@ func (stg *Shooting) Draw(screen *ebiten.Image) {
 		h.Draw(screen)
 	}
 
-	uiBackground.Draw(screen)
+	background.Draw(screen)
 	input.Draw(screen)
 }
 
@@ -258,8 +265,8 @@ func initEnemies() {
 
 func checkCollision() {
 	// player shots
-	for i := 0; i < len(playerShots); i++ {
-		p := playerShots[i]
+	for ite := playerShots.GetIterator(); ite.HasNext(); {
+		p := (*shot.Shot)(ite.Next().GetData())
 		if p.IsActive() == false {
 			continue
 		}
@@ -282,8 +289,8 @@ func checkCollision() {
 
 	// enemy shots
 	if player.IsDead() == false {
-		for i := 0; i < len(enemyShots); i++ {
-			e := enemyShots[i]
+		for ite := enemyShots.GetIterator(); ite.HasNext(); {
+			e := (*shot.Shot)(ite.Next().GetData())
 			if e.IsActive() == false {
 				continue
 			}
