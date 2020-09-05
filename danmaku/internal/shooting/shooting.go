@@ -61,13 +61,15 @@ func NewShooting(screenWidth, screenHeight int) *Shooting {
 	stg.screenWidth = screenWidth
 	stg.screenHeight = screenHeight
 
-	stg.initGame()
+	state = gameStateLoading
+	stg.init()
+	stg.setupStage()
+	state = gameStatePlaying
 
 	return stg
 }
 
-func (stg *Shooting) initGame() {
-	state = gameStateLoading
+func (stg *Shooting) init() {
 	rand.Seed(time.Now().Unix())
 	input = inputs.NewInput(stg.screenWidth, stg.screenHeight)
 	currentField = field.NewField()
@@ -76,12 +78,6 @@ func (stg *Shooting) initGame() {
 		stg.screenWidth,
 		stg.screenHeight-int(currentField.GetBottom()-currentField.GetTop()),
 		backgroundColor)
-
-	// player
-	player = shooter.NewPlayer(currentField, shared.PlayerShots)
-	player.Init()
-	player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
-	player.SetField(currentField)
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
@@ -102,10 +98,23 @@ func (stg *Shooting) initGame() {
 	for i := 0; i < maxEffects; i++ {
 		shared.Effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
+}
 
-	// Setup stage
+func (stg *Shooting) setupStage() {
+	// cleaning
+	shared.Enemies.Clean()
+	shared.PlayerShots.Clean()
+	shared.EnemyShots.Clean()
+	shared.Effects.Clean()
+
+	// player
+	player = shooter.NewPlayer(currentField, shared.PlayerShots)
+	player.Init()
+	player.SetMainWeapon(weapon.NewNormal(shot.KindPlayerNormal))
+	player.SetField(currentField)
+
+	// enemies
 	initEnemies()
-	state = gameStatePlaying
 }
 
 // Update updates the scene
@@ -173,6 +182,10 @@ func (stg *Shooting) Update() {
 	shared.PlayerShots.Sweep()
 	shared.Enemies.Sweep()
 	shared.Effects.Sweep()
+
+	if player.IsDead() && shared.Effects.GetActiveNum() == 0 {
+		stg.setupStage()
+	}
 }
 
 // Draw draws the scene

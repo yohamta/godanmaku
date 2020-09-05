@@ -20,54 +20,69 @@ type Pool struct {
 
 // NewPool creates new Pool
 func NewPool() *Pool {
-	f := &Pool{}
-	f.actives = list.NewList()
-	f.pool = list.NewList()
-	f.ite = &Iterator{}
+	p := &Pool{}
+	p.actives = list.NewList()
+	p.pool = list.NewList()
+	p.ite = &Iterator{}
 
-	return f
+	return p
+}
+
+// GetActiveNum returns the number of active item
+func (p *Pool) GetActiveNum() int {
+	return p.actives.Length()
 }
 
 // AddToPool adds resusable item
-func (f *Pool) AddToPool(item unsafe.Pointer) {
+func (p *Pool) AddToPool(item unsafe.Pointer) {
 	o := &Object{}
 	o.data = item
 	o.isActive = false
 	ptr := unsafe.Pointer(o)
 	elem := list.NewElement(ptr)
 	o.elem = elem
-	f.pool.AddElement(elem)
+	p.pool.AddElement(elem)
 }
 
 // GetIterator adds resusable item
-func (f *Pool) GetIterator() *Iterator {
-	ite := f.ite
-	ite.current = f.actives.GetFirstElement()
+func (p *Pool) GetIterator() *Iterator {
+	ite := p.ite
+	ite.current = p.actives.GetFirstElement()
 
 	return ite
 }
 
 // CreateFromPool adds resusable item
-func (f *Pool) CreateFromPool() unsafe.Pointer {
-	e := f.pool.GetFirstElement()
+func (p *Pool) CreateFromPool() unsafe.Pointer {
+	e := p.pool.GetFirstElement()
 	if e == nil {
 		return nil
 	}
-	f.pool.RemoveElement(e)
-	f.actives.AddElement(e)
+	p.pool.RemoveElement(e)
+	p.actives.AddElement(e)
 	o := (*Object)(e.GetValue())
 	o.isActive = true
 	return o.GetData()
 }
 
 // Sweep remove non active objects from active list
-func (f *Pool) Sweep() {
-	for ite := f.actives.GetIterator(); ite.HasNext(); {
+func (p *Pool) Sweep() {
+	for ite := p.actives.GetIterator(); ite.HasNext(); {
 		elem := ite.Next()
 		o := (*Object)(elem.GetValue())
 		if o.isActive == false {
-			f.actives.RemoveElement(elem)
-			f.pool.AddElement(elem)
+			p.actives.RemoveElement(elem)
+			p.pool.AddElement(elem)
 		}
 	}
+}
+
+// Clean deactivate all items
+func (p *Pool) Clean() {
+	for ite := p.actives.GetIterator(); ite.HasNext(); {
+		elem := ite.Next()
+		o := (*Object)(elem.GetValue())
+		o.isActive = false
+	}
+	p.Sweep()
 }
