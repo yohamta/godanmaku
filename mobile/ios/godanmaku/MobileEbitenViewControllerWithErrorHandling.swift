@@ -6,7 +6,7 @@
 //  Copyright © 2020 Yota Hamada. All rights reserved.
 //
 
-import Foundation
+import Foundation   
 import Mobile
 
 class MobileEbitenViewControllerWithErrorHandling: MobileEbitenViewController {
