@@ -41,14 +41,14 @@ func (e *Enemy) Init() {
 	f := e.field
 	fieldWidth := f.GetRight() - f.GetLeft()
 
-	width := 8.
-	height := 8.
+	width := 24.
+	height := 24.
 	e.setSize(width, height)
 	e.SetPosition(rand.Float64()*float64(fieldWidth-width)+float64(width/2), 30)
 	e.SetSpeed(0.96, 90)
 	e.SetWeapon(weapon.Normal(shot.EnemyShot))
 
-	e.life = 1
+	e.life = 3
 	e.isActive = true
 	e.spr = sprite.Enemy1
 	e.updateMoveTo()

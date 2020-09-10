@@ -27,8 +27,8 @@ type FireButton struct {
 // NewFireButton returns new FireButton
 func NewFireButton() *FireButton {
 	scw, sch := ui.GetScreenSize()
-	x := scw/2 + scw/2 - width/2
-	y := sch - 40
+	x := scw/2 + scw/4 - width/2
+	y := sch - height - 40
 	baseButton := (ui.NewButton(x, y, width, height))
 	fButton := &FireButton{Button: *baseButton}
 

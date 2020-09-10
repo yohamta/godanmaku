@@ -9,7 +9,6 @@ import (
 	_ "image/png"
 
 	"github.com/hajimehoshi/ebiten"
-
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
 )
 
@@ -127,19 +126,19 @@ func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 
 // LoadSprites loads sprites
 func LoadSprites() {
-	Player = createSprite(&images.PLAYER, 8)
-	Background = createSprite(&images.UTYUU_BG, 1)
+	Player = createSprite(&images.P_ROBO1, 8)
+	Background = createSprite(&images.SPACE5, 1)
 	PlayerBullet = createSprite(&images.SHOT2, 8)
-	Enemy1 = createSprite(&images.ENEMY1, 8)
-	Enemy2 = createSprite(&images.ENEMY2, 1)
-	Hit = createSprite(&images.HIT, 1)
-	Explosion = createSprite(&images.EXPLODE1, 10)
+	Enemy1 = createSprite(&images.E_ROBO1, 8)
+	Hit = createSprite(&images.HIT_SMALL, 8)
+	Explosion = createSprite(&images.EXPLODE_SMALL, 10)
 
-	addEnemyShotSprite(createSprite(&images.SHOT1, 1))
-	addEnemyShotSprite(createSprite(&images.SHOT3, 1))
-	addEnemyShotSprite(createSprite(&images.SHOT4, 1))
-	addEnemyShotSprite(createSprite(&images.SHOT5, 1))
-	addEnemyShotSprite(createSprite(&images.SHOT6, 1))
+	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1))
+	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1))
+	addEnemyShotSprite(createSprite(&images.ESHOT10_3, 1))
+	addEnemyShotSprite(createSprite(&images.ESHOT10_4, 1))
+	addEnemyShotSprite(createSprite(&images.ESHOT10_5, 1))
+	addEnemyShotSprite(createSprite(&images.ESHOT10_6, 1))
 }
 
 // RandomEnemyShot returns random sprite for enemy shots

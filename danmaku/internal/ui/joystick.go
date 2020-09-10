@@ -24,6 +24,7 @@ type Joystick struct {
 	center         position
 	isReadingTouch bool
 	touchID        int
+	isFirstTouch   bool
 }
 
 // NewJoystick returns Joystick
@@ -39,16 +40,21 @@ func NewJoystick() *Joystick {
 	joystick.color = color.RGBA{0, 0xff, 0, 0xff}
 	joystick.animateAlpha = -3
 
-	joystick.preparePanel()
+	// position
+	scw, sch := GetScreenSize()
+	joystick.center.x = scw/2 - joystick.panelSize/2
+	joystick.center.y = sch - joystick.panelSize/2 - 40
+	joystick.isFirstTouch = true
+
+	joystick.createOffsetImage()
 
 	return joystick
 }
 
-func (joystick *Joystick) preparePanel() {
+func (joystick *Joystick) createOffsetImage() {
 	panelSize := joystick.panelSize
 	offsetImage, _ := ebiten.NewImage(panelSize, panelSize, ebiten.FilterDefault)
 
-	// draw keys
 	panelNum := joystick.panelNum
 	keySize := joystick.keySize
 	color := joystick.color
@@ -87,6 +93,7 @@ func (joystick *Joystick) StartReadingTouch(touchID int) {
 	joystick.center.x = x
 	joystick.center.y = y
 	joystick.isReadingTouch = true
+	joystick.isFirstTouch = false
 }
 
 // ReadInput returns current input
@@ -119,6 +126,9 @@ func (joystick *Joystick) EndReadingTouch() {
 
 // Draw draws joystick
 func (joystick *Joystick) Draw(screen *ebiten.Image) {
+	if joystick.IsReadingTouch() == false && joystick.isFirstTouch == false {
+		return
+	}
 	op := &ebiten.DrawImageOptions{}
 
 	// set position

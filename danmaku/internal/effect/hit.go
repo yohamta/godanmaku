@@ -12,13 +12,19 @@ type hit struct{}
 func (c *hit) init(e *Effect) {}
 
 func (c *hit) draw(e *Effect, screen *ebiten.Image) {
+	if e.spriteFrame >= sprite.Hit.Length() {
+		return
+	}
+	sprite.Hit.SetIndex(e.spriteFrame)
 	sprite.Hit.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
 	sprite.Hit.Draw(screen)
 }
 
 func (c *hit) update(e *Effect) {
-	e.y--
-	if e.updateCount >= 20 {
+	if e.updateCount > 0 && e.updateCount%4 == 0 {
+		e.spriteFrame++
+	}
+	if e.spriteFrame >= sprite.Hit.Length() {
 		e.isActive = false
 	}
 }

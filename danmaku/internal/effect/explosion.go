@@ -21,7 +21,7 @@ func (c *explosion) draw(e *Effect, screen *ebiten.Image) {
 }
 
 func (c *explosion) update(e *Effect) {
-	if e.updateCount > 0 && e.updateCount%2 == 0 {
+	if e.updateCount > 0 && e.updateCount%4 == 0 {
 		e.spriteFrame++
 	}
 	if e.spriteFrame >= sprite.Explosion.Length() {

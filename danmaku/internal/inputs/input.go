@@ -42,10 +42,8 @@ func (input *Input) Update() {
 
 // Draw draws the input
 func (input *Input) Draw(screen *ebiten.Image) {
-	if input.joystick.IsReadingTouch() {
-		input.joystick.Draw(screen)
-	}
 	if touch.IsTouchPrimaryInput() {
+		input.joystick.Draw(screen)
 		input.fireButton.Draw(screen)
 	}
 }

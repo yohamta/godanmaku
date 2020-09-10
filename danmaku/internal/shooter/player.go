@@ -35,8 +35,8 @@ func NewPlayer(f *field.Field, shotsPool *flyweight.Pool) *Player {
 
 // Init inits the player
 func (p *Player) Init() {
-	p.life = 1
-	p.setSize(10, 10)
+	p.life = 10
+	p.setSize(16, 16)
 	p.SetPosition(p.field.GetCenterX()/2, p.field.GetCenterY()/2)
 	p.SetSpeed(2, 270)
 	p.isActive = true
