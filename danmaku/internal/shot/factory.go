@@ -3,24 +3,26 @@ package shot
 import "github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 var (
-	playerNormal = &playerNormalController{baseController{}}
-	enemyNormal  = &enemyNormalController{baseController{}}
+	controllers = map[string]controller{
+		"colorful": &colorful{baseController{}},
+		"blue":     &blue{baseController{}},
+	}
 )
 
-// NormalPlayerShot creates shot
-func NormalPlayerShot(x, y float64, degree int) {
+// PlayerShot creates shot
+func PlayerShot(x, y float64, degree int) {
 	s := (*Shot)(shared.PlayerShots.CreateFromPool())
 	if s == nil {
 		return
 	}
-	s.init(playerNormal, x, y, degree)
+	s.init(controllers["blue"], x, y, degree)
 }
 
-// NormalEnemyShot creates shot
-func NormalEnemyShot(x, y float64, degree int) {
+// EnemyShot creates shot
+func EnemyShot(x, y float64, degree int) {
 	s := (*Shot)(shared.EnemyShots.CreateFromPool())
 	if s == nil {
 		return
 	}
-	s.init(enemyNormal, x, y, degree)
+	s.init(controllers["colorful"], x, y, degree)
 }

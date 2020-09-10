@@ -8,13 +8,13 @@ import (
 type View interface {
 	Update()
 	Draw(screen *ebiten.Image)
-	GetPosition() struct{ x, y int }
-	GetSize() struct{ width, height int }
+	GetPosition() (x, y int)
+	GetSize() (width, height int)
 }
 
 var (
 	screenWidth, screenHeight int
-	viewStack                 stack
+	viewStack                 *stack
 )
 
 type position struct {
@@ -36,9 +36,14 @@ func GetScreenHeight() int {
 	return screenHeight
 }
 
+// GetScreenSize returns width of the screen
+func GetScreenSize() (int, int) {
+	return screenWidth, screenHeight
+}
+
 // SetRootView set the root view
 func SetRootView(v View) {
-	viewStack = stack{}
+	viewStack = newStack()
 	viewStack.push(v)
 }
 
@@ -46,6 +51,11 @@ func SetRootView(v View) {
 func SetScreenSize(width, height int) {
 	screenWidth = width
 	screenHeight = height
+}
+
+// GetCenterOfScreen returns center position of the screen
+func GetCenterOfScreen() (x, y int) {
+	return screenWidth / 2, screenHeight / 2
 }
 
 // Update updates the screen

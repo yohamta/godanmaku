@@ -41,7 +41,7 @@ func (p *Player) Init() {
 	p.SetSpeed(2, 270)
 	p.isActive = true
 	p.spr = sprite.Player
-	p.SetWeapon(weapon.NewNormal(shot.NormalPlayerShot))
+	p.SetWeapon(weapon.Normal(shot.PlayerShot))
 }
 
 // Draw draws the player

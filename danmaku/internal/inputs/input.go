@@ -21,11 +21,11 @@ type Input struct {
 }
 
 // NewInput creates new Input
-func NewInput(screenWidth, screenHeight int) *Input {
+func NewInput() *Input {
 	input := &Input{}
 	input.prevTickTime = time.Now()
 	input.joystick = ui.NewJoystick()
-	input.fireButton = NewFireButton(screenWidth, screenHeight)
+	input.fireButton = NewFireButton()
 	return input
 }
 

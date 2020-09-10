@@ -3,6 +3,8 @@ package danmaku
 import (
 	"image/color"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+
 	"github.com/hajimehoshi/ebiten"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
@@ -22,11 +24,10 @@ type Scene interface {
 }
 
 var (
-	currentScene    Scene = nil
-	screenWidth           = 240
-	screenHeight          = 320
-	isInitialized         = false
-	isWindowSizeSet       = false
+	screenWidth     = 240
+	screenHeight    = 320
+	isInitialized   = false
+	isWindowSizeSet = false
 )
 
 // Update updates a game by one tick. The given argument represents a screen image.
@@ -34,14 +35,13 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if isWindowSizeSet && !isInitialized {
 		paint.LoadFonts()
 		sprite.LoadSprites()
-		currentScene = shooting.NewShooting(screenWidth, screenHeight)
+		ui.SetScreenSize(screenWidth, screenHeight)
+		ui.SetRootView(shooting.NewShooting())
 		isInitialized = true
 		return nil
 	}
 
-	if currentScene != nil {
-		currentScene.Update()
-	}
+	ui.Update()
 
 	return nil
 }
@@ -56,9 +56,7 @@ func (g *Game) SetWindowSize(width, height int) {
 // Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x10, 0x10, 0x30, 0xff})
-	if currentScene != nil {
-		currentScene.Draw(screen)
-	}
+	ui.Draw(screen)
 }
 
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.

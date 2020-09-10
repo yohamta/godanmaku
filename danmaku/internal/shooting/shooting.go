@@ -5,6 +5,9 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/touch"
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
@@ -34,20 +37,23 @@ const (
 
 // Shooting represents shooting scene
 type Shooting struct {
-	screenWidth  int
-	screenHeight int
-	player       *shooter.Player
-	state        gameState
-	input        *inputs.Input
-	field        *field.Field
+	player     *shooter.Player
+	state      gameState
+	input      *inputs.Input
+	field      *field.Field
+	viewCenter struct{ x, y float64 }
 }
 
 // NewShooting returns new Shooting struct
-func NewShooting(screenWidth, screenHeight int) *Shooting {
+func NewShooting() *Shooting {
 	s := &Shooting{}
 
-	s.screenWidth = screenWidth
-	s.screenHeight = screenHeight
+	s.viewCenter.x = float64(ui.GetScreenWidth() / 2)
+	s.viewCenter.y = float64(ui.GetScreenHeight() / 2)
+
+	if touch.IsTouchPrimaryInput() {
+		s.viewCenter.y -= 40
+	}
 
 	s.state = gameStateLoading
 	s.init()
@@ -59,9 +65,9 @@ func NewShooting(screenWidth, screenHeight int) *Shooting {
 
 func (s *Shooting) init() {
 	rand.Seed(time.Now().Unix())
-	s.input = inputs.NewInput(s.screenWidth, s.screenHeight)
+	s.input = inputs.NewInput()
 
-	f := field.NewField(float64(s.screenWidth), float64(s.screenHeight))
+	f := field.NewField(ui.GetScreenWidth(), ui.GetScreenHeight())
 	s.field = f
 
 	// enemies
@@ -99,6 +105,16 @@ func (s *Shooting) setupStage() {
 
 	// enemies
 	s.initEnemies()
+}
+
+// GetPosition returns view position
+func (s *Shooting) GetPosition() (int, int) {
+	return 0, 0
+}
+
+// GetSize returns view size
+func (s *Shooting) GetSize() (int, int) {
+	return ui.GetScreenWidth(), ui.GetScreenHeight()
 }
 
 // Update updates the scene
@@ -178,8 +194,8 @@ func (s *Shooting) Update() {
 // Draw draws the scene
 func (s *Shooting) Draw(screen *ebiten.Image) {
 	// update offset
-	shared.OffsetX = s.player.GetX() - float64(s.screenWidth/2)
-	shared.OffsetY = s.player.GetY() - float64(s.screenHeight/2)
+	shared.OffsetX = s.player.GetX() - s.viewCenter.x
+	shared.OffsetY = s.player.GetY() - s.viewCenter.y
 
 	// draw background
 	s.field.Draw(screen)

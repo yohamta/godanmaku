@@ -4,11 +4,11 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
-type playerNormalController struct {
+type blue struct {
 	baseController
 }
 
-func (c *playerNormalController) init(s *Shot) {
+func (c *blue) init(s *Shot) {
 	s.spr = sprite.PlayerBullet
 	s.setSize(4, 4)
 	s.setSpeed(2.56, s.degree)

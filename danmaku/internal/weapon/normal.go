@@ -4,19 +4,10 @@ import (
 	"time"
 )
 
-// Normal represents player's weapon
-type Normal struct{ baseWeapon }
-
-// NewNormal creates new struct
-func NewNormal(factory shotFactoryFunction) *Normal {
-	w := &Normal{baseWeapon{}}
-	w.shotFactory = factory
-
-	return w
-}
+type normal struct{ baseWeapon }
 
 // Fire create shots
-func (w *Normal) Fire(x, y float64, degree int) {
+func (w *normal) Fire(x, y float64, degree int) {
 	if time.Since(w.lastShotTime).Milliseconds() < 350 {
 		return
 	}

@@ -27,14 +27,14 @@ type Field struct {
 }
 
 // NewField creates new field
-func NewField(windowWidth, windowHeight float64) *Field {
+func NewField(windowWidth, windowHeight int) *Field {
 	f := &Field{}
 	f.x = fieldWidth / 2
 	f.y = fieldHeight / 2
 	f.width = fieldWidth
 	f.height = fieldHeight
-	f.windowWidth = windowWidth
-	f.windowHeight = windowHeight
+	f.windowWidth = float64(windowWidth)
+	f.windowHeight = float64(windowHeight)
 
 	borderColor := color.RGBA{0xff, 0, 0, 0x50}
 	offsetImage, _ := ebiten.NewImage(int(f.width), int(f.height), ebiten.FilterDefault)
