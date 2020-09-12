@@ -10,6 +10,7 @@ type Effect struct {
 	controller  controller
 	updateCount int
 	spriteFrame int
+	callback    func()
 }
 
 // NewEffect creates new effect

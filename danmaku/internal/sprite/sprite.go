@@ -20,6 +20,7 @@ var (
 	Enemy2       *Sprite
 	Hit          *Sprite
 	Explosion    *Sprite
+	Jump         *Sprite
 	EnemyShots   []*Sprite
 )
 
@@ -132,6 +133,7 @@ func LoadSprites() {
 	Enemy1 = createSprite(&images.E_ROBO1, 8)
 	Hit = createSprite(&images.HIT_SMALL, 8)
 	Explosion = createSprite(&images.EXPLODE_SMALL, 10)
+	Jump = createSprite(&images.JUMP, 5)
 
 	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1))
 	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1))

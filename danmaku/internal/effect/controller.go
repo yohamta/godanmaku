@@ -14,6 +14,7 @@ type controller interface {
 var (
 	hitController       = new(hit)
 	explosionController = new(explosion)
+	jumpController      = new(jump)
 )
 
 // CreateHitEffect creates an effect
@@ -32,4 +33,13 @@ func CreateExplosion(x, y float64) {
 		return
 	}
 	e.init(explosionController, x, y)
+}
+
+// CreateJump creates an effect
+func CreateJump(x, y float64, callback func()) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(jumpController, x, y)
 }
