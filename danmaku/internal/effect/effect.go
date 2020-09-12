@@ -10,6 +10,7 @@ type Effect struct {
 	controller  controller
 	updateCount int
 	spriteFrame int
+	waitFrame   int
 	callback    func()
 }
 
@@ -43,5 +44,6 @@ func (e *Effect) init(c controller, x, y float64) {
 	e.controller = c
 	e.updateCount = 0
 	e.spriteFrame = 0
+	e.waitFrame = 0
 	c.init(e)
 }

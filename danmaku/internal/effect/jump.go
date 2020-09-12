@@ -15,12 +15,18 @@ func (c *jump) draw(e *Effect, screen *ebiten.Image) {
 	if e.spriteFrame >= sprite.Jump.Length() {
 		return
 	}
+	if e.updateCount < e.waitFrame {
+		return
+	}
 	sprite.Jump.SetIndex(e.spriteFrame)
 	sprite.Jump.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
 	sprite.Jump.Draw(screen)
 }
 
 func (c *jump) update(e *Effect) {
+	if e.updateCount < e.waitFrame {
+		return
+	}
 	if e.updateCount > 0 && e.updateCount%3 == 0 {
 		e.spriteFrame++
 	}

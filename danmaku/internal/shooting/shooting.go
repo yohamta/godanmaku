@@ -5,6 +5,7 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/list"
 	"github.com/yohamta/godanmaku/danmaku/internal/touch"
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
@@ -35,6 +36,10 @@ const (
 	gameStatePlaying
 )
 
+type enemyPop struct {
+	x, y float64
+}
+
 // Shooting represents shooting scene
 type Shooting struct {
 	player     *shooter.Player
@@ -42,6 +47,8 @@ type Shooting struct {
 	input      *inputs.Input
 	field      *field.Field
 	viewCenter struct{ x, y float64 }
+	enemyQueue *list.List
+	tmpEnemy   *shooter.Enemy
 }
 
 // NewShooting returns new Shooting struct
@@ -67,22 +74,23 @@ func (s *Shooting) init() {
 	rand.Seed(time.Now().Unix())
 	s.input = inputs.NewInput()
 
-	f := field.NewField(ui.GetScreenWidth(), ui.GetScreenHeight())
-	s.field = f
+	s.field = field.NewField(ui.GetScreenWidth(), ui.GetScreenHeight())
+	s.enemyQueue = list.NewList()
+	s.tmpEnemy = shooter.NewEnemy(s.field, shared.EnemyShots)
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
-		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(f, shared.EnemyShots)))
+		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(s.field, shared.EnemyShots)))
 	}
 
 	// shots
 	for i := 0; i < maxPlayerShot; i++ {
-		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(f)))
+		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(s.field)))
 	}
 
 	// enemyShots
 	for i := 0; i < maxEnemyShot; i++ {
-		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(f)))
+		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(s.field)))
 	}
 
 	// effects
@@ -99,8 +107,7 @@ func (s *Shooting) setupStage() {
 	shared.Effects.Clean()
 
 	// player
-	f := s.field
-	s.player = shooter.NewPlayer(f, shared.PlayerShots)
+	s.player = shooter.NewPlayer(s.field, shared.PlayerShots)
 	s.player.Init()
 
 	// enemies
@@ -232,16 +239,36 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	s.input.Draw(screen)
 }
 
-func (s *Shooting) initEnemies() {
-	enemyCount := 20
+func (s *Shooting) popNextEnemy() {
+	q := s.enemyQueue
+	if q.Length() <= 0 {
+		return
+	}
+	element := q.GetFirstElement()
+	q.RemoveElement(element)
+	popInfo := (*enemyPop)(element.GetValue())
 
+	enemy := (*shooter.Enemy)(shared.Enemies.CreateFromPool())
+	if enemy == nil {
+		return
+	}
+	enemy.Init(popInfo.x, popInfo.y)
+	enemy.SetTarget(s.player)
+}
+
+func (s *Shooting) initEnemies() {
+	enemyCount := 30
+
+	wait := int(rand.Float64() * 10)
 	for i := 0; i < enemyCount; i++ {
-		enemy := (*shooter.Enemy)(shared.Enemies.CreateFromPool())
-		if enemy == nil {
-			return
-		}
-		enemy.Init()
-		enemy.SetTarget(s.player)
+		// get enemy size
+		s.tmpEnemy.Init(0, 0)
+		x, y := s.field.GetRandamPosition(s.player.GetX(), s.player.GetY(), 200)
+		s.enemyQueue.AddValue(unsafe.Pointer(&enemyPop{x: x, y: y}))
+
+		// craete jump effect
+		effect.CreateJump(x, y, wait, s.popNextEnemy)
+		wait += int(rand.Float64() * 30)
 	}
 }
 

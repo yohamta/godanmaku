@@ -37,14 +37,11 @@ func NewEnemy(f *field.Field, shotsPool *flyweight.Pool) *Enemy {
 }
 
 // Init inits the enemy
-func (e *Enemy) Init() {
-	f := e.field
-	fieldWidth := f.GetRight() - f.GetLeft()
-
+func (e *Enemy) Init(x, y float64) {
 	width := 24.
 	height := 24.
 	e.setSize(width, height)
-	e.SetPosition(rand.Float64()*float64(fieldWidth-width)+float64(width/2), 30)
+	e.SetPosition(x, y)
 	e.SetSpeed(0.96, 90)
 	e.SetWeapon(weapon.Normal(shot.EnemyShot))
 

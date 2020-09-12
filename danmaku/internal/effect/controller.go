@@ -36,10 +36,12 @@ func CreateExplosion(x, y float64) {
 }
 
 // CreateJump creates an effect
-func CreateJump(x, y float64, callback func()) {
+func CreateJump(x, y float64, wait int, callback func()) {
 	e := (*Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
 		return
 	}
 	e.init(jumpController, x, y)
+	e.waitFrame = wait
+	e.callback = callback
 }
