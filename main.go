@@ -12,7 +12,7 @@ type size struct {
 }
 
 func main() {
-	window := &size{480, 640}
+	window := &size{480, 800}
 
 	ebiten.SetWindowTitle("Danmaku")
 	ebiten.SetWindowSize(window.width, window.height)

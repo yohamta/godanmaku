@@ -1,5 +1,4 @@
-// +build android ios darwin,arm darwin,arm64
-// +build !js
+// +build android ios darwin,arm darwin,arm64 js
 
 package touch
 

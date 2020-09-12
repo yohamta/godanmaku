@@ -1,6 +1,7 @@
-// +build darwin,!arm,!arm64 freebsd linux windows js
+// +build darwin,!arm,!arm64 freebsd linux windows
 // +build !android
 // +build !ios
+// +build !js
 
 package touch
 

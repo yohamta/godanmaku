@@ -25,7 +25,7 @@ type Scene interface {
 
 var (
 	screenWidth     = 240
-	screenHeight    = 320
+	screenHeight    = 360
 	isInitialized   = false
 	isWindowSizeSet = false
 )
