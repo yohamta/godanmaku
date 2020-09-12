@@ -27,7 +27,7 @@ func (c *jump) update(e *Effect) {
 	if e.updateCount < e.waitFrame {
 		return
 	}
-	if e.updateCount > 0 && e.updateCount%3 == 0 {
+	if e.updateCount > 0 && e.updateCount%5 == 0 {
 		e.spriteFrame++
 	}
 	if e.spriteFrame >= sprite.Jump.Length() {
