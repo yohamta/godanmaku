@@ -24,6 +24,7 @@ type Shot struct {
 	degree        int
 	spr           *sprite.Sprite
 	sprIndex      int
+	updateCount   int
 }
 
 // NewShot returns initialized struct
@@ -66,6 +67,11 @@ func (s *Shot) Draw(screen *ebiten.Image) {
 
 // Update updates this shot
 func (s *Shot) Update() {
+	s.updateCount++
+	s.setPosition(s.x+s.vx, s.y+s.vy)
+	if util.IsOutOfArea(s, s.field) {
+		s.isActive = false
+	}
 	s.controller.update(s)
 }
 
@@ -92,6 +98,7 @@ func (s *Shot) init(controller controller, x, y float64, degree int) {
 	s.x = x
 	s.y = y
 	s.degree = degree
+	s.updateCount = 0
 	s.controller = controller
 	controller.init(s)
 }

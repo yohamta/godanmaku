@@ -24,7 +24,7 @@ import (
 
 const (
 	maxPlayerShot = 80
-	maxEnemyShot  = 70
+	maxEnemyShot  = 100
 	maxEnemy      = 50
 	maxEffects    = 100
 )
@@ -260,15 +260,16 @@ func (s *Shooting) initEnemies() {
 	enemyCount := 30
 
 	wait := int(rand.Float64() * 10)
+	radius := 300.
 	for i := 0; i < enemyCount; i++ {
 		// get enemy size
 		s.tmpEnemy.Init(0, 0)
-		x, y := s.field.GetRandamPosition(s.player.GetX(), s.player.GetY(), 200)
+		x, y := s.field.GetRandamPosition(s.player.GetX(), s.player.GetY(), radius)
 		s.enemyQueue.AddValue(unsafe.Pointer(&enemyPop{x: x, y: y}))
 
 		// craete jump effect
 		effect.CreateJump(x, y, wait, s.popNextEnemy)
-		wait += int(rand.Float64() * 30)
+		wait += int(rand.Float64() * 20)
 	}
 }
 

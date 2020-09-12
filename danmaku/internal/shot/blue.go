@@ -10,6 +10,6 @@ type blue struct {
 
 func (c *blue) init(s *Shot) {
 	s.spr = sprite.PlayerBullet
-	s.setSize(4, 4)
-	s.setSpeed(2.56, s.degree)
+	s.setSize(10, 10)
+	s.setSpeed(3.56, s.degree)
 }

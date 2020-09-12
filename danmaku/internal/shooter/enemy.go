@@ -67,7 +67,10 @@ func (e *Enemy) Update() {
 	}
 
 	target := e.target
-	e.degree = util.RadToDeg(math.Atan2(target.GetY()-e.y, target.GetX()-e.x))
+
+	if rand.Float64() < 0.05 {
+		e.degree = util.RadToDeg(math.Atan2(target.GetY()-e.y, target.GetX()-e.x))
+	}
 }
 
 func (e *Enemy) isArrived() bool {
