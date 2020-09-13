@@ -11,7 +11,7 @@ import (
 
 const (
 	width    = 80
-	height   = 40
+	height   = 80
 	maxAlpha = 0x30
 )
 
