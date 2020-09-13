@@ -64,7 +64,7 @@ func PlayBgm(kind BgmKind) {
 // PlaySe playes SE
 func PlaySe(kind SeKind) {
 	seDic[kind].Rewind()
-	seDic[kind].SetVolume(float64(bgmVolume128) / 128)
+	seDic[kind].SetVolume(float64(seVolume128) / 128)
 	seDic[kind].Play()
 }
 
