@@ -12,6 +12,8 @@ type Effect struct {
 	spriteFrame int
 	waitFrame   int
 	callback    func()
+	scale       float64
+	rotate      float64
 }
 
 // NewEffect creates new effect
@@ -45,5 +47,7 @@ func (e *Effect) init(c controller, x, y float64) {
 	e.updateCount = 0
 	e.spriteFrame = 0
 	e.waitFrame = 0
+	e.scale = 1
+	e.rotate = 0
 	c.init(e)
 }

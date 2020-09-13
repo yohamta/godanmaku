@@ -125,6 +125,19 @@ func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
+// DrawWithScaleRotate draws this sprite
+func (s *Sprite) DrawWithScaleRotate(screen *ebiten.Image, scale float64, rotate float64) {
+	w, h := s.Size()
+	x := s.position.x
+	y := s.position.y
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Rotate(rotate)
+	op.GeoM.Translate((x-float64(w)/2)/scale, (y-float64(h)/2)/scale)
+	op.GeoM.Scale(scale, scale)
+
+	screen.DrawImage(s.subImages[s.index], op)
+}
+
 // LoadSprites loads sprites
 func LoadSprites() {
 	Player = createSprite(&images.P_ROBO1, 8)
