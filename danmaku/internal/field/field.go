@@ -59,8 +59,11 @@ func (f *Field) GetRandamPosition(centerX, centerY, radius float64) (float64, fl
 // Draw draws the field
 func (f *Field) Draw(screen *ebiten.Image) {
 	_, h := sprite.Background.Size()
-	sprite.Background.SetPosition(f.windowWidth/2, f.windowHeight/2)
-	sprite.Background.DrawWithScale(screen, (f.windowHeight / float64(h)))
+	centerX := f.windowWidth / 2
+	centerY := f.windowHeight / 2
+	scale := (f.windowHeight / float64(h))
+	sprite.Background.SetPosition(centerX, centerY/scale)
+	sprite.Background.DrawWithScale(screen, scale)
 
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(-shared.OffsetX, -shared.OffsetY)

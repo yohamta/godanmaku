@@ -119,7 +119,7 @@ func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 	x := s.position.x
 	y := s.position.y
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(x-float64(w)*scale/2, y-float64(h)*scale/2)
+	op.GeoM.Translate((x-float64(w)/2)/scale, (y-float64(h)/2)/scale)
 	op.GeoM.Scale(scale, scale)
 
 	screen.DrawImage(s.subImages[s.index], op)
