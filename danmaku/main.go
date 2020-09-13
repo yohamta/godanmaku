@@ -3,6 +3,7 @@ package danmaku
 import (
 	"image/color"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
 	"github.com/hajimehoshi/ebiten"
@@ -35,6 +36,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if isWindowSizeSet && !isInitialized {
 		paint.LoadFonts()
 		sprite.LoadSprites()
+		sound.Load()
 		ui.SetScreenSize(screenWidth, screenHeight)
 		ui.SetRootView(shooting.NewShooting())
 		isInitialized = true

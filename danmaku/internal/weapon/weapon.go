@@ -14,4 +14,5 @@ type shotFactory func(x, y float64, degree int)
 type baseWeapon struct {
 	shotFactory  shotFactory
 	lastShotTime time.Time
+	playSound    bool
 }

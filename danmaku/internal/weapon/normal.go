@@ -2,6 +2,8 @@ package weapon
 
 import (
 	"time"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 )
 
 type normal struct{ baseWeapon }
@@ -13,4 +15,7 @@ func (w *normal) Fire(x, y float64, degree int) {
 	}
 	w.lastShotTime = time.Now()
 	w.shotFactory(x, y, degree)
+	if w.playSound {
+		sound.PlaySe(sound.SeKindShot)
+	}
 }

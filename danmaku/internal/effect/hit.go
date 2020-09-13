@@ -3,6 +3,7 @@ package effect
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
@@ -21,6 +22,9 @@ func (c *hit) draw(e *Effect, screen *ebiten.Image) {
 }
 
 func (c *hit) update(e *Effect) {
+	if e.updateCount == 0 {
+		sound.PlaySe(sound.SeKindHit2)
+	}
 	if e.updateCount > 0 && e.updateCount%4 == 0 {
 		e.spriteFrame++
 	}

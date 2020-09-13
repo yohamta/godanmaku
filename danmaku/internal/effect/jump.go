@@ -3,13 +3,15 @@ package effect
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 type jump struct{}
 
-func (c *jump) init(e *Effect) {}
+func (c *jump) init(e *Effect) {
+}
 
 func (c *jump) draw(e *Effect, screen *ebiten.Image) {
 	if e.spriteFrame >= sprite.Jump.Length() {
@@ -26,6 +28,9 @@ func (c *jump) draw(e *Effect, screen *ebiten.Image) {
 func (c *jump) update(e *Effect) {
 	if e.updateCount < e.waitFrame {
 		return
+	}
+	if e.updateCount == e.waitFrame {
+		sound.PlaySe(sound.SeKindJump)
 	}
 	if e.updateCount > 0 && e.updateCount%5 == 0 {
 		e.spriteFrame++

@@ -43,7 +43,7 @@ func (e *Enemy) Init(x, y float64) {
 	e.setSize(width, height)
 	e.SetPosition(x, y)
 	e.SetSpeed(0.96, 90)
-	e.SetWeapon(weapon.Normal(shot.EnemyShot))
+	e.SetWeapon(weapon.Normal(shot.EnemyShot, false))
 
 	e.life = 3
 	e.isActive = true

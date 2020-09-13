@@ -5,6 +5,8 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/list"
 	"github.com/yohamta/godanmaku/danmaku/internal/touch"
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
@@ -97,6 +99,8 @@ func (s *Shooting) init() {
 	for i := 0; i < maxEffects; i++ {
 		shared.Effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
+
+	sound.PlayBgm(sound.BgmKindBattle)
 }
 
 func (s *Shooting) setupStage() {
