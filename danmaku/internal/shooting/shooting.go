@@ -55,6 +55,7 @@ type Shooting struct {
 	viewCenter struct{ x, y float64 }
 	enemyQueue *list.List
 	tmpEnemy   *shooter.Enemy
+	endTime    time.Time
 	killNum    int
 }
 
@@ -69,15 +70,15 @@ func NewShooting() *Shooting {
 		s.viewCenter.y -= 40
 	}
 
-	s.state = stateLoading
 	s.init()
 	s.setupStage()
-	s.state = statePlaying
 
 	return s
 }
 
 func (s *Shooting) init() {
+	s.state = stateLoading
+
 	rand.Seed(time.Now().Unix())
 	s.input = inputs.NewInput()
 
@@ -126,6 +127,8 @@ func (s *Shooting) setupStage() {
 
 	// enemies
 	s.initEnemies()
+
+	s.state = statePlaying
 }
 
 // GetPosition returns view position
@@ -207,20 +210,28 @@ func (s *Shooting) Update() {
 	shared.Enemies.Sweep()
 	shared.Effects.Sweep()
 
-	s.checkResult()
+	switch s.state {
+	case statePlaying:
+		s.checkResult()
+	case stateLose:
+		fallthrough
+	case stateWin:
+		if time.Since(s.endTime).Seconds() > 3 {
+			s.setupStage()
+		}
+	}
 }
 
 func (s *Shooting) checkResult() {
-	if s.state != statePlaying {
-		return
-	}
-
-	if shared.Enemies.GetActiveNum() == 0 && s.killNum > 0 {
+	if shared.Enemies.GetActiveNum() == 0 && s.killNum > 0 &&
+		s.enemyQueue.Length() == 0 {
+		s.endTime = time.Now()
 		s.state = stateWin
 		return
 	}
 
 	if s.player.IsDead() {
+		s.endTime = time.Now()
 		s.state = stateLose
 	}
 }
@@ -263,16 +274,17 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	s.input.Draw(screen)
-
-	s.drawResult(screen)
+	switch s.state {
+	case statePlaying:
+		s.input.Draw(screen)
+	case stateLose:
+		fallthrough
+	case stateWin:
+		s.drawResult(screen)
+	}
 }
 
 func (s *Shooting) drawResult(screen *ebiten.Image) {
-	if s.state != stateLose && s.state != stateWin {
-		return
-	}
-
 	x, y := ui.GetCenterOfScreen()
 	if s.state == stateLose {
 		sprite.Result.SetIndex(0)
@@ -301,7 +313,7 @@ func (s *Shooting) popNextEnemy() {
 }
 
 func (s *Shooting) initEnemies() {
-	enemyCount := 3
+	enemyCount := 40
 
 	wait := int(rand.Float64() * 10)
 	radius := 300.
