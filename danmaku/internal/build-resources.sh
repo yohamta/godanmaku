@@ -17,4 +17,5 @@ generate () {
 
 generate "resources/images" "images"
 generate "resources/fonts" "fonts"
+generate "resources/audios" "audios"
 
