@@ -1,4 +1,4 @@
-package inputs
+package ui
 
 import (
 	"image/color"
@@ -6,18 +6,17 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 )
 
 const (
-	width    = 80
-	height   = 80
-	maxAlpha = 0x30
+	fireButtonWidth    = 80
+	fireButtonHeight   = 80
+	fireButtonMaxAlpha = 0x30
 )
 
 // FireButton represents Button
 type FireButton struct {
-	ui.Button
+	Button
 	onImage      *ebiten.Image
 	offImage     *ebiten.Image
 	alpha        uint8
@@ -26,14 +25,14 @@ type FireButton struct {
 
 // NewFireButton returns new FireButton
 func NewFireButton() *FireButton {
-	scw, sch := ui.GetScreenSize()
-	x := scw/2 + scw/4 - width/2
-	y := sch - height - 40
-	baseButton := (ui.NewButton(x, y, width, height))
+	scw, sch := GetScreenSize()
+	x := scw/2 + scw/4 - fireButtonWidth/2
+	y := sch - fireButtonHeight - 40
+	baseButton := (NewButton(x, y, fireButtonWidth, fireButtonHeight))
 	fButton := &FireButton{Button: *baseButton}
 
 	// visual setting
-	fButton.alpha = maxAlpha
+	fButton.alpha = fireButtonMaxAlpha
 	fButton.animateAlpha = -1
 	fButton.offImage = initOffsetImage(
 		color.RGBA{0, 0xff, 0, 0x50},
@@ -46,6 +45,8 @@ func NewFireButton() *FireButton {
 }
 
 func initOffsetImage(bgClr, bdrClr color.RGBA) *ebiten.Image {
+	width := fireButtonWidth
+	height := fireButtonHeight
 	offImage, _ := ebiten.NewImage(width, height, ebiten.FilterDefault)
 	paint.FillRect(offImage, paint.Rect{X: 0, Y: 0, W: width, H: height}, bgClr)
 	paint.DrawRect(offImage, paint.Rect{X: 0, Y: 0, W: width, H: height}, bdrClr, 1)
@@ -54,9 +55,10 @@ func initOffsetImage(bgClr, bdrClr color.RGBA) *ebiten.Image {
 }
 
 func (fButton *FireButton) updateColor() {
+	maxAlpha := fireButtonMaxAlpha
 	a := fButton.alpha
-	a = uint8(math.Min(math.Max(float64(a)+float64(fButton.animateAlpha), 0), maxAlpha))
-	if a == maxAlpha || a == 0 {
+	a = uint8(math.Min(math.Max(float64(a)+float64(fButton.animateAlpha), 0), float64(maxAlpha)))
+	if a == uint8(maxAlpha) || a == 0 {
 		fButton.animateAlpha *= -1
 	}
 	fButton.alpha = a

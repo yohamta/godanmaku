@@ -5,6 +5,8 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/list"
@@ -31,11 +33,13 @@ const (
 	maxEffects    = 100
 )
 
-type gameState int
+type state int
 
 const (
-	gameStateLoading gameState = iota
-	gameStatePlaying
+	stateLoading state = iota
+	statePlaying
+	stateLose
+	stateWin
 )
 
 type enemyPop struct {
@@ -45,12 +49,13 @@ type enemyPop struct {
 // Shooting represents shooting scene
 type Shooting struct {
 	player     *shooter.Player
-	state      gameState
+	state      state
 	input      *inputs.Input
 	field      *field.Field
 	viewCenter struct{ x, y float64 }
 	enemyQueue *list.List
 	tmpEnemy   *shooter.Enemy
+	killNum    int
 }
 
 // NewShooting returns new Shooting struct
@@ -64,10 +69,10 @@ func NewShooting() *Shooting {
 		s.viewCenter.y -= 40
 	}
 
-	s.state = gameStateLoading
+	s.state = stateLoading
 	s.init()
 	s.setupStage()
-	s.state = gameStatePlaying
+	s.state = statePlaying
 
 	return s
 }
@@ -79,6 +84,7 @@ func (s *Shooting) init() {
 	s.field = field.NewField(ui.GetScreenWidth(), ui.GetScreenHeight())
 	s.enemyQueue = list.NewList()
 	s.tmpEnemy = shooter.NewEnemy(s.field, shared.EnemyShots)
+	s.killNum = 0
 
 	if shared.HealthBar == nil {
 		shared.HealthBar = ui.NewHealthBar()
@@ -201,8 +207,21 @@ func (s *Shooting) Update() {
 	shared.Enemies.Sweep()
 	shared.Effects.Sweep()
 
-	if player.IsDead() && shared.Effects.GetActiveNum() == 0 {
-		s.setupStage()
+	s.checkResult()
+}
+
+func (s *Shooting) checkResult() {
+	if s.state != statePlaying {
+		return
+	}
+
+	if shared.Enemies.GetActiveNum() == 0 && s.killNum > 0 {
+		s.state = stateWin
+		return
+	}
+
+	if s.player.IsDead() {
+		s.state = stateLose
 	}
 }
 
@@ -245,6 +264,23 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	s.input.Draw(screen)
+
+	s.drawResult(screen)
+}
+
+func (s *Shooting) drawResult(screen *ebiten.Image) {
+	if s.state != stateLose && s.state != stateWin {
+		return
+	}
+
+	x, y := ui.GetCenterOfScreen()
+	if s.state == stateLose {
+		sprite.Result.SetIndex(0)
+	} else {
+		sprite.Result.SetIndex(1)
+	}
+	sprite.Result.SetPosition(float64(x), float64(y))
+	sprite.Result.Draw(screen)
 }
 
 func (s *Shooting) popNextEnemy() {
@@ -265,7 +301,7 @@ func (s *Shooting) popNextEnemy() {
 }
 
 func (s *Shooting) initEnemies() {
-	enemyCount := 30
+	enemyCount := 3
 
 	wait := int(rand.Float64() * 10)
 	radius := 300.
@@ -291,6 +327,9 @@ func (s *Shooting) checkCollision() {
 				continue
 			}
 			e.AddDamage(1)
+			if e.IsDead() {
+				s.killNum++
+			}
 			p.OnHit()
 		}
 	}

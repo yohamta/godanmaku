@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	maxAlpha               = 0xcc
-	joyStickRadius float64 = 50
+	joyStickMaxAlpha         = 0xcc
+	joyStickRadius   float64 = 50
 )
 
 // Joystick represents virtual keyboard
@@ -78,9 +78,9 @@ func (joystick *Joystick) updateColor() {
 	// animate the panel color
 	clr := joystick.color
 	a := clr.A
-	a = uint8(math.Min(math.Max(float64(a)+float64(joystick.animateAlpha), 0), maxAlpha))
+	a = uint8(math.Min(math.Max(float64(a)+float64(joystick.animateAlpha), 0), joyStickMaxAlpha))
 	clr.A = a
-	if a == maxAlpha || a == 0 {
+	if a == joyStickMaxAlpha || a == 0 {
 		joystick.animateAlpha *= -1
 	}
 	joystick.color = clr

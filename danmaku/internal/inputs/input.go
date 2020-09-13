@@ -17,7 +17,7 @@ type Input struct {
 	Fire         bool
 	prevTickTime time.Time
 	joystick     *ui.Joystick
-	fireButton   *FireButton
+	fireButton   *ui.FireButton
 }
 
 // NewInput creates new Input
@@ -25,7 +25,7 @@ func NewInput() *Input {
 	input := &Input{}
 	input.prevTickTime = time.Now()
 	input.joystick = ui.NewJoystick()
-	input.fireButton = NewFireButton()
+	input.fireButton = ui.NewFireButton()
 	return input
 }
 
