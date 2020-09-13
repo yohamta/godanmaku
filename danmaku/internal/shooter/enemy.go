@@ -46,6 +46,7 @@ func (e *Enemy) Init(x, y float64) {
 	e.SetWeapon(weapon.Normal(shot.EnemyShot, false))
 
 	e.life = 3
+	e.maxLife = e.life
 	e.isActive = true
 	e.spr = sprite.Enemy1
 	e.updateMoveTo()

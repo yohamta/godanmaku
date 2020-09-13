@@ -2,6 +2,7 @@ package shared
 
 import (
 	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 )
 
 var (
@@ -18,4 +19,7 @@ var (
 	OffsetX float64
 	// OffsetY is screen offset
 	OffsetY float64
+
+	// HealthBar is shared health bar instance
+	HealthBar *ui.HealthBar
 )

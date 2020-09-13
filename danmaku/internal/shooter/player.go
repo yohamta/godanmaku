@@ -36,6 +36,7 @@ func NewPlayer(f *field.Field, shotsPool *flyweight.Pool) *Player {
 // Init inits the player
 func (p *Player) Init() {
 	p.life = 10
+	p.maxLife = p.life
 	p.setSize(16, 16)
 	p.SetPosition(p.field.GetCenterX()/2, p.field.GetCenterY()/2)
 	p.SetSpeed(2, 270)
@@ -49,6 +50,8 @@ func (p *Player) Draw(screen *ebiten.Image) {
 	p.spr.SetPosition(p.GetX()-shared.OffsetX, p.GetY()-shared.OffsetY)
 	p.spr.SetIndex(util.DegreeToDirectionIndex(p.degree))
 	p.spr.Draw(screen)
+	shared.HealthBar.Draw(p.x-shared.OffsetX, p.y+p.height/2-shared.OffsetY+5,
+		float64(p.life)/float64(p.maxLife), screen)
 }
 
 // Update moves the player

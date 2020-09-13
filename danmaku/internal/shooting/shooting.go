@@ -80,6 +80,10 @@ func (s *Shooting) init() {
 	s.enemyQueue = list.NewList()
 	s.tmpEnemy = shooter.NewEnemy(s.field, shared.EnemyShots)
 
+	if shared.HealthBar == nil {
+		shared.HealthBar = ui.NewHealthBar()
+	}
+
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
 		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(s.field, shared.EnemyShots)))
