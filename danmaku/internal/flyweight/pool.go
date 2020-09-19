@@ -6,11 +6,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/list"
 )
 
-// Item represents item
-type Item interface {
-	IsActive() bool
-}
-
 // Pool represents factory
 type Pool struct {
 	actives *list.List

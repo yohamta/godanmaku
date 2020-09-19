@@ -5,6 +5,7 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sound"
@@ -31,6 +32,8 @@ const (
 	maxEnemyShot  = 100
 	maxEnemy      = 50
 	maxEffects    = 100
+
+	quadTreeDepth = 3
 )
 
 type state int
@@ -57,6 +60,12 @@ type Shooting struct {
 	tmpEnemy   *shooter.Enemy
 	endTime    time.Time
 	killNum    int
+
+	// quadtree
+	playersQuadTree *quad.Quad
+	enemyQuadTree   *quad.Quad
+	pShotQuadTree   *quad.Quad
+	eShotQuadTree   *quad.Quad
 }
 
 // NewShooting returns new Shooting struct
@@ -111,7 +120,15 @@ func (s *Shooting) init() {
 		shared.Effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
 
-	sound.PlayBgm(sound.BgmKindBattle)
+	// quad tree
+	x1 := s.field.GetLeft()
+	x2 := s.field.GetRight()
+	y1 := s.field.GetTop()
+	y2 := s.field.GetBottom()
+	s.playersQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
+	s.enemyQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
+	s.pShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
+	s.eShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
 }
 
 func (s *Shooting) setupStage() {
@@ -129,6 +146,9 @@ func (s *Shooting) setupStage() {
 	s.initEnemies()
 
 	s.state = statePlaying
+
+	// play sound
+	sound.PlayBgm(sound.BgmKindBattle)
 }
 
 // GetPosition returns view position
@@ -164,6 +184,7 @@ func (s *Shooting) Update() {
 		p := (*shot.Shot)(obj.GetData())
 		if p.IsActive() == false {
 			obj.SetInactive()
+			quad.RemoveNodeFromQuad(p.GetQuadNode())
 			continue
 		}
 		p.Update()
@@ -175,6 +196,7 @@ func (s *Shooting) Update() {
 		e := (*shot.Shot)(obj.GetData())
 		if e.IsActive() == false {
 			obj.SetInactive()
+			quad.RemoveNodeFromQuad(e.GetQuadNode())
 			continue
 		}
 		e.Update()
@@ -186,6 +208,7 @@ func (s *Shooting) Update() {
 		e := (*shooter.Enemy)(obj.GetData())
 		if e.IsActive() == false {
 			obj.SetInactive()
+			quad.RemoveNodeFromQuad(e.GetQuadNode())
 			continue
 		}
 		e.Update()
@@ -327,6 +350,29 @@ func (s *Shooting) initEnemies() {
 		effect.CreateJump(x, y, wait, s.popNextEnemy)
 		wait += int(rand.Float64() * 20)
 	}
+}
+
+func (s *Shooting) updateQuadTree() {
+	// player shots
+	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
+		p := (*shot.Shot)(ite.Next().GetData())
+		s.pShotQuadTree.AddNode(p.GetQuadNode())
+	}
+
+	// enemy shots
+	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
+		e := (*shot.Shot)(ite.Next().GetData())
+		s.eShotQuadTree.AddNode(e.GetQuadNode())
+	}
+
+	// enemies
+	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
+		e := (*shooter.Enemy)(ite.Next().GetData())
+		s.enemyQuadTree.AddNode(e.GetQuadNode())
+	}
+
+	// player
+	s.playersQuadTree.AddNode(s.player.GetQuadNode())
 }
 
 func (s *Shooting) checkCollision() {

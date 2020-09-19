@@ -2,8 +2,10 @@ package shot
 
 import (
 	"math"
+	"unsafe"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
+	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
@@ -25,14 +27,21 @@ type Shot struct {
 	spr           *sprite.Sprite
 	sprIndex      int
 	updateCount   int
+	quadNode      *quad.Node
 }
 
 // NewShot returns initialized struct
 func NewShot(f *field.Field) *Shot {
 	s := &Shot{}
 	s.field = f
+	s.quadNode = quad.NewNode(s, unsafe.Pointer(s))
 
 	return s
+}
+
+// GetQuadNode return quad node
+func (s *Shot) GetQuadNode() *quad.Node {
+	return s.quadNode
 }
 
 // IsActive returns if this is active

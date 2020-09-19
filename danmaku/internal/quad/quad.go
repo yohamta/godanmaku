@@ -8,10 +8,10 @@ import (
 
 // Object represents obejct to be contained
 type Object interface {
-	getX() float64
-	getY() float64
-	getWidth() float64
-	getHeight() float64
+	GetX() float64
+	GetY() float64
+	GetWidth() float64
+	GetHeight() float64
 }
 
 // Quad represents quad tree
@@ -88,10 +88,10 @@ func (q *Quad) GetIterator() *Iterator {
 
 // Search returns quad the object belongs to
 func (q *Quad) Search(o Object) *Quad {
-	x1 := o.getX() - o.getWidth()/2
-	x2 := o.getX() + o.getWidth()/2
-	y1 := o.getY() - o.getHeight()/2
-	y2 := o.getY() + o.getHeight()/2
+	x1 := o.GetX() - o.GetWidth()/2
+	x2 := o.GetX() + o.GetWidth()/2
+	y1 := o.GetY() - o.GetHeight()/2
+	y2 := o.GetY() + o.GetHeight()/2
 	return findQuad(q, x1, x2, y1, y2)
 }
 
@@ -131,7 +131,8 @@ func findQuad(root *Quad, x1, x2, y1, y2 float64) *Quad {
 	return q
 }
 
-func removeFromQuad(node *Node) {
+// RemoveNodeFromQuad removes a node from the quad
+func RemoveNodeFromQuad(node *Node) {
 	if node.quad == nil {
 		return
 	}
@@ -139,20 +140,15 @@ func removeFromQuad(node *Node) {
 	node.quad = nil
 }
 
-// RemoveNode removes a node from the quad
-func (q *Quad) RemoveNode(node *Node) {
-	removeFromQuad(node)
-}
-
 // AddNode adds a node to the quad
 func (q *Quad) AddNode(node *Node) {
-	removeFromQuad(node)
+	RemoveNodeFromQuad(node)
 
 	o := node.object
-	x1 := o.getX() - o.getWidth()/2
-	x2 := o.getX() + o.getWidth()/2
-	y1 := o.getY() - o.getHeight()/2
-	y2 := o.getY() + o.getHeight()/2
+	x1 := o.GetX() - o.GetWidth()/2
+	x2 := o.GetX() + o.GetWidth()/2
+	y1 := o.GetY() - o.GetHeight()/2
+	y2 := o.GetY() + o.GetHeight()/2
 	node.x1 = x1
 	node.x2 = x2
 	node.y1 = y1
