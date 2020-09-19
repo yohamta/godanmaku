@@ -19,14 +19,14 @@ import (
 
 // Player represents player of the game
 type Player struct {
-	Shooter
+	*Shooter
 	shotSpeed float64
 	shotSize  float64
 }
 
 // NewPlayer returns initialized Player
 func NewPlayer(f *field.Field, shotsPool *flyweight.Pool) *Player {
-	p := &Player{Shooter: *NewShooter()}
+	p := &Player{Shooter: NewShooter()}
 	p.field = f
 	p.shotsPool = shotsPool
 

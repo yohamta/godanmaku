@@ -2,9 +2,6 @@ package shooter
 
 import (
 	"math"
-	"unsafe"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 
@@ -42,20 +39,13 @@ type Shooter struct {
 	target        Target
 	movdweTo      struct{ x, y float64 }
 	shotsPool     *flyweight.Pool
-	quadNode      *quad.Node
 }
 
 // NewShooter creates shooter struct
 func NewShooter() *Shooter {
 	sh := &Shooter{}
-	sh.quadNode = quad.NewNode(sh, unsafe.Pointer(sh))
 
 	return sh
-}
-
-// GetQuadNode return quad node
-func (sh *Shooter) GetQuadNode() *quad.Node {
-	return sh.quadNode
 }
 
 // GetX returns x

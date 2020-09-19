@@ -19,7 +19,7 @@ func (ite *Iterator) HasNext() bool {
 	if ite.index >= len(ite.quad.descendants) {
 		return false
 	}
-	for ite.index < len(ite.quad.descendants) {
+	for ite.index < len(ite.quad.descendants)-1 {
 		ite.index++
 		if ite.quad.descendants[ite.index].nodes.Length() > 0 {
 			ite.current = ite.quad.descendants[ite.index].nodes.GetIterator()

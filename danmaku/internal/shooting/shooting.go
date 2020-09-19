@@ -62,10 +62,8 @@ type Shooting struct {
 	killNum    int
 
 	// quadtree
-	playersQuadTree *quad.Quad
-	enemyQuadTree   *quad.Quad
-	pShotQuadTree   *quad.Quad
-	eShotQuadTree   *quad.Quad
+	pShotQuadTree *quad.Quad
+	eShotQuadTree *quad.Quad
 }
 
 // NewShooting returns new Shooting struct
@@ -102,17 +100,22 @@ func (s *Shooting) init() {
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
-		shared.Enemies.AddToPool(unsafe.Pointer(shooter.NewEnemy(s.field, shared.EnemyShots)))
+		ptr := shooter.NewEnemy(s.field, shared.EnemyShots)
+		shared.Enemies.AddToPool(unsafe.Pointer(ptr))
 	}
 
 	// shots
 	for i := 0; i < maxPlayerShot; i++ {
-		shared.PlayerShots.AddToPool(unsafe.Pointer(shot.NewShot(s.field)))
+		ptr := shot.NewShot(s.field)
+		ptr.SetQuadNode(quad.NewNode(unsafe.Pointer(ptr)))
+		shared.PlayerShots.AddToPool(unsafe.Pointer(ptr))
 	}
 
 	// enemyShots
 	for i := 0; i < maxEnemyShot; i++ {
-		shared.EnemyShots.AddToPool(unsafe.Pointer(shot.NewShot(s.field)))
+		ptr := shot.NewShot(s.field)
+		ptr.SetQuadNode(quad.NewNode(unsafe.Pointer(ptr)))
+		shared.EnemyShots.AddToPool(unsafe.Pointer(ptr))
 	}
 
 	// effects
@@ -120,13 +123,14 @@ func (s *Shooting) init() {
 		shared.Effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
 
+	// player
+	s.player = shooter.NewPlayer(s.field, shared.PlayerShots)
+
 	// quad tree
 	x1 := s.field.GetLeft()
 	x2 := s.field.GetRight()
 	y1 := s.field.GetTop()
 	y2 := s.field.GetBottom()
-	s.playersQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
-	s.enemyQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
 	s.pShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
 	s.eShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
 }
@@ -139,7 +143,6 @@ func (s *Shooting) setupStage() {
 	shared.Effects.Clean()
 
 	// player
-	s.player = shooter.NewPlayer(s.field, shared.PlayerShots)
 	s.player.Init()
 
 	// enemies
@@ -165,6 +168,7 @@ func (s *Shooting) GetSize() (int, int) {
 func (s *Shooting) Update() {
 	s.input.Update()
 
+	s.updateQuadTree()
 	s.checkCollision()
 
 	player := s.player
@@ -208,7 +212,6 @@ func (s *Shooting) Update() {
 		e := (*shooter.Enemy)(obj.GetData())
 		if e.IsActive() == false {
 			obj.SetInactive()
-			quad.RemoveNodeFromQuad(e.GetQuadNode())
 			continue
 		}
 		e.Update()
@@ -356,51 +359,50 @@ func (s *Shooting) updateQuadTree() {
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
-		s.pShotQuadTree.AddNode(p.GetQuadNode())
+		s.pShotQuadTree.AddNode(p, p.GetQuadNode())
 	}
 
 	// enemy shots
 	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 		e := (*shot.Shot)(ite.Next().GetData())
-		s.eShotQuadTree.AddNode(e.GetQuadNode())
+		s.eShotQuadTree.AddNode(e, e.GetQuadNode())
 	}
-
-	// enemies
-	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
-		e := (*shooter.Enemy)(ite.Next().GetData())
-		s.enemyQuadTree.AddNode(e.GetQuadNode())
-	}
-
-	// player
-	s.playersQuadTree.AddNode(s.player.GetQuadNode())
 }
 
 func (s *Shooting) checkCollision() {
 	// player shots
-	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
-		p := (*shot.Shot)(ite.Next().GetData())
-		for ite2 := shared.Enemies.GetIterator(); ite2.HasNext(); {
-			e := (*shooter.Enemy)(ite2.Next().GetData())
-			if util.IsCollideWith(e, p) == false {
+	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
+		enemy := (*shooter.Enemy)(ite.Next().GetData())
+		qd := s.pShotQuadTree.SearchQuad(enemy)
+		for ite2 := qd.GetIterator(); ite2.HasNext(); {
+			shot := (*shot.Shot)(ite2.Next().GetItem())
+			if shot.IsActive() == false {
 				continue
 			}
-			e.AddDamage(1)
-			if e.IsDead() {
+			if util.IsCollideWith(enemy, shot) == false {
+				continue
+			}
+			enemy.AddDamage(1)
+			shot.OnHit()
+			if enemy.IsDead() {
 				s.killNum++
 			}
-			p.OnHit()
 		}
 	}
 
 	// enemy shots
-	if s.player.IsDead() == false {
-		for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
-			e := (*shot.Shot)(ite.Next().GetData())
-			if util.IsCollideWith(s.player, e) == false {
+	{
+		qd := s.eShotQuadTree.SearchQuad(s.player)
+		for ite2 := qd.GetIterator(); ite2.HasNext(); {
+			shot := (*shot.Shot)(ite2.Next().GetItem())
+			if shot.IsActive() == false {
+				continue
+			}
+			if util.IsCollideWith(s.player, shot) == false {
 				continue
 			}
 			s.player.AddDamage(1)
-			e.OnHit()
+			shot.OnHit()
 		}
 	}
 }

@@ -20,7 +20,7 @@ import (
 
 // Enemy represents enemy of the game
 type Enemy struct {
-	Shooter
+	*Shooter
 	moveTo    struct{ x, y float64 }
 	wep       weapon.Weapon
 	shotSpeed float64
@@ -29,7 +29,7 @@ type Enemy struct {
 
 // NewEnemy returns initialized Enemy
 func NewEnemy(f *field.Field, shotsPool *flyweight.Pool) *Enemy {
-	e := &Enemy{Shooter: *NewShooter()}
+	e := &Enemy{Shooter: NewShooter()}
 	e.field = f
 	e.shotsPool = shotsPool
 

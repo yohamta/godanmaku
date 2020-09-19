@@ -30,16 +30,14 @@ type Quad struct {
 // Node represents a node that a quad contains
 type Node struct {
 	x1, x2, y1, y2 float64
-	object         Object
 	ptr            unsafe.Pointer
 	element        *list.Element
 	quad           *Quad
 }
 
 // NewNode creates new ndoe
-func NewNode(o Object, p unsafe.Pointer) *Node {
+func NewNode(p unsafe.Pointer) *Node {
 	n := &Node{}
-	n.object = o
 	n.ptr = p
 	n.element = list.NewElement(unsafe.Pointer(n))
 	return n
@@ -48,6 +46,11 @@ func NewNode(o Object, p unsafe.Pointer) *Node {
 // GetItem returns the pointer of the item
 func (n *Node) GetItem() unsafe.Pointer {
 	return n.ptr
+}
+
+// SetItem sets the item to this node
+func (n *Node) SetItem(p unsafe.Pointer) {
+	n.ptr = p
 }
 
 // NewQuad creates new quad
@@ -62,7 +65,7 @@ func NewQuad(x1, x2, y1, y2 float64, depth int) *Quad {
 	q.descendants = []*Quad{q}
 	q.ite = &Iterator{quad: q}
 
-	if depth == 0 {
+	if depth == 1 {
 		q.isLeaf = true
 	} else {
 		q.nw = NewQuad(x1, x1+(x2-x1)/2, y1, y1+(y2-y1)/2, depth-1)
@@ -86,8 +89,8 @@ func (q *Quad) GetIterator() *Iterator {
 	return q.ite
 }
 
-// Search returns quad the object belongs to
-func (q *Quad) Search(o Object) *Quad {
+// SearchQuad returns quad for the object
+func (q *Quad) SearchQuad(o Object) *Quad {
 	x1 := o.GetX() - o.GetWidth()/2
 	x2 := o.GetX() + o.GetWidth()/2
 	y1 := o.GetY() - o.GetHeight()/2
@@ -141,20 +144,21 @@ func RemoveNodeFromQuad(node *Node) {
 }
 
 // AddNode adds a node to the quad
-func (q *Quad) AddNode(node *Node) {
+func (q *Quad) AddNode(o Object, node *Node) {
 	RemoveNodeFromQuad(node)
 
-	o := node.object
 	x1 := o.GetX() - o.GetWidth()/2
 	x2 := o.GetX() + o.GetWidth()/2
 	y1 := o.GetY() - o.GetHeight()/2
 	y2 := o.GetY() + o.GetHeight()/2
+
 	node.x1 = x1
 	node.x2 = x2
 	node.y1 = y1
 	node.y2 = y2
 
 	found := findQuad(q, x1, x2, y1, y2)
+
 	node.quad = found
 	found.nodes.AddElement(node.element)
 }

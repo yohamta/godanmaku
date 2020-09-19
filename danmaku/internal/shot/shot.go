@@ -2,7 +2,6 @@ package shot
 
 import (
 	"math"
-	"unsafe"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/quad"
@@ -34,7 +33,6 @@ type Shot struct {
 func NewShot(f *field.Field) *Shot {
 	s := &Shot{}
 	s.field = f
-	s.quadNode = quad.NewNode(s, unsafe.Pointer(s))
 
 	return s
 }
@@ -42,6 +40,11 @@ func NewShot(f *field.Field) *Shot {
 // GetQuadNode return quad node
 func (s *Shot) GetQuadNode() *quad.Node {
 	return s.quadNode
+}
+
+// SetQuadNode return quad node
+func (s *Shot) SetQuadNode(n *quad.Node) {
+	s.quadNode = n
 }
 
 // IsActive returns if this is active
