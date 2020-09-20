@@ -21,12 +21,6 @@ func (c *locus) draw(e *Effect, screen *ebiten.Image) {
 	if e.updateCount > locusTTL {
 		return
 	}
-
-	// TODO: refactor
-	size := (1. - float64(e.updateCount)/locusTTL) * locusSize * 1.3
-	strength := 1. - float64(e.updateCount)/locusTTL
-
-	c.drawGrowEffect(e, size, size, strength, screen)
 }
 
 func (c *locus) update(e *Effect) {

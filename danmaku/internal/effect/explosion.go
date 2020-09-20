@@ -1,8 +1,6 @@
 package effect
 
 import (
-	"math"
-
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/sound"
@@ -21,11 +19,6 @@ func (c *explosion) draw(e *Effect, screen *ebiten.Image) {
 	sprite.Explosion.SetIndex(e.spriteFrame)
 	sprite.Explosion.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
 	sprite.Explosion.Draw(screen)
-
-	// TODO: refactor
-	scale := float64(sprite.Explosion.GetWidth()) * e.scale *
-		math.Min((1.-(float64(e.spriteFrame)/float64(sprite.Explosion.Length()))+0.5), 1.)
-	c.drawGrowEffect(e, scale, scale, 0.5, screen)
 }
 
 func (c *explosion) update(e *Effect) {

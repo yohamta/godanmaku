@@ -23,6 +23,4 @@ func (c *colorful) draw(s *Shot, screen *ebiten.Image) {
 	spr.SetPosition(s.x-shared.OffsetX, s.y-shared.OffsetY)
 	spr.SetIndex(s.sprIndex)
 	spr.Draw(screen)
-
-	c.drawGrowEffect(s, screen)
 }
