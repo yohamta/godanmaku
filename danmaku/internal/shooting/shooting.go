@@ -45,7 +45,7 @@ const (
 	stateWin
 )
 
-type enemyPop struct {
+type enemyData struct {
 	x, y float64
 }
 
@@ -328,7 +328,7 @@ func (s *Shooting) popNextEnemy() {
 	}
 	element := q.GetFirstElement()
 	q.RemoveElement(element)
-	popInfo := (*enemyPop)(element.GetValue())
+	popInfo := (*enemyData)(element.GetValue())
 
 	enemy := (*shooter.Enemy)(shared.Enemies.CreateFromPool())
 	if enemy == nil {
@@ -347,7 +347,7 @@ func (s *Shooting) initEnemies() {
 		// get enemy size
 		s.tmpEnemy.Init(0, 0)
 		x, y := s.field.GetRandamPosition(s.player.GetX(), s.player.GetY(), radius)
-		s.enemyQueue.AddValue(unsafe.Pointer(&enemyPop{x: x, y: y}))
+		s.enemyQueue.AddValue(unsafe.Pointer(&enemyData{x: x, y: y}))
 
 		// craete jump effect
 		effect.CreateJump(x, y, wait, s.popNextEnemy)
@@ -403,6 +403,9 @@ func (s *Shooting) checkCollision() {
 			}
 			s.player.AddDamage(1)
 			shot.OnHit()
+			if s.player.IsDead() {
+				break
+			}
 		}
 	}
 }
