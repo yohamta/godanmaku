@@ -4,90 +4,49 @@ import (
 	"math"
 	"math/rand"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/collision"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/field"
-	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/shot"
-
 	"github.com/hajimehoshi/ebiten"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
-	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 )
 
-// Enemy represents enemy of the game
-type Enemy struct {
-	*Shooter
-	moveTo    struct{ x, y float64 }
-	wep       weapon.Weapon
-	shotSpeed float64
-	shotSize  float64
+type enemyController struct{}
+
+func (c *enemyController) init(sh *Shooter) {
+	c.updateDestination(sh)
 }
 
-// NewEnemy returns initialized Enemy
-func NewEnemy(f *field.Field, shotsPool *flyweight.Pool) *Enemy {
-	e := &Enemy{Shooter: NewShooter()}
-	e.field = f
-	e.shotsPool = shotsPool
+func (c *enemyController) update(sh *Shooter) {
+	sh.SetPosition(sh.x+sh.vx, sh.y+sh.vy)
 
-	return e
-}
-
-// Init inits the enemy
-func (e *Enemy) Init(x, y float64) {
-	width := 24.
-	height := 24.
-	e.setSize(width, height)
-	e.SetPosition(x, y)
-	e.SetSpeed(0.96, 90)
-	e.SetWeapon(weapon.Normal(shot.EnemyShot, false))
-	e.collisionBox = collision.GetCollisionBox("E_ROBO1")
-
-	e.life = 3
-	e.maxLife = e.life
-	e.isActive = true
-	e.spr = sprite.Enemy1
-	e.updateMoveTo()
-}
-
-// Draw draws the enemy
-func (e *Enemy) Draw(screen *ebiten.Image) {
-	sprite.Enemy1.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
-	sprite.Enemy1.SetIndex(util.DegreeToDirectionIndex(e.degree))
-	sprite.Enemy1.Draw(screen)
-}
-
-// Update moves the enemy
-func (e *Enemy) Update() {
-	e.SetPosition(e.x+e.vx, e.y+e.vy)
-
-	if e.isArrived() {
-		e.updateMoveTo()
+	if c.isArrived(sh) {
+		c.updateDestination(sh)
 	}
 
-	target := e.target
+	target := sh.target
 
 	if rand.Float64() < 0.05 {
-		e.degree = util.RadToDeg(math.Atan2(target.GetY()-e.y, target.GetX()-e.x))
+		sh.degree = util.RadToDeg(math.Atan2(target.GetY()-sh.y, target.GetX()-sh.x))
 	}
 }
 
-func (e *Enemy) isArrived() bool {
-	return math.Abs(e.y-e.moveTo.y) < e.GetHeight() &&
-		math.Abs(e.x-e.moveTo.x) < e.GetWidth()
+func (c *enemyController) draw(sh *Shooter, screen *ebiten.Image) {
+	sh.spr.SetPosition(sh.x-shared.OffsetX, sh.y-shared.OffsetY)
+	sh.spr.SetIndex(util.DegreeToDirectionIndex(sh.degree))
+	sh.spr.Draw(screen)
 }
 
-func (e *Enemy) updateMoveTo() {
-	f := e.field
+func (c *enemyController) isArrived(sh *Shooter) bool {
+	return math.Abs(sh.y-sh.destination.y) < sh.GetHeight() &&
+		math.Abs(sh.x-sh.destination.x) < sh.GetWidth()
+}
+
+func (c *enemyController) updateDestination(sh *Shooter) {
+	f := sh.field
 	x := (f.GetRight() - f.GetLeft()) * rand.Float64()
 	y := (f.GetBottom() - f.GetTop()) * rand.Float64()
-	e.moveTo.x = x
-	e.moveTo.y = y
-	rad := math.Atan2(y-e.y, x-e.x)
-	e.vx = math.Cos(rad) * e.speed
-	e.vy = math.Sin(rad) * e.speed
+	sh.destination.x = x
+	sh.destination.y = y
+	rad := math.Atan2(y-sh.y, x-sh.x)
+	sh.vx = math.Cos(rad) * sh.speed
+	sh.vy = math.Sin(rad) * sh.speed
 }

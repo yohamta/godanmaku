@@ -2,101 +2,82 @@ package shooter
 
 import (
 	"math"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/collision"
-	"github.com/yohamta/godanmaku/danmaku/internal/effect"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/shot"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
-	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
+	"math/rand"
 
 	"github.com/hajimehoshi/ebiten"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/field"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
-// Player represents player of the game
-type Player struct {
-	*Shooter
-	shotSpeed float64
-	shotSize  float64
-}
+type playerController struct{}
 
-// NewPlayer returns initialized Player
-func NewPlayer(f *field.Field, shotsPool *flyweight.Pool) *Player {
-	p := &Player{Shooter: NewShooter()}
-	p.field = f
-	p.shotsPool = shotsPool
+func (c *playerController) init(sh *Shooter) {}
 
-	return p
-}
-
-// Init inits the player
-func (p *Player) Init() {
-	p.life = 10
-	p.maxLife = p.life
-	p.setSize(16, 16)
-	p.SetPosition(p.field.GetCenterX()/2, p.field.GetCenterY()/2)
-	p.SetSpeed(2, 270)
-	p.isActive = true
-	p.spr = sprite.Player
-	p.SetWeapon(weapon.Machinegun(shot.PlayerShot, true))
-	p.collisionBox = collision.GetCollisionBox("P_ROBO_1")
-}
-
-// Draw draws the player
-func (p *Player) Draw(screen *ebiten.Image) {
-	p.spr.SetPosition(p.GetX()-shared.OffsetX, p.GetY()-shared.OffsetY)
-	p.spr.SetIndex(util.DegreeToDirectionIndex(p.degree))
-	p.spr.Draw(screen)
-	shared.HealthBar.Draw(p.x-shared.OffsetX, p.y+p.height/2-shared.OffsetY+5,
-		float64(p.life)/float64(p.maxLife), screen)
-}
-
-func (p *Player) createLocusEffect(slottle float64) {
+func (c *playerController) createLocusEffect(sh *Shooter, slottle float64) {
 	if slottle < 0.5 {
 		return
 	}
-	if p.updateCount%int(3/slottle) == 0 {
-		x, y := p.GetPosition()
+	if sh.updateCount%int(3/slottle) == 0 {
+		x, y := sh.GetPosition()
 		effect.CreateLocusEffect(x, y)
 	}
 }
 
-// Update moves the player
-func (p *Player) Update(horizontal float64, vertical float64, isFire bool) {
-	p.updateCount++
+func (c *playerController) update(sh *Shooter) {
+	x := sh.GetX()
+	y := sh.GetY()
+	f := sh.field
 
-	x := p.GetX()
-	y := p.GetY()
-	f := p.field
+	vertical := shared.GameInput.Vertical
+	horizontal := shared.GameInput.Horizontal
 
 	slottle := math.Abs(vertical) + math.Abs(horizontal)
-	p.createLocusEffect(slottle)
+	c.createLocusEffect(sh, slottle)
 
 	if vertical != 0 {
-		p.vy = vertical * p.speed
-		y = y + p.vy
-		y = math.Max(f.GetTop()+p.GetHeight()/2, y)
-		y = math.Min(f.GetBottom()-p.GetHeight()/2, y)
+		sh.vy = vertical * sh.speed
+		y = y + sh.vy
+		y = math.Max(f.GetTop()+sh.GetHeight()/2, y)
+		y = math.Min(f.GetBottom()-sh.GetHeight()/2, y)
 	}
 
 	if horizontal != 0 {
-		p.vx = horizontal * p.speed
-		x = x + p.vx
-		x = math.Max(f.GetLeft()+p.GetWidth()/2, x)
-		x = math.Min(f.GetRight()-p.GetWidth()/2, x)
+		sh.vx = horizontal * sh.speed
+		x = x + sh.vx
+		x = math.Max(f.GetLeft()+sh.GetWidth()/2, x)
+		x = math.Min(f.GetRight()-sh.GetWidth()/2, x)
 	}
 
-	p.SetPosition(x, y)
+	sh.SetPosition(x, y)
 
 	if vertical != 0 || horizontal != 0 {
-		if isFire == false {
-			p.degree = util.RadToDeg(math.Atan2(vertical, horizontal))
+		if shared.GameInput.Fire == false {
+			sh.degree = util.RadToDeg(math.Atan2(vertical, horizontal))
 		}
 	}
+}
+
+func (c *playerController) draw(sh *Shooter, screen *ebiten.Image) {
+	sh.spr.SetPosition(sh.GetX()-shared.OffsetX, sh.GetY()-shared.OffsetY)
+	sh.spr.SetIndex(util.DegreeToDirectionIndex(sh.degree))
+	sh.spr.Draw(screen)
+	shared.HealthBar.Draw(sh.x-shared.OffsetX, sh.y+sh.height/2-shared.OffsetY+5,
+		float64(sh.life)/float64(sh.maxLife), screen)
+}
+
+func (c *playerController) isArrived(sh *Shooter) bool {
+	return math.Abs(sh.y-sh.destination.y) < sh.GetHeight() &&
+		math.Abs(sh.x-sh.destination.x) < sh.GetWidth()
+}
+
+func (c *playerController) updateDestination(sh *Shooter) {
+	f := sh.field
+	x := (f.GetRight() - f.GetLeft()) * rand.Float64()
+	y := (f.GetBottom() - f.GetTop()) * rand.Float64()
+	sh.destination.x = x
+	sh.destination.y = y
+	rad := math.Atan2(y-sh.y, x-sh.x)
+	sh.vx = math.Cos(rad) * sh.speed
+	sh.vy = math.Sin(rad) * sh.speed
 }

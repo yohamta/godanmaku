@@ -54,13 +54,12 @@ type enemyData struct {
 
 // Shooting represents shooting scene
 type Shooting struct {
-	player     *shooter.Player
+	player     *shooter.Shooter
 	state      state
-	input      *inputs.Input
 	field      *field.Field
 	viewCenter struct{ x, y float64 }
 	enemyQueue *list.List
-	tmpEnemy   *shooter.Enemy
+	tmpShooter *shooter.Shooter
 	endTime    time.Time
 	killNum    int
 
@@ -90,20 +89,18 @@ func (s *Shooting) init() {
 	s.state = stateLoading
 
 	rand.Seed(time.Now().Unix())
-	s.input = inputs.NewInput()
 
 	s.field = field.NewField()
 	s.enemyQueue = list.NewList()
-	s.tmpEnemy = shooter.NewEnemy(s.field, shared.EnemyShots)
+	s.tmpShooter = shooter.NewShooter()
 	s.killNum = 0
 
-	if shared.HealthBar == nil {
-		shared.HealthBar = ui.NewHealthBar()
-	}
+	shared.HealthBar = ui.NewHealthBar()
+	shared.GameInput = inputs.NewInput()
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
-		ptr := shooter.NewEnemy(s.field, shared.EnemyShots)
+		ptr := shooter.NewShooter()
 		shared.Enemies.AddToPool(unsafe.Pointer(ptr))
 	}
 
@@ -132,7 +129,7 @@ func (s *Shooting) init() {
 	}
 
 	// player
-	s.player = shooter.NewPlayer(s.field, shared.PlayerShots)
+	s.player = shooter.NewShooter()
 
 	// quad tree
 	x1 := s.field.GetLeft()
@@ -152,7 +149,8 @@ func (s *Shooting) setupStage() {
 	shared.BackEffects.Clean()
 
 	// player
-	s.player.Init()
+	shooter.BuildShooter(shooter.P_ROBO1, s.player, s.field,
+		s.field.GetCenterX()/2, s.field.GetCenterY()/2)
 
 	// enemies
 	s.initEnemies()
@@ -175,18 +173,17 @@ func (s *Shooting) GetSize() (int, int) {
 
 // Update updates the scene
 func (s *Shooting) Update() {
-	s.input.Update()
+	shared.GameInput.Update()
 
 	s.updateQuadTree()
 	s.checkCollision()
 
 	player := s.player
-	input := s.input
 
 	// player
 	if player.IsDead() == false {
-		player.Update(input.Horizontal, input.Vertical, input.Fire)
-		if input.Fire {
+		player.Update()
+		if shared.GameInput.Fire {
 			player.Fire()
 		}
 	}
@@ -218,7 +215,7 @@ func (s *Shooting) Update() {
 	// enemies
 	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
-		e := (*shooter.Enemy)(obj.GetData())
+		e := (*shooter.Shooter)(obj.GetData())
 		if e.IsActive() == false {
 			obj.SetInactive()
 			continue
@@ -310,7 +307,7 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	// enemies
 	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
-		e := (*shooter.Enemy)(obj.GetData())
+		e := (*shooter.Shooter)(obj.GetData())
 		e.Draw(screen)
 	}
 
@@ -332,7 +329,7 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 
 	switch s.state {
 	case statePlaying:
-		s.input.Draw(screen)
+		shared.GameInput.Draw(screen)
 	case stateLose:
 		fallthrough
 	case stateWin:
@@ -372,11 +369,11 @@ func (s *Shooting) popNextEnemy() {
 	q.RemoveElement(element)
 	popInfo := (*enemyData)(element.GetValue())
 
-	enemy := (*shooter.Enemy)(shared.Enemies.CreateFromPool())
+	enemy := (*shooter.Shooter)(shared.Enemies.CreateFromPool())
 	if enemy == nil {
 		return
 	}
-	enemy.Init(popInfo.x, popInfo.y)
+	shooter.BuildShooter(shooter.E_ROBO1, enemy, s.field, popInfo.x, popInfo.y)
 	enemy.SetTarget(s.player)
 }
 
@@ -387,7 +384,7 @@ func (s *Shooting) initEnemies() {
 	radius := 300.
 	for i := 0; i < enemyCount; i++ {
 		// get enemy size
-		s.tmpEnemy.Init(0, 0)
+		shooter.BuildShooter(shooter.E_ROBO1, s.tmpShooter, s.field, 0, 0)
 		x, y := s.field.GetRandamPosition(s.player.GetX(), s.player.GetY(), radius)
 		s.enemyQueue.AddValue(unsafe.Pointer(&enemyData{x: x, y: y}))
 
@@ -414,7 +411,7 @@ func (s *Shooting) updateQuadTree() {
 func (s *Shooting) checkCollision() {
 	// player shots
 	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
-		enemy := (*shooter.Enemy)(ite.Next().GetData())
+		enemy := (*shooter.Shooter)(ite.Next().GetData())
 		if enemy.IsDead() {
 			continue
 		}

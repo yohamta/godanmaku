@@ -3,6 +3,7 @@ package shooter
 import (
 	"math"
 
+	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 
@@ -39,9 +40,10 @@ type Shooter struct {
 	updateCount   int
 	mainWeapon    weapon.Weapon
 	target        Target
-	movdweTo      struct{ x, y float64 }
+	destination   struct{ x, y float64 }
 	shotsPool     *flyweight.Pool
 	collisionBox  []*collision.Box
+	controller    controller
 }
 
 // NewShooter creates shooter struct
@@ -49,6 +51,21 @@ func NewShooter() *Shooter {
 	sh := &Shooter{}
 
 	return sh
+}
+
+func (sh *Shooter) init() {
+	sh.controller.init(sh)
+}
+
+// Update updates the shooter
+func (sh *Shooter) Update() {
+	sh.updateCount++
+	sh.controller.update(sh)
+}
+
+// Draw draws the shooter
+func (sh *Shooter) Draw(screen *ebiten.Image) {
+	sh.controller.draw(sh, screen)
 }
 
 // GetX returns x

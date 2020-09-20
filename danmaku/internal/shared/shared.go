@@ -2,6 +2,7 @@ package shared
 
 import (
 	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
+	"github.com/yohamta/godanmaku/danmaku/internal/inputs"
 	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 )
 
@@ -24,4 +25,7 @@ var (
 
 	// HealthBar is shared health bar instance
 	HealthBar *ui.HealthBar
+
+	// GameInput represents users's input
+	GameInput *inputs.Input
 )
