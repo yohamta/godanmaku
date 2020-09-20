@@ -23,6 +23,7 @@ var (
 	Jump         *Sprite
 	EnemyShots   []*Sprite
 	Result       *Sprite
+	Locus        *Sprite
 )
 
 type frame struct {
@@ -151,7 +152,7 @@ func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 	w, h := s.Size()
 	x := s.position.x
 	y := s.position.y
-	op.GeoM.Translate((x-float64(w)/2)/scale, (y-float64(h)/2)/scale)
+	op.GeoM.Translate((x/scale - float64(w)/2), (y/scale - float64(h)/2))
 
 	op.GeoM.Scale(scale, scale)
 
@@ -184,6 +185,7 @@ func LoadSprites() {
 	Explosion = createSprite(&images.EXPLODE_SMALL, 10, 1)
 	Jump = createSprite(&images.JUMP, 5, 1)
 	Result = createSprite(&images.SYOUHAI, 1, 3)
+	Locus = createSprite(&images.KISEKI, 5, 1)
 
 	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1, 1))
 	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1, 1))

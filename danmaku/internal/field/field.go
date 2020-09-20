@@ -63,8 +63,8 @@ func (f *Field) Draw(screen *ebiten.Image) {
 	centerY := f.windowHeight / 2
 	scaleH := (f.windowHeight / float64(h))
 	scaleW := (f.windowWidth / float64(w))
-	sprite.Background.SetPosition(centerX/scaleW, centerY/scaleH)
-	sprite.Background.DrawWithScale(screen, scaleH)
+	sprite.Background.SetPosition(centerX, centerY)
+	sprite.Background.DrawWithScale(screen, math.Max(scaleH, scaleW))
 
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(-shared.OffsetX, -shared.OffsetY)

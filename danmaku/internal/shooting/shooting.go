@@ -29,10 +29,11 @@ import (
 )
 
 const (
-	maxPlayerShot = 80
-	maxEnemyShot  = 300
-	maxEnemy      = 50
-	maxEffects    = 100
+	maxPlayerShot  = 80
+	maxEnemyShot   = 300
+	maxEnemy       = 50
+	maxEffects     = 100
+	maxBackEffects = 100
 
 	quadTreeDepth = 3
 )
@@ -124,6 +125,11 @@ func (s *Shooting) init() {
 		shared.Effects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
 
+	// effects
+	for i := 0; i < maxBackEffects; i++ {
+		shared.BackEffects.AddToPool(unsafe.Pointer(effect.NewEffect()))
+	}
+
 	// player
 	s.player = shooter.NewPlayer(s.field, shared.PlayerShots)
 
@@ -142,6 +148,7 @@ func (s *Shooting) setupStage() {
 	shared.PlayerShots.Clean()
 	shared.EnemyShots.Clean()
 	shared.Effects.Clean()
+	shared.BackEffects.Clean()
 
 	// player
 	s.player.Init()
@@ -232,10 +239,22 @@ func (s *Shooting) Update() {
 		e.Update()
 	}
 
+	// back effects
+	for ite := shared.BackEffects.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*effect.Effect)(obj.GetData())
+		if e.IsActive() == false {
+			obj.SetInactive()
+			continue
+		}
+		e.Update()
+	}
+
 	shared.EnemyShots.Sweep()
 	shared.PlayerShots.Sweep()
 	shared.Enemies.Sweep()
 	shared.Effects.Sweep()
+	shared.BackEffects.Sweep()
 
 	switch s.state {
 	case statePlaying:
@@ -271,6 +290,12 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 
 	// draw background
 	s.field.Draw(screen)
+
+	// back effects
+	for ite := shared.BackEffects.GetIterator(); ite.HasNext(); {
+		e := (*effect.Effect)(ite.Next().GetData())
+		e.Draw(screen)
+	}
 
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {

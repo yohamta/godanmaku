@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
@@ -56,11 +57,26 @@ func (p *Player) Draw(screen *ebiten.Image) {
 		float64(p.life)/float64(p.maxLife), screen)
 }
 
+func (p *Player) createLocusEffect(slottle float64) {
+	if slottle < 0.5 {
+		return
+	}
+	if p.updateCount%int(3/slottle) == 0 {
+		x, y := p.GetPosition()
+		effect.CreateLocusEffect(x, y)
+	}
+}
+
 // Update moves the player
 func (p *Player) Update(horizontal float64, vertical float64, isFire bool) {
+	p.updateCount++
+
 	x := p.GetX()
 	y := p.GetY()
 	f := p.field
+
+	slottle := math.Abs(vertical) + math.Abs(horizontal)
+	p.createLocusEffect(slottle)
 
 	if vertical != 0 {
 		p.vy = vertical * p.speed

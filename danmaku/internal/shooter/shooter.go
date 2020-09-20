@@ -36,6 +36,7 @@ type Shooter struct {
 	sprIndex      int
 	life          int
 	maxLife       int
+	updateCount   int
 	mainWeapon    weapon.Weapon
 	target        Target
 	movdweTo      struct{ x, y float64 }

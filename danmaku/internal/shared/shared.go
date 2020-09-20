@@ -10,6 +10,8 @@ var (
 	PlayerShots *flyweight.Pool = flyweight.NewPool()
 	// EnemyShots is a pool
 	EnemyShots *flyweight.Pool = flyweight.NewPool()
+	// BackEffects is a pool
+	BackEffects *flyweight.Pool = flyweight.NewPool()
 	// Effects is a pool
 	Effects *flyweight.Pool = flyweight.NewPool()
 	// Enemies is a pool

@@ -15,7 +15,18 @@ var (
 	hitController       = new(hit)
 	explosionController = new(explosion)
 	jumpController      = new(jump)
+	locusController     = new(locus)
 )
+
+// CreateLocusEffect creates an effect
+func CreateLocusEffect(x, y float64) {
+	e := (*Effect)(shared.BackEffects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(locusController, x, y)
+	e.waitFrame = 3
+}
 
 // CreateHitEffect creates an effect
 func CreateHitEffect(x, y float64) {
