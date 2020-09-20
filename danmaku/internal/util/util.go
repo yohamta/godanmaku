@@ -1,6 +1,10 @@
 package util
 
-import "math"
+import (
+	"math"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+)
 
 // DegreeToDirectionIndex convert degree into 1 to 8 integer
 func DegreeToDirectionIndex(degree int) int {
@@ -46,6 +50,25 @@ func IsOutOfArea(e Entity, area Area) bool {
 		return true
 	}
 	if e.GetY()-e.GetHeight()/2 > area.GetBottom() {
+		return true
+	}
+	return false
+}
+
+// IsOutOfAreaEnoughly Returns if the entity is enoughly out of the certain area
+func IsOutOfAreaEnoughly(e Entity, area Area) bool {
+	w := float64(ui.GetScreenWidth())
+	h := float64(ui.GetScreenHeight())
+	if e.GetX()+e.GetWidth()/2 < area.GetLeft()-w/2 {
+		return true
+	}
+	if e.GetX()-e.GetWidth() > area.GetRight()+w/2 {
+		return true
+	}
+	if e.GetY()+e.GetHeight() < area.GetTop()-h/2 {
+		return true
+	}
+	if e.GetY()-e.GetHeight()/2 > area.GetBottom()+h/2 {
 		return true
 	}
 	return false

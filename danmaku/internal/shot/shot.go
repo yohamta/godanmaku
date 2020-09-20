@@ -88,7 +88,7 @@ func (s *Shot) Draw(screen *ebiten.Image) {
 func (s *Shot) Update() {
 	s.updateCount++
 	s.setPosition(s.x+s.vx, s.y+s.vy)
-	if util.IsOutOfArea(s, s.field) {
+	if util.IsOutOfAreaEnoughly(s, s.field) {
 		s.isActive = false
 	}
 	s.controller.update(s)
