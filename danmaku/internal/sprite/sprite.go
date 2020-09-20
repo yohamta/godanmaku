@@ -24,6 +24,7 @@ var (
 	EnemyShots   []*Sprite
 	Result       *Sprite
 	Locus        *Sprite
+	Nova         *Sprite
 )
 
 type frame struct {
@@ -85,6 +86,16 @@ func (s *Sprite) Size() (int, int) {
 	return s.frame.w, s.frame.h
 }
 
+// GetWidth returns frame width and height of the Sprite
+func (s *Sprite) GetWidth() int {
+	return s.frame.w
+}
+
+// GetHeight returns frame width and height of the Sprite
+func (s *Sprite) GetHeight() int {
+	return s.frame.h
+}
+
 // SetPosition sets the position of the Sprite
 func (s *Sprite) SetPosition(x, y float64) {
 	s.position.x = x
@@ -108,11 +119,30 @@ func (s *Sprite) Length() int {
 
 // Draw draws this sprite
 func (s *Sprite) Draw(screen *ebiten.Image) {
+	op := &ebiten.DrawImageOptions{}
+
 	w, h := s.Size()
 	x := s.position.x
 	y := s.position.y
-	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(x-float64(w)/2, y-float64(h)/2)
+
+	screen.DrawImage(s.subImages[s.index], op)
+}
+
+// DrawAdditive draws additive image
+func (s *Sprite) DrawAdditive(screen *ebiten.Image, strength float64, scaleW float64, scaleH float64) {
+	op := &ebiten.DrawImageOptions{}
+
+	w, h := s.Size()
+	x := s.position.x
+	y := s.position.y
+	op.GeoM.Translate(x/scaleW-float64(w)/2, y/scaleH-float64(h)/2)
+
+	op.GeoM.Scale(scaleW, scaleH)
+
+	op.ColorM.Translate(0, 0, 0, -1+strength)
+
+	op.CompositeMode = ebiten.CompositeModeLighter
 
 	screen.DrawImage(s.subImages[s.index], op)
 }
@@ -186,6 +216,7 @@ func LoadSprites() {
 	Jump = createSprite(&images.JUMP, 5, 1)
 	Result = createSprite(&images.SYOUHAI, 1, 3)
 	Locus = createSprite(&images.KISEKI, 5, 1)
+	Nova = createSprite(&images.NOVA, 1, 1)
 
 	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1, 1))
 	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1, 1))

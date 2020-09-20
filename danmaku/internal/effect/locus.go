@@ -2,12 +2,14 @@ package effect
 
 import (
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
-type locus struct{}
+const (
+	locusTTL  = 40.
+	locusSize = 7.
+)
+
+type locus struct{ *baseController }
 
 func (c *locus) init(e *Effect) {
 }
@@ -16,22 +18,21 @@ func (c *locus) draw(e *Effect, screen *ebiten.Image) {
 	if e.updateCount < e.waitFrame {
 		return
 	}
-	if e.spriteFrame >= sprite.Locus.Length() {
+	if e.updateCount > locusTTL {
 		return
 	}
-	sprite.Locus.SetIndex(e.spriteFrame)
-	sprite.Locus.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
-	sprite.Locus.DrawWithScale(screen, 1)
+
+	size := (1. - float64(e.updateCount)/locusTTL) * locusSize * 1.3
+	strength := 1. - float64(e.updateCount)/locusTTL
+
+	c.drawGrowEffect(e, size, size, strength, screen)
 }
 
 func (c *locus) update(e *Effect) {
 	if e.updateCount < e.waitFrame {
 		return
 	}
-	if e.updateCount > 0 && e.updateCount%5 == 0 {
-		e.spriteFrame++
-	}
-	if e.spriteFrame >= sprite.Locus.Length() {
+	if e.updateCount >= locusTTL {
 		e.isActive = false
 	}
 }

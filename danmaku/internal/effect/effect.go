@@ -1,6 +1,9 @@
 package effect
 
-import "github.com/hajimehoshi/ebiten"
+import (
+	"github.com/hajimehoshi/ebiten"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+)
 
 // Effect represents the base of player, enemy, shots
 type Effect struct {
@@ -50,4 +53,50 @@ func (e *Effect) init(c controller, x, y float64) {
 	e.scale = 1
 	e.rotate = 0
 	c.init(e)
+}
+
+var (
+	hitController       = &hit{newBaseControlelr()}
+	explosionController = &explosion{newBaseControlelr()}
+	jumpController      = &jump{newBaseControlelr()}
+	locusController     = &locus{newBaseControlelr()}
+)
+
+// CreateLocusEffect creates an effect
+func CreateLocusEffect(x, y float64) {
+	e := (*Effect)(shared.BackEffects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(locusController, x, y)
+	e.waitFrame = 3
+}
+
+// CreateHitEffect creates an effect
+func CreateHitEffect(x, y float64) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(hitController, x, y)
+}
+
+// CreateExplosion creates an effect
+func CreateExplosion(x, y float64) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(explosionController, x, y)
+}
+
+// CreateJump creates an effect
+func CreateJump(x, y float64, wait int, callback func()) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(jumpController, x, y)
+	e.waitFrame = wait
+	e.callback = callback
 }
