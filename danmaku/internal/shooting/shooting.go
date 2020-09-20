@@ -1,6 +1,7 @@
 package shooting
 
 import (
+	"math"
 	"math/rand"
 	"time"
 	"unsafe"
@@ -91,7 +92,7 @@ func (s *Shooting) init() {
 	rand.Seed(time.Now().Unix())
 	s.input = inputs.NewInput()
 
-	s.field = field.NewField(ui.GetScreenWidth(), ui.GetScreenHeight())
+	s.field = field.NewField()
 	s.enemyQueue = list.NewList()
 	s.tmpEnemy = shooter.NewEnemy(s.field, shared.EnemyShots)
 	s.killNum = 0
@@ -289,6 +290,9 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	shared.OffsetY = s.player.GetY() - s.viewCenter.y
 
 	// draw background
+	s.drawBackground(screen)
+
+	// draw field
 	s.field.Draw(screen)
 
 	// back effects
@@ -334,6 +338,18 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	case stateWin:
 		s.drawResult(screen)
 	}
+}
+
+func (s *Shooting) drawBackground(screen *ebiten.Image) {
+	w, h := sprite.Background.Size()
+	screenW := float64(ui.GetScreenWidth())
+	screenH := float64(ui.GetScreenHeight())
+	centerX := screenW / 2
+	centerY := screenH / 2
+	scaleH := (screenW / float64(h))
+	scaleW := (screenH / float64(w))
+	sprite.Background.SetPosition(centerX, centerY)
+	sprite.Background.DrawWithScale(screen, math.Max(scaleH, scaleW))
 }
 
 func (s *Shooting) drawResult(screen *ebiten.Image) {
