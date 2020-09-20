@@ -5,6 +5,8 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 
@@ -18,7 +20,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
-	"github.com/yohamta/godanmaku/danmaku/internal/util"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
@@ -379,7 +380,7 @@ func (s *Shooting) checkCollision() {
 			if shot.IsActive() == false {
 				continue
 			}
-			if util.IsCollideWith(enemy, shot) == false {
+			if collision.IsCollideWith(enemy, shot) == false {
 				continue
 			}
 			enemy.AddDamage(1)
@@ -395,17 +396,17 @@ func (s *Shooting) checkCollision() {
 		qd := s.eShotQuadTree.SearchQuad(s.player)
 		for ite2 := qd.GetIterator(); ite2.HasNext(); {
 			shot := (*shot.Shot)(ite2.Next().GetItem())
+			if s.player.IsDead() {
+				break
+			}
 			if shot.IsActive() == false {
 				continue
 			}
-			if util.IsCollideWith(s.player, shot) == false {
+			if collision.IsCollideWith(s.player, shot) == false {
 				continue
 			}
 			s.player.AddDamage(1)
 			shot.OnHit()
-			if s.player.IsDead() {
-				break
-			}
 		}
 	}
 }

@@ -3,6 +3,7 @@ package shot
 import (
 	"math"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 
@@ -27,6 +28,7 @@ type Shot struct {
 	sprIndex      int
 	updateCount   int
 	quadNode      *quad.Node
+	collisionBox  []*collision.Box
 }
 
 // NewShot returns initialized struct
@@ -70,6 +72,11 @@ func (s *Shot) GetWidth() float64 {
 // GetHeight returns height
 func (s *Shot) GetHeight() float64 {
 	return s.height
+}
+
+// GetCollisionBox returns collision box
+func (s *Shot) GetCollisionBox() []*collision.Box {
+	return s.collisionBox
 }
 
 // Draw draws this

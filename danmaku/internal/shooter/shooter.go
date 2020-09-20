@@ -3,6 +3,7 @@ package shooter
 import (
 	"math"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
@@ -39,6 +40,7 @@ type Shooter struct {
 	target        Target
 	movdweTo      struct{ x, y float64 }
 	shotsPool     *flyweight.Pool
+	collisionBox  []*collision.Box
 }
 
 // NewShooter creates shooter struct
@@ -71,6 +73,11 @@ func (sh *Shooter) GetWidth() float64 {
 // GetHeight returns height
 func (sh *Shooter) GetHeight() float64 {
 	return sh.height
+}
+
+// GetCollisionBox returns collision box
+func (sh *Shooter) GetCollisionBox() []*collision.Box {
+	return sh.collisionBox
 }
 
 // GetDegree returns height
@@ -113,6 +120,11 @@ func (sh *Shooter) AddDamage(damage int) {
 // IsDead returns if this is active
 func (sh *Shooter) IsDead() bool {
 	return sh.life <= 0
+}
+
+// GetLife returns if this is active
+func (sh *Shooter) GetLife() int {
+	return sh.life
 }
 
 // SetWeapon adds damage to this playe

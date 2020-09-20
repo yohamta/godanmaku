@@ -4,6 +4,7 @@ import (
 	"math"
 	"math/rand"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
@@ -44,6 +45,7 @@ func (e *Enemy) Init(x, y float64) {
 	e.SetPosition(x, y)
 	e.SetSpeed(0.96, 90)
 	e.SetWeapon(weapon.Normal(shot.EnemyShot, false))
+	e.collisionBox = collision.GetCollisionBox("E_ROBO1")
 
 	e.life = 3
 	e.maxLife = e.life
