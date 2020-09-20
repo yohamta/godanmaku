@@ -152,7 +152,7 @@ func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 	w, h := s.Size()
 	x := s.position.x
 	y := s.position.y
-	op.GeoM.Translate((x/scale - float64(w)/2), (y/scale - float64(h)/2))
+	op.GeoM.Translate(x/scale-float64(w)/2, y/scale-float64(h)/2)
 
 	op.GeoM.Scale(scale, scale)
 
@@ -168,7 +168,7 @@ func (s *Sprite) DrawWithScaleRotate(screen *ebiten.Image, scale float64, rotate
 	w, h := s.Size()
 	x := s.position.x
 	y := s.position.y
-	op.GeoM.Translate((x-float64(w)/2)/scale, (y-float64(h)/2)/scale)
+	op.GeoM.Translate(x/scale-float64(w)/2, y/scale-float64(h)/2)
 
 	op.GeoM.Scale(scale, scale)
 
