@@ -15,16 +15,17 @@ import (
 var (
 	Background   *Sprite
 	Player       *Sprite
-	PlayerBullet *Sprite
 	Enemy1       *Sprite
 	Enemy2       *Sprite
 	Hit          *Sprite
 	Explosion    *Sprite
 	Jump         *Sprite
-	EnemyShots   []*Sprite
 	Result       *Sprite
 	Locus        *Sprite
 	Nova         *Sprite
+	PlayerBullet *Sprite
+	EnemyShots   []*Sprite
+	BlueLaser    *Sprite
 )
 
 type frame struct {
@@ -217,6 +218,7 @@ func LoadSprites() {
 	Result = createSprite(&images.SYOUHAI, 1, 3)
 	Locus = createSprite(&images.KISEKI, 5, 1)
 	Nova = createSprite(&images.NOVA, 1, 1)
+	BlueLaser = createSprite(&images.RASER1, 6, 4)
 
 	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1, 1))
 	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1, 1))

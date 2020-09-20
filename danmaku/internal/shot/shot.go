@@ -1,6 +1,7 @@
 package shot
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
@@ -12,6 +13,37 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
+
+type point struct {
+	x, y float64
+}
+
+var (
+	laserCollisionIDMap = map[int]string{}
+	laserAdjustMap      = map[int]*point{}
+)
+
+func init() {
+	for i := 0; i <= 345; i += 15 {
+		laserCollisionIDMap[i] = fmt.Sprintf("laser1_%d", i)
+		x := 0.
+		y := 0.
+		if i <= 75 {
+			x = 8
+			y = 6
+		} else if i <= 175 {
+			x = -6
+			y = 8
+		} else if i <= 255 {
+			x = -8
+			y = -6
+		} else {
+			x = 8
+			y = -6
+		}
+		laserAdjustMap[i] = &point{x, y}
+	}
+}
 
 // Shot represents shooter
 type Shot struct {

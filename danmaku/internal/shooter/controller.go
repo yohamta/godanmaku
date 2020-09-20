@@ -38,7 +38,7 @@ func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 		sh.setSize(16, 16)
 		sh.SetSpeed(0.96, 90)
 		sh.SetSpeed(2, 270)
-		sh.SetWeapon(weapon.Machinegun(shot.PlayerShot, true))
+		sh.SetWeapon(weapon.Machinegun(shot.BlueLaser, true))
 
 		sh.collisionBox = collision.GetCollisionBox("P_ROBO_1")
 		sh.life = 10

@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	fieldWidth  = 750
-	fieldHeight = 750
+	fieldWidth  = 500
+	fieldHeight = 500
 )
 
 // Field represents the game field

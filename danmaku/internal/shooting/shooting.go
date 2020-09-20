@@ -354,6 +354,7 @@ func (s *Shooting) drawResult(screen *ebiten.Image) {
 	if s.state == stateLose {
 		sprite.Result.SetIndex(0)
 	} else {
+		y -= 100
 		sprite.Result.SetIndex(1)
 	}
 	sprite.Result.SetPosition(float64(x), float64(y))
