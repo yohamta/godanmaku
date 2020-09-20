@@ -29,7 +29,7 @@ import (
 
 const (
 	maxPlayerShot = 80
-	maxEnemyShot  = 100
+	maxEnemyShot  = 300
 	maxEnemy      = 50
 	maxEffects    = 100
 

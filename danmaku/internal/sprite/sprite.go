@@ -116,13 +116,43 @@ func (s *Sprite) Draw(screen *ebiten.Image) {
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
-// DrawWithScale draws this sprite
-func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
+// DrawWithTint draws this sprite
+func (s *Sprite) DrawWithTint(screen *ebiten.Image, r, g, b, a float64) {
+	op := &ebiten.DrawImageOptions{}
+
 	w, h := s.Size()
 	x := s.position.x
 	y := s.position.y
+	op.GeoM.Translate(x-float64(w)/2, y-float64(h)/2)
+
+	op.ColorM.Translate(r, g, b, a)
+
+	screen.DrawImage(s.subImages[s.index], op)
+}
+
+// DrawWithHsv draws this sprite
+func (s *Sprite) DrawWithHsv(screen *ebiten.Image, hue, sat, val float64) {
 	op := &ebiten.DrawImageOptions{}
+
+	w, h := s.Size()
+	x := s.position.x
+	y := s.position.y
+	op.GeoM.Translate(x-float64(w)/2, y-float64(h)/2)
+
+	op.ColorM.ChangeHSV(hue, sat, val)
+
+	screen.DrawImage(s.subImages[s.index], op)
+}
+
+// DrawWithScale draws this sprite
+func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
+	op := &ebiten.DrawImageOptions{}
+
+	w, h := s.Size()
+	x := s.position.x
+	y := s.position.y
 	op.GeoM.Translate((x-float64(w)/2)/scale, (y-float64(h)/2)/scale)
+
 	op.GeoM.Scale(scale, scale)
 
 	screen.DrawImage(s.subImages[s.index], op)
@@ -130,12 +160,15 @@ func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 
 // DrawWithScaleRotate draws this sprite
 func (s *Sprite) DrawWithScaleRotate(screen *ebiten.Image, scale float64, rotate float64) {
+	op := &ebiten.DrawImageOptions{}
+
+	op.GeoM.Rotate(rotate)
+
 	w, h := s.Size()
 	x := s.position.x
 	y := s.position.y
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Rotate(rotate)
 	op.GeoM.Translate((x-float64(w)/2)/scale, (y-float64(h)/2)/scale)
+
 	op.GeoM.Scale(scale, scale)
 
 	screen.DrawImage(s.subImages[s.index], op)
