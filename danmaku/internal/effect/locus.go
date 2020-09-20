@@ -22,6 +22,7 @@ func (c *locus) draw(e *Effect, screen *ebiten.Image) {
 		return
 	}
 
+	// TODO: refactor
 	size := (1. - float64(e.updateCount)/locusTTL) * locusSize * 1.3
 	strength := 1. - float64(e.updateCount)/locusTTL
 
