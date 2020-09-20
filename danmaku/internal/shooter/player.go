@@ -44,7 +44,7 @@ func (p *Player) Init() {
 	p.SetSpeed(2, 270)
 	p.isActive = true
 	p.spr = sprite.Player
-	p.SetWeapon(weapon.Normal(shot.PlayerShot, true))
+	p.SetWeapon(weapon.Machinegun(shot.PlayerShot, true))
 	p.collisionBox = collision.GetCollisionBox("P_ROBO_1")
 }
 
