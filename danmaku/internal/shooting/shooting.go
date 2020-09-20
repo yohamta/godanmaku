@@ -415,6 +415,9 @@ func (s *Shooting) checkCollision() {
 	// player shots
 	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		enemy := (*shooter.Enemy)(ite.Next().GetData())
+		if enemy.IsDead() {
+			continue
+		}
 		qd := s.pShotQuadTree.SearchQuad(enemy)
 		for ite2 := qd.GetIterator(); ite2.HasNext(); {
 			shot := (*shot.Shot)(ite2.Next().GetItem())
