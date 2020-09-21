@@ -379,7 +379,7 @@ func (s *Shooting) popNextEnemy() {
 }
 
 func (s *Shooting) initEnemies() {
-	enemyCount := 40
+	enemyCount := 30
 
 	wait := int(rand.Float64() * 10)
 	radius := 300.

@@ -7,6 +7,7 @@ var (
 		"colorful":  &colorful{baseController{}},
 		"blue":      &blue{baseController{}},
 		"blueLaser": &blueLaser{baseController{}},
+		"sparkle":   &sparkle{baseController{}},
 	}
 )
 
