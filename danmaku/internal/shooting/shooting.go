@@ -1,12 +1,14 @@
 package shooting
 
 import (
+	"image/color"
 	"math"
 	"math/rand"
 	"time"
 	"unsafe"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
@@ -54,14 +56,18 @@ type enemyData struct {
 
 // Shooting represents shooting scene
 type Shooting struct {
-	player     *shooter.Shooter
-	state      state
-	field      *field.Field
-	viewCenter struct{ x, y float64 }
-	enemyQueue *list.List
-	tmpShooter *shooter.Shooter
-	endTime    time.Time
-	killNum    int
+	player      *shooter.Shooter
+	state       state
+	field       *field.Field
+	viewCenter  struct{ x, y float64 }
+	enemyQueue  *list.List
+	tmpShooter  *shooter.Shooter
+	endTime     time.Time
+	killNum     int
+	updateCount int
+
+	dispTextTime time.Time
+	dispText     string
 
 	// quadtree
 	pShotQuadTree *quad.Quad
@@ -173,6 +179,7 @@ func (s *Shooting) GetSize() (int, int) {
 
 // Update updates the scene
 func (s *Shooting) Update() {
+	s.updateCount++
 	shared.GameInput.Update()
 
 	s.updateQuadTree()
@@ -327,6 +334,21 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
+	if time.Since(s.dispTextTime).Seconds() <= 1 {
+		w := 3 * 24
+		h := 24
+		shouldPaint := true
+		if time.Since(s.dispTextTime).Seconds() < 0.3 {
+			if s.updateCount%6 > 3 {
+				shouldPaint = false
+			}
+		}
+		if shouldPaint {
+			paint.DrawText(screen, s.dispText, ui.GetScreenWidth()/2-w/2,
+				h+10, color.White, paint.FontSizeXLarge)
+		}
+	}
+
 	switch s.state {
 	case statePlaying:
 		shared.GameInput.Draw(screen)
@@ -425,10 +447,16 @@ func (s *Shooting) checkCollision() {
 			if collision.IsCollideWith(enemy, shot) == false {
 				continue
 			}
+
 			enemy.AddDamage(1)
 			shot.OnHit()
 			if enemy.IsDead() {
 				s.killNum++
+				s.dispTextTime = time.Now()
+				s.dispText = "[撃破]"
+			} else {
+				s.dispTextTime = time.Now()
+				s.dispText = "[命中]"
 			}
 		}
 	}
@@ -449,6 +477,9 @@ func (s *Shooting) checkCollision() {
 			}
 			s.player.AddDamage(1)
 			shot.OnHit()
+
+			s.dispTextTime = time.Now()
+			s.dispText = "[被弾]"
 		}
 	}
 }
