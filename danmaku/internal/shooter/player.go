@@ -18,7 +18,7 @@ func (c *playerController) createLocusEffect(sh *Shooter, slottle float64) {
 	if slottle < 0.5 {
 		return
 	}
-	if sh.updateCount%int(2/slottle) == 0 {
+	if sh.updateCount%int(10/slottle) == 0 {
 		x, y := sh.GetPosition()
 		effect.CreateLocusEffect(x, y)
 	}

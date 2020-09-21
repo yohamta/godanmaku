@@ -23,6 +23,7 @@ var (
 	EnemyShots   []*Sprite
 	BlueLaser    *Sprite
 	Sparkle      *Sprite
+	Backfire     *Sprite
 )
 
 // LoadSprites loads sprites
@@ -39,6 +40,7 @@ func LoadSprites() {
 	Nova = createSprite(&images.NOVA, 1, 1)
 	BlueLaser = createSprite(&images.RASER1, 6, 4)
 	Sparkle = createSprite(&images.SPARKLE, 8, 8)
+	Backfire = createSprite(&images.BACKFIRE, 8, 1)
 
 	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1, 1))
 	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1, 1))

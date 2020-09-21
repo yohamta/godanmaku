@@ -64,7 +64,7 @@ var (
 
 // CreateLocusEffect creates an effect
 func CreateLocusEffect(x, y float64) {
-	e := (*Effect)(shared.BackEffects.CreateFromPool())
+	e := (*Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
 		return
 	}
