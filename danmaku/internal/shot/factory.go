@@ -1,13 +1,16 @@
 package shot
 
-import "github.com/yohamta/godanmaku/danmaku/internal/shared"
+import (
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+)
 
 var (
 	controllers = map[string]controller{
-		"colorful":  &colorful{baseController{}},
-		"blue":      &blue{baseController{}},
-		"blueLaser": &blueLaser{baseController{}},
-		"sparkle":   &sparkle{baseController{}},
+		"colorful": &colorful{baseController{}},
+		"blue":     &blue{baseController{}},
+		"laser":    &laser{baseController{}},
+		"sparkle":  &sparkle{baseController{}},
 	}
 )
 
@@ -26,7 +29,18 @@ func BlueLaser(x, y float64, degree int) {
 	if s == nil {
 		return
 	}
-	s.init(controllers["blueLaser"], x, y, degree)
+	s.init(controllers["laser"], x, y, degree)
+	s.spr = sprite.BlueLaser
+}
+
+// BlueLaserLong creates shot
+func BlueLaserLong(x, y float64, degree int) {
+	s := (*Shot)(shared.PlayerShots.CreateFromPool())
+	if s == nil {
+		return
+	}
+	s.init(controllers["laser"], x, y, degree)
+	s.spr = sprite.BlueLaserLong
 }
 
 // EnemyShot creates shot

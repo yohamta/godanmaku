@@ -9,21 +9,22 @@ import (
 )
 
 var (
-	Background   *Sprite
-	Player       *Sprite
-	Enemy1       *Sprite
-	Enemy2       *Sprite
-	Hit          *Sprite
-	Explosion    *Sprite
-	Jump         *Sprite
-	Result       *Sprite
-	Locus        *Sprite
-	Nova         *Sprite
-	PlayerBullet *Sprite
-	EnemyShots   []*Sprite
-	BlueLaser    *Sprite
-	Sparkle      *Sprite
-	Backfire     *Sprite
+	Background    *Sprite
+	Player        *Sprite
+	Enemy1        *Sprite
+	Enemy2        *Sprite
+	Hit           *Sprite
+	Explosion     *Sprite
+	Jump          *Sprite
+	Result        *Sprite
+	Locus         *Sprite
+	Nova          *Sprite
+	PlayerBullet  *Sprite
+	EnemyShots    []*Sprite
+	BlueLaser     *Sprite
+	Sparkle       *Sprite
+	Backfire      *Sprite
+	BlueLaserLong *Sprite
 )
 
 // LoadSprites loads sprites
@@ -39,6 +40,7 @@ func LoadSprites() {
 	Locus = createSprite(&images.KISEKI, 5, 1)
 	Nova = createSprite(&images.NOVA, 1, 1)
 	BlueLaser = createSprite(&images.RASER1, 6, 4)
+	BlueLaserLong = createSprite(&images.RASERLONG1, 6, 4)
 	Sparkle = createSprite(&images.SPARKLE, 8, 8)
 	Backfire = createSprite(&images.BACKFIRE, 8, 1)
 

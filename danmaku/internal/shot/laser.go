@@ -4,15 +4,13 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
-type blueLaser struct {
+type laser struct {
 	baseController
 }
 
-func (c *blueLaser) init(s *Shot) {
-	s.spr = sprite.BlueLaser
+func (c *laser) init(s *Shot) {
 	s.setSize(16, 16)
 	s.setSpeed(3.56, s.degree)
 
@@ -25,7 +23,7 @@ func (c *blueLaser) init(s *Shot) {
 	s.setPosition(s.x+adjust.x, s.y+adjust.y)
 }
 
-func (c *blueLaser) draw(s *Shot, screen *ebiten.Image) {
+func (c *laser) draw(s *Shot, screen *ebiten.Image) {
 	spr := s.spr
 	spr.SetPosition(s.x-shared.OffsetX, s.y-shared.OffsetY)
 	spr.SetIndex(s.sprIndex)
