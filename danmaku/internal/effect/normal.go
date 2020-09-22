@@ -46,5 +46,5 @@ func (c *normal) draw(e *Effect, screen *ebiten.Image) {
 	}
 	e.sprite.SetIndex(e.spriteFrame)
 	e.sprite.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
-	e.sprite.Draw(screen)
+	e.sprite.DrawWithScale(screen, e.scale)
 }

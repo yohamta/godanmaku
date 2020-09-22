@@ -3,6 +3,7 @@ package shot
 import (
 	"fmt"
 	"math"
+	"math/rand"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
@@ -129,7 +130,11 @@ func (s *Shot) Update() {
 // OnHit should be called on hit something
 func (s *Shot) OnHit() {
 	s.isActive = false
-	effect.CreateHitEffect(s.x, s.y)
+	if rand.Float64() > 0.5 {
+		effect.CreateHitEffect(s.x, s.y)
+	} else {
+		effect.CreateHitLargeEffect(s.x, s.y)
+	}
 }
 
 func (s *Shot) setSize(width, height float64) {

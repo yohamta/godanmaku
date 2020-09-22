@@ -34,6 +34,19 @@ func CreateHitEffect(x, y float64) {
 	e.fps = 15
 }
 
+// CreateHitLargeEffect creates an effect
+func CreateHitLargeEffect(x, y float64) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(normalController, x, y)
+	e.sprite = sprite.Hit
+	e.se = sound.SeKindHit2
+	e.scale = 2
+	e.fps = 15
+}
+
 // CreateExplosion creates an effect
 func CreateExplosion(x, y float64) {
 	e := (*Effect)(shared.Effects.CreateFromPool())
