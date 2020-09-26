@@ -7,6 +7,10 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/yohamta/godanmaku/danmaku/internal/uikit/flex"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/uikit"
+
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 
@@ -72,6 +76,10 @@ type Shooting struct {
 	// quadtree
 	pShotQuadTree *quad.Quad
 	eShotQuadTree *quad.Quad
+
+	// ui
+	viewController *uikit.ViewController
+	rootView       *uikit.View
 }
 
 // NewShooting returns new Shooting struct
@@ -144,6 +152,33 @@ func (s *Shooting) init() {
 	y2 := s.field.GetBottom()
 	s.pShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
 	s.eShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
+
+	s.initView()
+}
+
+func (s *Shooting) initView() {
+	s.viewController = uikit.NewViewController()
+	s.viewController.SetFrame(0, 0, ui.GetScreenWidth(), ui.GetScreenHeight())
+
+	// root view
+	rootFlex := flex.NewFlex(ui.GetScreenWidth(), ui.GetScreenHeight())
+	rootFlex.Direction = flex.Column
+	rootFlex.Justify = flex.JustifySpaceBetween
+	flexContainerView := uikit.NewView(rootFlex)
+	s.rootView = flexContainerView
+	s.viewController.SetRootView(flexContainerView)
+
+	// top view
+	topFlex := flex.NewFlex(ui.GetScreenWidth(), 100)
+	topFlex.Direction = flex.Row
+	topFlex.Justify = flex.JustifySpaceBetween
+	flexContainerView.AddSubView(uikit.NewView(topFlex))
+
+	// bottom view
+	bottomFlex := flex.NewFlex(ui.GetScreenWidth(), 100)
+	bottomFlex.Direction = flex.Row
+	bottomFlex.Justify = flex.JustifySpaceBetween
+	flexContainerView.AddSubView(uikit.NewView(topFlex))
 }
 
 func (s *Shooting) setupStage() {
@@ -357,6 +392,8 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	case stateWin:
 		s.drawResult(screen)
 	}
+
+	s.viewController.Draw(screen)
 }
 
 func (s *Shooting) drawBackground(screen *ebiten.Image) {
