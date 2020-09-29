@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten"
 
-	"github.com/yohamta/godanmaku/danmaku"
+	"github.com/yotahamada/godanmaku/danmaku"
 )
 
 type size struct {

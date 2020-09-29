@@ -3,10 +3,10 @@ package ui
 import (
 	"image/color"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/uikit"
+	"github.com/yotahamada/godanmaku/danmaku/internal/uikit"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/paint"
+	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
 )
 
 type Rectangle struct {

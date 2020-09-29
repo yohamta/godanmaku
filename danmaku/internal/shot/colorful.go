@@ -2,9 +2,9 @@ package shot
 
 import (
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/collision"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yotahamada/godanmaku/danmaku/internal/collision"
+	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
+	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
 )
 
 type colorful struct {

@@ -5,7 +5,7 @@ import (
 	"image"
 	"math"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/uikit"
+	"github.com/yotahamada/godanmaku/danmaku/internal/uikit"
 )
 
 // Direction is the direction in which flex items are laid out

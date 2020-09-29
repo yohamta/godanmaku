@@ -5,12 +5,12 @@ import (
 	"math"
 	"math/rand"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/util"
+	"github.com/yotahamada/godanmaku/danmaku/internal/util"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/paint"
+	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
 )
 
 const (

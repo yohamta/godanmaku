@@ -5,7 +5,7 @@ import (
 	"image"
 	"math/rand"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
+	"github.com/yotahamada/godanmaku/danmaku/internal/resources/images"
 )
 
 var (

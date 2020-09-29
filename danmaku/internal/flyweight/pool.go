@@ -3,7 +3,7 @@ package flyweight
 import (
 	"unsafe"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/list"
+	"github.com/yotahamada/godanmaku/danmaku/internal/list"
 )
 
 // Pool represents factory

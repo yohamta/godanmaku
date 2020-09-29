@@ -1,9 +1,9 @@
 package shared
 
 import (
-	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
-	"github.com/yohamta/godanmaku/danmaku/internal/inputs"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+	"github.com/yotahamada/godanmaku/danmaku/internal/flyweight"
+	"github.com/yotahamada/godanmaku/danmaku/internal/inputs"
+	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
 )
 
 var (

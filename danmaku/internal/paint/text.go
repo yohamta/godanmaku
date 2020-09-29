@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/resources/fonts"
+	"github.com/yotahamada/godanmaku/danmaku/internal/resources/fonts"
 	"golang.org/x/image/font"
 
 	// "github.com/hajimehoshi/ebiten/text"

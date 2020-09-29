@@ -3,14 +3,14 @@ package danmaku
 import (
 	"image/color"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/sound"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
+	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
 
 	"github.com/hajimehoshi/ebiten"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
+	"github.com/yotahamada/godanmaku/danmaku/internal/shooting"
+	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
 )
 
 // Game implements ebiten.Game interface.

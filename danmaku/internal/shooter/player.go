@@ -5,9 +5,9 @@ import (
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/effect"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-	"github.com/yohamta/godanmaku/danmaku/internal/util"
+	"github.com/yotahamada/godanmaku/danmaku/internal/effect"
+	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
+	"github.com/yotahamada/godanmaku/danmaku/internal/util"
 )
 
 type playerController struct{}

@@ -6,8 +6,8 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/touch"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+	"github.com/yotahamada/godanmaku/danmaku/internal/touch"
+	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
 )
 
 // Input represents the state of user's input

@@ -3,7 +3,7 @@ package util
 import (
 	"math"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
 )
 
 // DegreeToDirectionIndex convert degree into 1 to 8 integer

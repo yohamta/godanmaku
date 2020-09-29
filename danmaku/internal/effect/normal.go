@@ -2,8 +2,8 @@ package effect
 
 import (
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-	"github.com/yohamta/godanmaku/danmaku/internal/sound"
+	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
+	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
 )
 
 const fps = 60
