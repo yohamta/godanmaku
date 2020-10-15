@@ -25,7 +25,8 @@ type FireButton struct {
 
 // NewFireButton returns new FireButton
 func NewFireButton() *FireButton {
-	scw, sch := GetScreenSize()
+	scw := ScreenWidth
+	sch := ScreenHeight
 	x := scw/2 + scw/4 - fireButtonWidth/2
 	y := sch - fireButtonHeight - 40
 	baseButton := (NewButton(x, y, fireButtonWidth, fireButtonHeight))

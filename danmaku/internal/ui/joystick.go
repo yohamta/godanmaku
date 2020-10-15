@@ -41,7 +41,8 @@ func NewJoystick() *Joystick {
 	joystick.animateAlpha = -3
 
 	// position
-	scw, sch := GetScreenSize()
+	scw := ScreenWidth
+	sch := ScreenHeight
 	joystick.center.x = scw/2 - joystick.panelSize/2
 	joystick.center.y = sch - joystick.panelSize/2 - 40
 	joystick.isFirstTouch = true

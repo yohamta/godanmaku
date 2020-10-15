@@ -57,8 +57,8 @@ func IsOutOfArea(e Entity, area Area) bool {
 
 // IsOutOfAreaEnoughly Returns if the entity is enoughly out of the certain area
 func IsOutOfAreaEnoughly(e Entity, area Area) bool {
-	w := float64(ui.GetScreenWidth())
-	h := float64(ui.GetScreenHeight())
+	w := float64(ui.ScreenWidth)
+	h := float64(ui.ScreenHeight)
 	if e.GetX()+e.GetWidth()/2 < area.GetLeft()-w/2 {
 		return true
 	}
