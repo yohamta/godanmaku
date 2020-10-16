@@ -1,17 +1,16 @@
 package danmaku
 
 import (
-	"github.com/yotahamada/godanmaku/danmaku/internal/battle"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
-	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
+	"image"
 
 	"github.com/hajimehoshi/ebiten"
-
-	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
+	"github.com/yotahamada/godanmaku/danmaku/internal/shooting"
 )
 
-type Game struct{}
+type Game struct {
+	isInitialized bool
+	screenSize    image.Point
+}
 
 type Scene interface {
 	Update()
@@ -19,14 +18,8 @@ type Scene interface {
 	Draw(screen *ebiten.Image)
 }
 
-const screenScale = 2
-
 var (
-	screenWidth   = 240
-	screenHeight  int
-	isInitialized = false
-	btl           *battle.Battle
-	state         State
+	stg *shooting.Shooting
 )
 
 func NewGame() (*Game, error) {
@@ -36,48 +29,27 @@ func NewGame() (*Game, error) {
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
-	if isInitialized == false {
-		loadResources()
-
-		state = StateBattle
-
-		btl = battle.NewBattle()
-		btl.Layout(screenWidth, screenHeight)
-
-		isInitialized = true
+	if g.isInitialized == false {
+		stg = shooting.NewShooting()
+		stg.Layout(g.screenSize.X, g.screenSize.Y)
+		g.isInitialized = true
+		return nil
 	}
-
-	switch state {
-	case StateBattle:
-		btl.Update()
-	}
-
+	stg.Update()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	switch state {
-	case StateBattle:
-		btl.Draw(screen)
+	if stg != nil {
+		stg.Draw(screen)
 	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	screenWidth = outsideWidth / screenScale
-	screenHeight = outsideHeight / screenScale
-
-	ui.ScreenWidth = screenWidth
-	ui.ScreenHeight = screenHeight
-
-	if btl != nil {
-		btl.Layout(screenWidth, screenHeight)
+	height := float64(240) / float64(outsideWidth) * float64(outsideHeight)
+	g.screenSize = image.Pt(240, int(height))
+	if stg != nil {
+		stg.Layout(g.screenSize.X, g.screenSize.Y)
 	}
-
-	return screenWidth, screenHeight
-}
-
-func loadResources() {
-	paint.LoadFonts()
-	sprite.LoadSprites()
-	sound.Load()
+	return g.screenSize.X, g.screenSize.Y
 }

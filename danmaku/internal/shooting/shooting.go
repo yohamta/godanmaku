@@ -1,6 +1,7 @@
-package battle
+package shooting
 
 import (
+	"image"
 	"image/color"
 	"math"
 	"math/rand"
@@ -12,6 +13,7 @@ import (
 	"github.com/yotahamada/godanmaku/danmaku/internal/collision"
 	"github.com/yotahamada/godanmaku/danmaku/internal/field"
 	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
+	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
 
 	"github.com/yotahamada/godanmaku/danmaku/internal/quad"
 	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
@@ -20,7 +22,6 @@ import (
 
 	"github.com/yotahamada/godanmaku/danmaku/internal/list"
 	"github.com/yotahamada/godanmaku/danmaku/internal/touch"
-	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
 
 	"github.com/yotahamada/godanmaku/danmaku/internal/effect"
 	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
@@ -41,10 +42,10 @@ const (
 	quadTreeDepth  = 3
 )
 
-type BattleState int
+type State int
 
 const (
-	stateLoading BattleState = iota
+	stateLoading State = iota
 	statePlaying
 	stateLose
 	stateWin
@@ -54,13 +55,12 @@ type EnemyData struct {
 	x, y float64
 }
 
-type Battle struct {
-	ui *furex.Controller
+var (
+	battleView *furex.Controller
 
 	player      *shooter.Shooter
-	state       BattleState
-	field       *field.Field
-	center      struct{ x, y float64 }
+	state       State
+	fld         *field.Field
 	enemyQueue  *list.List
 	tmpShooter  *shooter.Shooter
 	endTime     time.Time
@@ -72,36 +72,44 @@ type Battle struct {
 
 	pShotQuadTree *quad.Quad
 	eShotQuadTree *quad.Quad
-}
 
-func NewBattle() *Battle {
-	b := &Battle{}
+	screenSize   image.Point
+	screenCenter image.Point
+)
+
+type Shooting struct{}
+
+func NewShooting() *Shooting {
+	s := &Shooting{}
+
+	loadResources()
 
 	if touch.IsTouchPrimaryInput() {
-		b.center.y -= 40
+		screenCenter.Y -= 40
 	}
 
-	b.initBattle()
-	b.initStage()
-	b.initUI()
+	initObjects()
+	initStage()
+	initUI()
 
-	return b
+	return s
 }
 
-func (b *Battle) Layout(width, height int) {
-	b.ui.Layout(0, 0, width, height)
-	b.center.x = float64(width / 2)
-	b.center.y = float64(height / 2)
+func (s *Shooting) Layout(width, height int) {
+	screenSize = image.Pt(width, height)
+	screenCenter.X = screenSize.X / 2
+	screenCenter.Y = screenSize.Y / 2
+	if battleView != nil {
+		battleView.Layout(0, 0, screenSize.X, screenSize.Y)
+	}
 }
 
-func (b *Battle) Update() {
-	b.updateCount++
+func (s *Shooting) Update() {
+	updateCount++
 	shared.GameInput.Update()
 
-	b.updateQuadTree()
-	b.checkCollision()
-
-	player := b.player
+	updateQuadTree()
+	checkCollision()
 
 	// player
 	if player.IsDead() == false {
@@ -177,28 +185,28 @@ func (b *Battle) Update() {
 	shared.Effects.Sweep()
 	shared.BackEffects.Sweep()
 
-	switch b.state {
+	switch state {
 	case statePlaying:
-		b.checkResult()
+		checkResult()
 	case stateLose:
 		fallthrough
 	case stateWin:
-		if time.Since(b.endTime).Seconds() > 3 {
-			b.initStage()
+		if time.Since(endTime).Seconds() > 3 {
+			initStage()
 		}
 	}
 }
 
-func (b *Battle) Draw(screen *ebiten.Image) {
+func (s *Shooting) Draw(screen *ebiten.Image) {
 	// update offset
-	shared.OffsetX = b.player.GetX() - b.center.x
-	shared.OffsetY = b.player.GetY() - b.center.y
+	shared.OffsetX = player.GetX() - float64(screenCenter.X)
+	shared.OffsetY = player.GetY() - float64(screenCenter.Y)
 
 	// draw background
-	b.drawBackground(screen)
+	drawBackground(screen)
 
-	// draw field
-	b.field.Draw(screen)
+	// drawfld
+	fld.Draw(screen)
 
 	// back effects
 	for ite := shared.BackEffects.GetIterator(); ite.HasNext(); {
@@ -219,8 +227,8 @@ func (b *Battle) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	if b.player.IsDead() == false {
-		b.player.Draw(screen)
+	if player.IsDead() == false {
+		player.Draw(screen)
 	}
 
 	// enemy shots
@@ -235,42 +243,42 @@ func (b *Battle) Draw(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	if time.Since(b.dispTextTime).Seconds() <= 1 {
+	if time.Since(dispTextTime).Seconds() <= 1 {
 		w := 3 * 24
 		h := 24
 		shouldPaint := true
-		if time.Since(b.dispTextTime).Seconds() < 0.3 {
-			if b.updateCount%6 > 3 {
+		if time.Since(dispTextTime).Seconds() < 0.3 {
+			if updateCount%6 > 3 {
 				shouldPaint = false
 			}
 		}
 		if shouldPaint {
-			paint.DrawText(screen, b.dispText, ui.ScreenWidth/2-w/2,
+			paint.DrawText(screen, dispText, screenSize.X/2-w/2,
 				h+10, color.White, paint.FontSizeXLarge)
 		}
 	}
 
-	switch b.state {
+	switch state {
 	case statePlaying:
 		shared.GameInput.Draw(screen)
 	case stateLose:
 		fallthrough
 	case stateWin:
-		b.drawResult(screen)
+		drawResult(screen)
 	}
 
-	b.ui.Draw(screen)
+	battleView.Draw(screen)
 }
 
-func (b *Battle) initBattle() {
-	b.state = stateLoading
+func initObjects() {
+	state = stateLoading
 
 	rand.Seed(time.Now().Unix())
 
-	b.field = field.NewField()
-	b.enemyQueue = list.NewList()
-	b.tmpShooter = shooter.NewShooter()
-	b.killNum = 0
+	fld = field.NewField()
+	enemyQueue = list.NewList()
+	tmpShooter = shooter.NewShooter()
+	killNum = 0
 
 	shared.HealthBar = ui.NewHealthBar()
 	shared.GameInput = inputs.NewInput()
@@ -283,14 +291,14 @@ func (b *Battle) initBattle() {
 
 	// shots
 	for i := 0; i < maxPlayerShot; i++ {
-		ptr := shot.NewShot(b.field)
+		ptr := shot.NewShot(fld)
 		ptr.SetQuadNode(quad.NewNode(unsafe.Pointer(ptr)))
 		shared.PlayerShots.AddToPool(unsafe.Pointer(ptr))
 	}
 
 	// enemyShots
 	for i := 0; i < maxEnemyShot; i++ {
-		ptr := shot.NewShot(b.field)
+		ptr := shot.NewShot(fld)
 		ptr.SetQuadNode(quad.NewNode(unsafe.Pointer(ptr)))
 		shared.EnemyShots.AddToPool(unsafe.Pointer(ptr))
 	}
@@ -306,23 +314,24 @@ func (b *Battle) initBattle() {
 	}
 
 	// player
-	b.player = shooter.NewShooter()
+	player = shooter.NewShooter()
 
 	// quad tree
-	x1 := b.field.GetLeft()
-	x2 := b.field.GetRight()
-	y1 := b.field.GetTop()
-	y2 := b.field.GetBottom()
-	b.pShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
-	b.eShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
+	x1 := fld.GetLeft()
+	x2 := fld.GetRight()
+	y1 := fld.GetTop()
+	y2 := fld.GetBottom()
+	pShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
+	eShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
 }
 
-func (b *Battle) initUI() {
-	b.ui = furex.NewController()
+func initUI() {
+	battleView = furex.NewController()
+	battleView.Layout(0, 0, screenSize.X, screenSize.Y)
 	// TODO:
 }
 
-func (b *Battle) initStage() {
+func initStage() {
 	// cleaning
 	shared.Enemies.Clean()
 	shared.PlayerShots.Clean()
@@ -331,36 +340,36 @@ func (b *Battle) initStage() {
 	shared.BackEffects.Clean()
 
 	// player
-	shooter.BuildShooter(shooter.P_ROBO1, b.player, b.field,
-		b.field.GetCenterX()/2, b.field.GetCenterY()/2)
+	shooter.BuildShooter(shooter.P_ROBO1, player, fld,
+		fld.GetCenterX()/2, fld.GetCenterY()/2)
 
 	// enemies
-	b.initEnemies()
+	initEnemies()
 
-	b.state = statePlaying
+	state = statePlaying
 
 	// play sound
 	sound.PlayBgm(sound.BgmKindBattle)
 }
 
-func (b *Battle) checkResult() {
-	if shared.Enemies.GetActiveNum() == 0 && b.killNum > 0 &&
-		b.enemyQueue.Length() == 0 {
-		b.endTime = time.Now()
-		b.state = stateWin
+func checkResult() {
+	if shared.Enemies.GetActiveNum() == 0 && killNum > 0 &&
+		enemyQueue.Length() == 0 {
+		endTime = time.Now()
+		state = stateWin
 		return
 	}
 
-	if b.player.IsDead() {
-		b.endTime = time.Now()
-		b.state = stateLose
+	if player.IsDead() {
+		endTime = time.Now()
+		state = stateLose
 	}
 }
 
-func (b *Battle) drawBackground(screen *ebiten.Image) {
+func drawBackground(screen *ebiten.Image) {
 	w, h := sprite.Background.Size()
-	screenW := float64(ui.ScreenWidth)
-	screenH := float64(ui.ScreenHeight)
+	screenW := float64(screenSize.X)
+	screenH := float64(screenSize.Y)
 	centerX := screenW / 2
 	centerY := screenH / 2
 	scaleH := (screenW / float64(h))
@@ -369,20 +378,20 @@ func (b *Battle) drawBackground(screen *ebiten.Image) {
 	sprite.Background.DrawWithScale(screen, math.Max(scaleH, scaleW))
 }
 
-func (b *Battle) drawResult(screen *ebiten.Image) {
-	x, y := ui.GetCenterOfScreen()
-	if b.state == stateLose {
+func drawResult(screen *ebiten.Image) {
+	center := screenCenter
+	if state == stateLose {
 		sprite.Result.SetIndex(0)
 	} else {
-		y -= 100
+		center.Y -= 100
 		sprite.Result.SetIndex(1)
 	}
-	sprite.Result.SetPosition(float64(x), float64(y))
+	sprite.Result.SetPosition(float64(center.X), float64(center.Y))
 	sprite.Result.Draw(screen)
 }
 
-func (b *Battle) popNextEnemy() {
-	q := b.enemyQueue
+func popNextEnemy() {
+	q := enemyQueue
 	if q.Length() <= 0 {
 		return
 	}
@@ -394,49 +403,49 @@ func (b *Battle) popNextEnemy() {
 	if enemy == nil {
 		return
 	}
-	shooter.BuildShooter(shooter.E_ROBO1, enemy, b.field, popInfo.x, popInfo.y)
-	enemy.SetTarget(b.player)
+	shooter.BuildShooter(shooter.E_ROBO1, enemy, fld, popInfo.x, popInfo.y)
+	enemy.SetTarget(player)
 }
 
-func (b *Battle) initEnemies() {
+func initEnemies() {
 	enemyCount := 30
 
 	wait := int(rand.Float64() * 10)
 	radius := 300.
 	for i := 0; i < enemyCount; i++ {
 		// get enemy size
-		shooter.BuildShooter(shooter.E_ROBO1, b.tmpShooter, b.field, 0, 0)
-		x, y := b.field.GetRandamPosition(b.player.GetX(), b.player.GetY(), radius)
-		b.enemyQueue.AddValue(unsafe.Pointer(&EnemyData{x: x, y: y}))
+		shooter.BuildShooter(shooter.E_ROBO1, tmpShooter, fld, 0, 0)
+		x, y := fld.GetRandamPosition(player.GetX(), player.GetY(), radius)
+		enemyQueue.AddValue(unsafe.Pointer(&EnemyData{x: x, y: y}))
 
 		// craete jump effect
-		effect.CreateJump(x, y, wait, b.popNextEnemy)
+		effect.CreateJump(x, y, wait, popNextEnemy)
 		wait += int(rand.Float64() * 20)
 	}
 }
 
-func (b *Battle) updateQuadTree() {
+func updateQuadTree() {
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
-		b.pShotQuadTree.AddNode(p, p.GetQuadNode())
+		pShotQuadTree.AddNode(p, p.GetQuadNode())
 	}
 
 	// enemy shots
 	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 		e := (*shot.Shot)(ite.Next().GetData())
-		b.eShotQuadTree.AddNode(e, e.GetQuadNode())
+		eShotQuadTree.AddNode(e, e.GetQuadNode())
 	}
 }
 
-func (b *Battle) checkCollision() {
+func checkCollision() {
 	// player shots
 	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		enemy := (*shooter.Shooter)(ite.Next().GetData())
 		if enemy.IsDead() {
 			continue
 		}
-		qd := b.pShotQuadTree.SearchQuad(enemy)
+		qd := pShotQuadTree.SearchQuad(enemy)
 		for ite2 := qd.GetIterator(); ite2.HasNext(); {
 			shot := (*shot.Shot)(ite2.Next().GetItem())
 			if shot.IsActive() == false {
@@ -449,35 +458,41 @@ func (b *Battle) checkCollision() {
 			enemy.AddDamage(1)
 			shot.OnHit()
 			if enemy.IsDead() {
-				b.killNum++
-				b.dispTextTime = time.Now()
-				b.dispText = "[撃破]"
+				killNum++
+				dispTextTime = time.Now()
+				dispText = "[撃破]"
 			} else {
-				b.dispTextTime = time.Now()
-				b.dispText = "[命中]"
+				dispTextTime = time.Now()
+				dispText = "[命中]"
 			}
 		}
 	}
 
 	// enemy shots
 	{
-		qd := b.eShotQuadTree.SearchQuad(b.player)
+		qd := eShotQuadTree.SearchQuad(player)
 		for ite2 := qd.GetIterator(); ite2.HasNext(); {
 			shot := (*shot.Shot)(ite2.Next().GetItem())
-			if b.player.IsDead() {
+			if player.IsDead() {
 				break
 			}
 			if shot.IsActive() == false {
 				continue
 			}
-			if collision.IsCollideWith(b.player, shot) == false {
+			if collision.IsCollideWith(player, shot) == false {
 				continue
 			}
-			b.player.AddDamage(1)
+			player.AddDamage(1)
 			shot.OnHit()
 
-			b.dispTextTime = time.Now()
-			b.dispText = "[被弾]"
+			dispTextTime = time.Now()
+			dispText = "[被弾]"
 		}
 	}
+}
+
+func loadResources() {
+	paint.LoadFonts()
+	sprite.LoadSprites()
+	sound.Load()
 }
