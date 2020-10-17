@@ -6,9 +6,9 @@ import (
 	"math"
 
 	"github.com/yotahamada/furex"
+	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
 )
 
 const (
@@ -59,6 +59,7 @@ func (fb *FireButton) OnReleaseButton() {
 }
 
 func (fb *FireButton) Draw(screen *ebiten.Image, frame image.Rectangle) {
+	// TODO: performance improvement
 	if fb.isPressing {
 		furex.FillRect(screen, frame, color.RGBA{0xff, 0, 0, 0x50})
 	} else {
