@@ -211,7 +211,7 @@ func initUI() {
 	battleView.AddLayer(furex.NewLayerWithContainer(flex))
 
 	joystick = NewJoystick()
-	flex.AddChild(joystick)
+	// flex.AddChild(joystick)
 
 	fireButton = NewFireButton()
 	flex.AddChild(fireButton)
