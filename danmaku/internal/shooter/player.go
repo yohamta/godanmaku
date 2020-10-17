@@ -24,6 +24,40 @@ func (c *playerController) createLocusEffect(sh *Shooter, slottle float64) {
 	}
 }
 
+func (c *playerController) move(sh *Shooter) {
+	x := sh.GetX()
+	y := sh.GetY()
+	f := sh.field
+
+	vertical := shared.GameInput.Vertical
+	horizontal := shared.GameInput.Horizontal
+
+	slottle := math.Abs(vertical) + math.Abs(horizontal)
+	c.createLocusEffect(sh, slottle)
+
+	if vertical != 0 {
+		sh.vy = vertical * sh.speed
+		y = y + sh.vy
+		y = math.Max(f.GetTop()+sh.GetHeight()/2, y)
+		y = math.Min(f.GetBottom()-sh.GetHeight()/2, y)
+	}
+
+	if horizontal != 0 {
+		sh.vx = horizontal * sh.speed
+		x = x + sh.vx
+		x = math.Max(f.GetLeft()+sh.GetWidth()/2, x)
+		x = math.Min(f.GetRight()-sh.GetWidth()/2, x)
+	}
+
+	sh.SetPosition(x, y)
+
+	if vertical != 0 || horizontal != 0 {
+		if shared.GameInput.Fire == false {
+			sh.degree = util.RadToDeg(math.Atan2(vertical, horizontal))
+		}
+	}
+}
+
 func (c *playerController) update(sh *Shooter) {
 	x := sh.GetX()
 	y := sh.GetY()

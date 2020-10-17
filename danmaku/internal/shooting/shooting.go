@@ -30,7 +30,6 @@ import (
 	"github.com/yotahamada/godanmaku/danmaku/internal/shot"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/inputs"
 )
 
 const (
@@ -102,6 +101,8 @@ func (s *Shooting) Layout(width, height int) {
 	screenSize = image.Pt(width, height)
 	screenCenter.X = screenSize.X / 2
 	screenCenter.Y = screenSize.Y / 2
+	shared.ScreenSize = screenSize
+
 	if battleView != nil {
 		battleView.Layout(0, 0, screenSize.X, screenSize.Y)
 	}
@@ -109,84 +110,11 @@ func (s *Shooting) Layout(width, height int) {
 
 func (s *Shooting) Update() {
 	updateCount++
-	shared.GameInput.Update()
 
+	updateInput()
 	updateQuadTree()
 	checkCollision()
-
-	// player
-	if player.IsDead() == false {
-		player.Update()
-		if isFire() {
-			player.Fire()
-		}
-	}
-
-	// player shots
-	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
-		obj := ite.Next()
-		p := (*shot.Shot)(obj.GetData())
-		if p.IsActive() == false {
-			obj.SetInactive()
-			quad.RemoveNodeFromQuad(p.GetQuadNode())
-			continue
-		}
-		p.Update()
-	}
-
-	// enemy shots
-	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
-		obj := ite.Next()
-		e := (*shot.Shot)(obj.GetData())
-		if e.IsActive() == false {
-			obj.SetInactive()
-			quad.RemoveNodeFromQuad(e.GetQuadNode())
-			continue
-		}
-		e.Update()
-	}
-
-	// enemies
-	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
-		obj := ite.Next()
-		e := (*shooter.Shooter)(obj.GetData())
-		if e.IsActive() == false {
-			obj.SetInactive()
-			continue
-		}
-		e.Update()
-		if player.IsDead() == false {
-			e.Fire()
-		}
-	}
-
-	// effects
-	for ite := shared.Effects.GetIterator(); ite.HasNext(); {
-		obj := ite.Next()
-		e := (*effect.Effect)(obj.GetData())
-		if e.IsActive() == false {
-			obj.SetInactive()
-			continue
-		}
-		e.Update()
-	}
-
-	// back effects
-	for ite := shared.BackEffects.GetIterator(); ite.HasNext(); {
-		obj := ite.Next()
-		e := (*effect.Effect)(obj.GetData())
-		if e.IsActive() == false {
-			obj.SetInactive()
-			continue
-		}
-		e.Update()
-	}
-
-	shared.EnemyShots.Sweep()
-	shared.PlayerShots.Sweep()
-	shared.Enemies.Sweep()
-	shared.Effects.Sweep()
-	shared.BackEffects.Sweep()
+	updateObjects()
 
 	battleView.Update()
 
@@ -203,69 +131,15 @@ func (s *Shooting) Update() {
 }
 
 func (s *Shooting) Draw(screen *ebiten.Image) {
-	// update offset
 	shared.OffsetX = player.GetX() - float64(screenCenter.X)
 	shared.OffsetY = player.GetY() - float64(screenCenter.Y)
 
-	// draw background
 	drawBackground(screen)
-
-	// drawfld
-	fld.Draw(screen)
-
-	// back effects
-	for ite := shared.BackEffects.GetIterator(); ite.HasNext(); {
-		e := (*effect.Effect)(ite.Next().GetData())
-		e.Draw(screen)
-	}
-
-	// player shots
-	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
-		p := (*shot.Shot)(ite.Next().GetData())
-		p.Draw(screen)
-	}
-
-	// enemies
-	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
-		obj := ite.Next()
-		e := (*shooter.Shooter)(obj.GetData())
-		e.Draw(screen)
-	}
-
-	if player.IsDead() == false {
-		player.Draw(screen)
-	}
-
-	// enemy shots
-	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
-		e := (*shot.Shot)(ite.Next().GetData())
-		e.Draw(screen)
-	}
-
-	// effects
-	for ite := shared.Effects.GetIterator(); ite.HasNext(); {
-		e := (*effect.Effect)(ite.Next().GetData())
-		e.Draw(screen)
-	}
-
-	if time.Since(dispTextTime).Seconds() <= 1 {
-		w := 3 * 24
-		h := 24
-		shouldPaint := true
-		if time.Since(dispTextTime).Seconds() < 0.3 {
-			if updateCount%6 > 3 {
-				shouldPaint = false
-			}
-		}
-		if shouldPaint {
-			paint.DrawText(screen, dispText, screenSize.X/2-w/2,
-				h+10, color.White, paint.FontSizeXLarge)
-		}
-	}
+	drawObjects(screen)
+	drawMessages(screen)
 
 	switch state {
 	case statePlaying:
-		shared.GameInput.Draw(screen)
 	case stateLose:
 		fallthrough
 	case stateWin:
@@ -286,7 +160,6 @@ func initObjects() {
 	killNum = 0
 
 	shared.HealthBar = ui.NewHealthBar()
-	shared.GameInput = inputs.NewInput()
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
@@ -385,6 +258,8 @@ func drawBackground(screen *ebiten.Image) {
 	scaleW := (screenH / float64(w))
 	sprite.Background.SetPosition(centerX, centerY)
 	sprite.Background.DrawWithScale(screen, math.Max(scaleH, scaleW))
+
+	fld.Draw(screen)
 }
 
 func drawResult(screen *ebiten.Image) {
@@ -506,6 +381,158 @@ func loadResources() {
 	sound.Load()
 }
 
-func isFire() bool {
-	return fireButton.isPressing || ebiten.IsKeyPressed(ebiten.KeySpace)
+func updateInput() {
+	v := 0.
+	h := 0.
+
+	if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyDown) {
+		v = 1
+	} else if ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyUp) {
+		v = -1
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyRight) {
+		h = 1
+	} else if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		h = -1
+	}
+
+	if v == 0 && h == 0 && joystick.isReadingTouch {
+		v = joystick.vertical
+		h = joystick.horizontal
+	}
+
+	shared.GameInput.Vertical = v
+	shared.GameInput.Horizontal = h
+	shared.GameInput.Fire = fireButton.isPressing || ebiten.IsKeyPressed(ebiten.KeySpace)
+}
+
+func updateObjects() {
+	// player
+	if player.IsDead() == false {
+		player.Update()
+		if shared.GameInput.Fire {
+			player.Fire()
+		}
+	}
+
+	// player shots
+	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		p := (*shot.Shot)(obj.GetData())
+		if p.IsActive() == false {
+			obj.SetInactive()
+			quad.RemoveNodeFromQuad(p.GetQuadNode())
+			continue
+		}
+		p.Update()
+	}
+
+	// enemy shots
+	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*shot.Shot)(obj.GetData())
+		if e.IsActive() == false {
+			obj.SetInactive()
+			quad.RemoveNodeFromQuad(e.GetQuadNode())
+			continue
+		}
+		e.Update()
+	}
+
+	// enemies
+	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*shooter.Shooter)(obj.GetData())
+		if e.IsActive() == false {
+			obj.SetInactive()
+			continue
+		}
+		e.Update()
+		if player.IsDead() == false {
+			e.Fire()
+		}
+	}
+
+	// effects
+	for ite := shared.Effects.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*effect.Effect)(obj.GetData())
+		if e.IsActive() == false {
+			obj.SetInactive()
+			continue
+		}
+		e.Update()
+	}
+
+	// back effects
+	for ite := shared.BackEffects.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*effect.Effect)(obj.GetData())
+		if e.IsActive() == false {
+			obj.SetInactive()
+			continue
+		}
+		e.Update()
+	}
+
+	shared.EnemyShots.Sweep()
+	shared.PlayerShots.Sweep()
+	shared.Enemies.Sweep()
+	shared.Effects.Sweep()
+	shared.BackEffects.Sweep()
+}
+
+func drawObjects(screen *ebiten.Image) {
+	// back effects
+	for ite := shared.BackEffects.GetIterator(); ite.HasNext(); {
+		e := (*effect.Effect)(ite.Next().GetData())
+		e.Draw(screen)
+	}
+
+	// player shots
+	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
+		p := (*shot.Shot)(ite.Next().GetData())
+		p.Draw(screen)
+	}
+
+	// enemies
+	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		e := (*shooter.Shooter)(obj.GetData())
+		e.Draw(screen)
+	}
+
+	if player.IsDead() == false {
+		player.Draw(screen)
+	}
+
+	// enemy shots
+	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
+		e := (*shot.Shot)(ite.Next().GetData())
+		e.Draw(screen)
+	}
+
+	// effects
+	for ite := shared.Effects.GetIterator(); ite.HasNext(); {
+		e := (*effect.Effect)(ite.Next().GetData())
+		e.Draw(screen)
+	}
+}
+
+func drawMessages(screen *ebiten.Image) {
+	if time.Since(dispTextTime).Seconds() <= 1 {
+		w := 3 * 24
+		h := 24
+		shouldPaint := true
+		if time.Since(dispTextTime).Seconds() < 0.3 {
+			if updateCount%6 > 3 {
+				shouldPaint = false
+			}
+		}
+		if shouldPaint {
+			paint.DrawText(screen, dispText, screenSize.X/2-w/2,
+				h+10, color.White, paint.FontSizeXLarge)
+		}
+	}
 }

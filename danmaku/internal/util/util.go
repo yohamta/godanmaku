@@ -4,7 +4,7 @@ import (
 	"image"
 	"math"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
+	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
 )
 
 // DegreeToDirectionIndex convert degree into 1 to 8 integer
@@ -58,8 +58,8 @@ func IsOutOfArea(e Entity, area Area) bool {
 
 // IsOutOfAreaEnoughly Returns if the entity is enoughly out of the certain area
 func IsOutOfAreaEnoughly(e Entity, area Area) bool {
-	w := float64(ui.ScreenWidth)
-	h := float64(ui.ScreenHeight)
+	w := float64(shared.ScreenSize.X)
+	h := float64(shared.ScreenSize.Y)
 	if e.GetX()+e.GetWidth()/2 < area.GetLeft()-w/2 {
 		return true
 	}
