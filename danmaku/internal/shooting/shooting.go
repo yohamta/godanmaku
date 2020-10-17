@@ -56,7 +56,7 @@ type EnemyData struct {
 }
 
 var (
-	battleView *furex.Controller
+	battleView *furex.View
 
 	player      *shooter.Shooter
 	state       State
@@ -75,6 +75,9 @@ var (
 
 	screenSize   image.Point
 	screenCenter image.Point
+
+	fireButton *FireButton
+	joystick   *Joystick
 )
 
 type Shooting struct{}
@@ -114,7 +117,7 @@ func (s *Shooting) Update() {
 	// player
 	if player.IsDead() == false {
 		player.Update()
-		if shared.GameInput.Fire {
+		if isFire() {
 			player.Fire()
 		}
 	}
@@ -184,6 +187,8 @@ func (s *Shooting) Update() {
 	shared.Enemies.Sweep()
 	shared.Effects.Sweep()
 	shared.BackEffects.Sweep()
+
+	battleView.Update()
 
 	switch state {
 	case statePlaying:
@@ -326,30 +331,34 @@ func initObjects() {
 }
 
 func initUI() {
-	battleView = furex.NewController()
+	battleView = furex.NewView()
 	battleView.Layout(0, 0, screenSize.X, screenSize.Y)
-	// TODO:
+
+	flex := furex.NewFlex(0, 0, screenSize.X, screenSize.Y)
+	battleView.AddLayer(furex.NewLayerWithContainer(flex))
+
+	joystick = NewJoystick()
+	flex.AddChild(joystick)
+
+	fireButton = NewFireButton()
+	flex.AddChild(fireButton)
+
+	battleView.AddLayer(furex.NewLayerWithContainer(flex))
 }
 
 func initStage() {
-	// cleaning
 	shared.Enemies.Clean()
 	shared.PlayerShots.Clean()
 	shared.EnemyShots.Clean()
 	shared.Effects.Clean()
 	shared.BackEffects.Clean()
 
-	// player
 	shooter.BuildShooter(shooter.P_ROBO1, player, fld,
 		fld.GetCenterX()/2, fld.GetCenterY()/2)
-
-	// enemies
 	initEnemies()
+	sound.PlayBgm(sound.BgmKindBattle)
 
 	state = statePlaying
-
-	// play sound
-	sound.PlayBgm(sound.BgmKindBattle)
 }
 
 func checkResult() {
@@ -495,4 +504,8 @@ func loadResources() {
 	paint.LoadFonts()
 	sprite.LoadSprites()
 	sound.Load()
+}
+
+func isFire() bool {
+	return fireButton.isPressing || ebiten.IsKeyPressed(ebiten.KeySpace)
 }

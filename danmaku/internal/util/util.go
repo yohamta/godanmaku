@@ -1,6 +1,7 @@
 package util
 
 import (
+	"image"
 	"math"
 
 	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
@@ -72,4 +73,8 @@ func IsOutOfAreaEnoughly(e Entity, area Area) bool {
 		return true
 	}
 	return false
+}
+
+func PrintRect(rect image.Rectangle) {
+	println(rect.Min.X, rect.Min.Y, rect.Max.X, rect.Min.Y)
 }
