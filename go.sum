@@ -55,6 +55,8 @@ github.com/nsf/gocode v0.0.0-20190302080247-5bee97b48836/go.mod h1:6Q8/OMaaKAgTX
 github.com/pkg/browser v0.0.0-20180916011732-0a3d74bf9ce4/go.mod h1:4OwLy04Bl9Ef3GJJCoec+30X3LQs/0/m4HFRt/2LUSA=
 github.com/yotahamada/furex v0.0.0-20201017144758-aed5c108c216 h1:YC3xogoySI+Ct/IxvwL8csfujr0VGIot5FrUPid0CyA=
 github.com/yotahamada/furex v0.0.0-20201017144758-aed5c108c216/go.mod h1:+EHtHxIAb7p4FCJ8NzVeRW/F8thQJ4TZ1pD3OTEEDe8=
+github.com/yotahamada/furex v0.0.0-20201017165852-05d697e3f962 h1:InrroyTLSH5BzX8o+8M+sBUltWSDslGRBq9qehp+n/s=
+github.com/yotahamada/furex v0.0.0-20201017165852-05d697e3f962/go.mod h1:+EHtHxIAb7p4FCJ8NzVeRW/F8thQJ4TZ1pD3OTEEDe8=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
