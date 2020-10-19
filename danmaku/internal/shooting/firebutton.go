@@ -21,12 +21,17 @@ type FireButton struct {
 	alpha        uint8
 	animateAlpha int
 	isPressing   bool
+	offImage     *ebiten.Image
+	onImage      *ebiten.Image
 }
 
 func NewFireButton() *FireButton {
 	fb := new(FireButton)
 	fb.alpha = fireButtonMaxAlpha
 	fb.animateAlpha = -1
+
+	fb.makeOffsetImages()
+
 	return fb
 }
 
@@ -59,13 +64,34 @@ func (fb *FireButton) OnReleaseButton() {
 }
 
 func (fb *FireButton) Draw(screen *ebiten.Image, frame image.Rectangle) {
-	// TODO: performance improvement
+	var img *ebiten.Image
 	if fb.isPressing {
-		furex.FillRect(screen, frame, color.RGBA{0xff, 0, 0, 0x50})
+		img = fb.onImage
 	} else {
-		furex.FillRect(screen, frame, color.RGBA{0, 0xff, 0, 0x50})
+		img = fb.offImage
 	}
-	furex.DrawRect(screen, frame, color.RGBA{0xcc, 0xcc, 0, 0x60}, 1)
-	paint.DrawText(screen, "Attack", frame.Min.X+(frame.Max.X-frame.Min.X)/2-34, frame.Min.Y+(frame.Max.Y-frame.Min.Y)/2+8,
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(float64(frame.Min.X), float64(frame.Min.Y))
+	screen.DrawImage(img, op)
+}
+
+func (fb *FireButton) makeOffsetImages() {
+	fb.offImage = fb.makeOffImageForState(false)
+	fb.onImage = fb.makeOffImageForState(true)
+}
+
+func (fb *FireButton) makeOffImageForState(isOn bool) *ebiten.Image {
+	off, _ := ebiten.NewImage(fireButtonWidth, fireButtonHeight, ebiten.FilterDefault)
+	var cl color.RGBA
+	frame := image.Rect(0, 0, fireButtonWidth, fireButtonHeight)
+	if isOn {
+		cl = color.RGBA{0xff, 0, 0, 0x50}
+	} else {
+		cl = color.RGBA{0, 0xff, 0, 0x50}
+	}
+	furex.FillRect(off, frame, cl)
+	furex.DrawRect(off, frame, color.RGBA{0xcc, 0xcc, 0, 0x60}, 1)
+	paint.DrawText(off, "Attack", frame.Min.X+(frame.Max.X-frame.Min.X)/2-34, frame.Min.Y+(frame.Max.Y-frame.Min.Y)/2+8,
 		color.White, paint.FontSizeXLarge)
+	return off
 }
