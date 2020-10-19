@@ -4,7 +4,7 @@ import (
 	"image"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/shooting"
+	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
 )
 
 type Game struct {

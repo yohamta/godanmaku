@@ -1,7 +1,7 @@
 package flyweight
 
 import (
-	"github.com/yotahamada/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/list"
 )
 
 // Iterator represents iterator

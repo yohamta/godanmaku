@@ -5,8 +5,8 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/yotahamada/furex"
-	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
+	"github.com/yohamta/furex"
+	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 
 	"github.com/hajimehoshi/ebiten"
 )

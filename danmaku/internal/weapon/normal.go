@@ -3,7 +3,7 @@ package weapon
 import (
 	"time"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 )
 
 type normal struct{ baseWeapon }

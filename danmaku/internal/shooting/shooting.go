@@ -8,25 +8,25 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/yotahamada/furex"
+	"github.com/yohamta/furex"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/collision"
-	"github.com/yotahamada/godanmaku/danmaku/internal/field"
-	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
-	"github.com/yotahamada/godanmaku/danmaku/internal/ui"
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/paint"
+	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/quad"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/quad"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/list"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/effect"
-	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/shooter"
-	"github.com/yotahamada/godanmaku/danmaku/internal/shot"
+	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
+	"github.com/yohamta/godanmaku/danmaku/internal/shot"
 
 	"github.com/hajimehoshi/ebiten"
 )

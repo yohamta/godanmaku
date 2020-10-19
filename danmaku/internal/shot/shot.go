@@ -5,14 +5,14 @@ import (
 	"math"
 	"math/rand"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/collision"
-	"github.com/yotahamada/godanmaku/danmaku/internal/effect"
-	"github.com/yotahamada/godanmaku/danmaku/internal/quad"
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
+	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/field"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
-	"github.com/yotahamada/godanmaku/danmaku/internal/util"
+	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 type point struct {

@@ -4,16 +4,16 @@ import (
 	"math"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/collision"
-	"github.com/yotahamada/godanmaku/danmaku/internal/effect"
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/flyweight"
+	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/field"
-	"github.com/yotahamada/godanmaku/danmaku/internal/weapon"
+	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
-	"github.com/yotahamada/godanmaku/danmaku/internal/util"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 // Target represents target
@@ -57,6 +57,11 @@ func (sh *Shooter) init() {
 }
 
 func (sh *Shooter) Update() {
+	sh.updateCount++
+	sh.controller.update(sh)
+}
+
+func (sh *Shooter) UpdatePlayer() {
 	sh.updateCount++
 	sh.controller.update(sh)
 }

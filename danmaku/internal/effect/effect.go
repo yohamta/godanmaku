@@ -2,8 +2,8 @@ package effect
 
 import (
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 // Effect represents the base of player, enemy, shots

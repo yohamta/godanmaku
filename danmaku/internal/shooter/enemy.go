@@ -5,8 +5,8 @@ import (
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
-	"github.com/yotahamada/godanmaku/danmaku/internal/util"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 type enemyController struct{}

@@ -3,7 +3,7 @@ package sound
 import (
 	"io/ioutil"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/resources/audios"
+	"github.com/yohamta/godanmaku/danmaku/internal/resources/audios"
 
 	"github.com/hajimehoshi/ebiten/audio"
 	"github.com/hajimehoshi/ebiten/audio/mp3"

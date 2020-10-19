@@ -4,7 +4,7 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/yotahamada/godanmaku/danmaku/internal/paint"
+	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 
 // Box represents colored box to render on screen

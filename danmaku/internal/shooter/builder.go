@@ -1,11 +1,11 @@
 package shooter
 
 import (
-	"github.com/yotahamada/godanmaku/danmaku/internal/collision"
-	"github.com/yotahamada/godanmaku/danmaku/internal/field"
-	"github.com/yotahamada/godanmaku/danmaku/internal/shot"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
-	"github.com/yotahamada/godanmaku/danmaku/internal/weapon"
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/shot"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 )
 
 // BuildShooter builds shooter

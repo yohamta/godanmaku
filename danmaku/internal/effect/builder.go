@@ -1,9 +1,9 @@
 package effect
 
 import (
-	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
-	"github.com/yotahamada/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 var (

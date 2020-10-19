@@ -4,7 +4,7 @@ import (
 	"image"
 	"math"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 )
 
 // DegreeToDirectionIndex convert degree into 1 to 8 integer

@@ -3,7 +3,7 @@ package flyweight
 import (
 	"unsafe"
 
-	"github.com/yotahamada/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/list"
 )
 
 // Object represents object
