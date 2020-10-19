@@ -76,5 +76,5 @@ func IsOutOfAreaEnoughly(e Entity, area Area) bool {
 }
 
 func PrintRect(rect image.Rectangle) {
-	println(rect.Min.X, rect.Min.Y, rect.Max.X, rect.Min.Y)
+	println(rect.Min.X, rect.Min.Y, rect.Max.X, rect.Max.Y)
 }
