@@ -6,5 +6,5 @@
 https://godanmaku.web.app/
 
 How to play:
-- Cursor: Move player
+- Cursor or W/S/A/D: Move player
 - Space Key: Fire weapon
