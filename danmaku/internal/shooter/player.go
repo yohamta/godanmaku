@@ -96,7 +96,7 @@ func (c *playerController) draw(sh *Shooter, screen *ebiten.Image) {
 	sh.spr.SetPosition(sh.GetX()-shared.OffsetX, sh.GetY()-shared.OffsetY)
 	sh.spr.SetIndex(util.DegreeToDirectionIndex(sh.degree))
 	sh.spr.Draw(screen)
-	shared.HealthBar.Draw(sh.x-shared.OffsetX, sh.y+sh.height/2-shared.OffsetY+5,
+	healthBar.Draw(sh.x-shared.OffsetX, sh.y+sh.height/2-shared.OffsetY+5,
 		float64(sh.life)/float64(sh.maxLife), screen)
 }
 

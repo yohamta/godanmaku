@@ -4,7 +4,6 @@ import (
 	"image"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
 )
 
 type Input struct {
@@ -24,8 +23,6 @@ var (
 
 	OffsetX float64
 	OffsetY float64
-
-	HealthBar *ui.HealthBar
 
 	GameInput Input
 )

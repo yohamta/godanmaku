@@ -1,4 +1,4 @@
-package ui
+package shooter
 
 import (
 	"image/color"

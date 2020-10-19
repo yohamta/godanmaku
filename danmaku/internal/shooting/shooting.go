@@ -13,7 +13,7 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/ui"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/quad"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
@@ -23,7 +23,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/list"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
@@ -157,8 +156,6 @@ func initObjects() {
 	enemyQueue = list.NewList()
 	tmpShooter = shooter.NewShooter()
 	killNum = 0
-
-	shared.HealthBar = ui.NewHealthBar()
 
 	// enemies
 	for i := 0; i < maxEnemy; i++ {
