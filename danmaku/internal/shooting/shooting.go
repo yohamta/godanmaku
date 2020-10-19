@@ -21,7 +21,6 @@ import (
 	"github.com/yotahamada/godanmaku/danmaku/internal/sound"
 
 	"github.com/yotahamada/godanmaku/danmaku/internal/list"
-	"github.com/yotahamada/godanmaku/danmaku/internal/touch"
 
 	"github.com/yotahamada/godanmaku/danmaku/internal/effect"
 	"github.com/yotahamada/godanmaku/danmaku/internal/shared"
@@ -55,7 +54,8 @@ type EnemyData struct {
 }
 
 var (
-	battleView *furex.View
+	isInitUIDone bool
+	battleView   *furex.View
 
 	player      *shooter.Shooter
 	state       State
@@ -86,13 +86,8 @@ func NewShooting() *Shooting {
 
 	loadResources()
 
-	if touch.IsTouchPrimaryInput() {
-		screenCenter.Y -= 40
-	}
-
 	initObjects()
 	initStage()
-	initUI()
 
 	return s
 }
@@ -100,11 +95,15 @@ func NewShooting() *Shooting {
 func (s *Shooting) Layout(width, height int) {
 	screenSize = image.Pt(width, height)
 	screenCenter.X = screenSize.X / 2
-	screenCenter.Y = screenSize.Y / 2
+	screenCenter.Y = screenSize.Y/2 - 50
 	shared.ScreenSize = screenSize
 
 	if battleView != nil {
 		battleView.Layout(0, 0, screenSize.X, screenSize.Y)
+	}
+	if isInitUIDone == false {
+		initUI()
+		isInitUIDone = true
 	}
 }
 
@@ -211,7 +210,7 @@ func initUI() {
 	battleView.AddLayer(furex.NewLayerWithContainer(flex))
 
 	joystick = NewJoystick()
-	// flex.AddChild(joystick)
+	flex.AddChild(joystick)
 
 	fireButton = NewFireButton()
 	flex.AddChild(fireButton)
