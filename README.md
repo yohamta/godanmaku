@@ -6,5 +6,10 @@
 https://godanmaku.web.app/
 
 How to play:
+[PC browser]
 - Cursor or W/S/A/D: Move player
 - Space Key: Fire weapon
+
+[Mobile browser]
+- JoyStick(Left down grid): Move player
+- Attack Button: Fire weapon
