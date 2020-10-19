@@ -6,7 +6,6 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-// View represents a view
 type View struct {
 	loaded   bool
 	bounds   image.Rectangle
@@ -60,7 +59,6 @@ func NewView(eventHandler ViewEventHandler) *View {
 	return v
 }
 
-// SetPosition sets the position of the view
 func (v *View) SetPosition(x, y int) {
 	v.bounds.Add(image.Point{
 		x - v.bounds.Min.X,
@@ -68,38 +66,31 @@ func (v *View) SetPosition(x, y int) {
 	})
 }
 
-// SetSize sets the position of the view
 func (v *View) SetSize(w, h int) {
 	v.bounds.Max.X = w + v.bounds.Min.X
 	v.bounds.Max.Y = h + v.bounds.Min.Y
 }
 
-// GetPosition returns the position of the view
 func (v *View) GetPosition() image.Point {
 	return v.bounds.Min
 }
 
-// GetSize returns the position of the view
 func (v *View) GetSize() image.Point {
 	return v.bounds.Max.Sub(v.bounds.Min)
 }
 
-// Rect returns the postion and size of the view
 func (v *View) Rect() image.Rectangle {
 	return v.bounds
 }
 
-// SetRect sets the rect of the view
 func (v *View) SetRect(x0, y0, x1, y1 int) {
 	v.bounds = image.Rect(x0, y0, x1, y1)
 }
 
-// SetRect sets the rect of the view
 func (v *View) SetViewEventHandler(h ViewEventHandler) {
 	v.handler = h
 }
 
-// Layout sets the frame of the view
 func (v *View) Layout() {
 	if v.handler != nil {
 		v.handler.OnLayout(v)
@@ -109,19 +100,16 @@ func (v *View) Layout() {
 	}
 }
 
-// AddSubView adds a new view
 func (v *View) AddSubView(sub *View) {
 	v.subViews = append(v.subViews, sub)
 	sub.Load()
 	v.Layout()
 }
 
-// GetSubView adds a new view
 func (v *View) GetSubView() []*View {
 	return v.subViews
 }
 
-// Load loads the view
 func (v *View) Load() {
 	if v.loaded == false {
 		if v.handler != nil {
@@ -134,7 +122,6 @@ func (v *View) Load() {
 	}
 }
 
-// Update updates the view
 func (v *View) Update() {
 	if v.handler != nil {
 		v.handler.OnUpdate(v)
@@ -144,7 +131,6 @@ func (v *View) Update() {
 	}
 }
 
-// Draw draws the view
 func (v *View) Draw(screen *ebiten.Image) {
 	if v.handler != nil {
 		v.handler.OnDraw(v, screen)
