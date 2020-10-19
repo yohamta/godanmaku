@@ -4,3 +4,7 @@
 
 ## demo (for mobile only)
 https://godanmaku.web.app/
+
+How to play:
+- Cursor: Move player
+- Space Key: Fire weapon
