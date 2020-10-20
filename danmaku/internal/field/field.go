@@ -1,6 +1,7 @@
 package field
 
 import (
+	"image"
 	"image/color"
 	"math"
 	"math/rand"
@@ -37,7 +38,7 @@ func NewField() *Field {
 
 	borderColor := color.RGBA{0xff, 0, 0, 0x50}
 	offsetImage, _ := ebiten.NewImage(int(f.width), int(f.height), ebiten.FilterDefault)
-	paint.DrawRect(offsetImage, paint.Rect{X: 0, Y: 0, W: int(f.width), H: int(f.height)}, borderColor, 1)
+	paint.DrawRect(offsetImage, image.Rect(0, 0, int(f.width), int(f.height)), borderColor, 1)
 	f.boundaryImage = offsetImage
 
 	return f

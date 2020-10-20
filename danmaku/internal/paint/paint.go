@@ -1,40 +1,42 @@
 package paint
 
 import (
+	"image"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten"
 )
 
-// Rect represents an area of image
-type Rect struct {
-	X, Y, W, H int
+var imgOfAPixel *ebiten.Image
+
+func createRectImg() *ebiten.Image {
+	if imgOfAPixel != nil {
+		return imgOfAPixel
+	}
+	imgOfAPixel, err := ebiten.NewImage(1, 1, ebiten.FilterDefault)
+	if err != nil {
+		panic(err)
+	}
+	return imgOfAPixel
 }
 
-// FillRect fills an area of the image
-func FillRect(target *ebiten.Image, r Rect, clr color.Color) {
-	img, _ := ebiten.NewImage(r.W, r.H, ebiten.FilterDefault)
+func FillRect(target *ebiten.Image, r image.Rectangle, clr color.Color) {
+	img := createRectImg()
 	img.Fill(clr)
 
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(r.X), float64(r.Y))
+
+	size := r.Size()
+	op.GeoM.Translate(float64(r.Min.X)*(1/float64(size.X)),
+		float64(r.Min.Y)*(1/float64(size.Y)))
+	op.GeoM.Scale(float64(size.X), float64(size.Y))
 
 	target.DrawImage(img, op)
 }
 
-// DrawRect draws rect
-func DrawRect(target *ebiten.Image, r Rect, clr color.Color, width int) {
-	for i := r.X; i < r.X+r.W; i++ {
-		for j := 0; j < width; j++ {
-			target.Set(i, r.Y+j, clr)
-			target.Set(i, r.Y+r.H-j-1, clr)
-		}
-	}
-
-	for i := r.Y; i < r.Y+r.H; i++ {
-		for j := 0; j < width; j++ {
-			target.Set(r.X+j, i, clr)
-			target.Set(r.X+r.W-j-1, i, clr)
-		}
-	}
+func DrawRect(target *ebiten.Image, r image.Rectangle, clr color.Color, width int) {
+	FillRect(target, image.Rect(r.Min.X, r.Min.Y, r.Min.X+width, r.Max.Y), clr)
+	FillRect(target, image.Rect(r.Max.X-width, r.Min.Y, r.Max.X, r.Max.Y), clr)
+	FillRect(target, image.Rect(r.Min.X, r.Min.Y, r.Max.X, r.Min.Y+width), clr)
+	FillRect(target, image.Rect(r.Min.X, r.Max.Y-width, r.Max.X, r.Max.Y), clr)
 }

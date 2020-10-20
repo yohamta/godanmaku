@@ -57,6 +57,8 @@ github.com/nsf/gocode v0.0.0-20190302080247-5bee97b48836/go.mod h1:6Q8/OMaaKAgTX
 github.com/pkg/browser v0.0.0-20180916011732-0a3d74bf9ce4/go.mod h1:4OwLy04Bl9Ef3GJJCoec+30X3LQs/0/m4HFRt/2LUSA=
 github.com/yohamta/furex v0.1.0 h1:YWSGJ1eCjmTBGCtUg1tU/yxidEOBvhGy4EjY1HCKFNU=
 github.com/yohamta/furex v0.1.0/go.mod h1:M+F649P/9mPlI07K1YnG3MiKIC+iEgOY+9xep3olWFY=
+github.com/yohamta/furex v0.1.2 h1:TitL+D1bR31gQkt6vWLTggp/d2N6fW5L5/n9pBa3ZhM=
+github.com/yohamta/furex v0.1.2/go.mod h1:M+F649P/9mPlI07K1YnG3MiKIC+iEgOY+9xep3olWFY=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=

@@ -88,7 +88,7 @@ func (joystick *Joystick) createOffsetImage() {
 		for j := 0; j < panelNum; j++ {
 			x := i * keySize
 			y := j * keySize
-			paint.DrawRect(offsetImage, paint.Rect{X: x, Y: y, W: keySize, H: keySize}, color, 1)
+			paint.DrawRect(offsetImage, image.Rect(x, y, x+keySize, y+keySize), color, 1)
 		}
 	}
 

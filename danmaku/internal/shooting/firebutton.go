@@ -5,7 +5,6 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/yohamta/furex"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 
 	"github.com/hajimehoshi/ebiten"
@@ -89,8 +88,8 @@ func (fb *FireButton) makeOffImageForState(isOn bool) *ebiten.Image {
 	} else {
 		cl = color.RGBA{0, 0xff, 0, 0x50}
 	}
-	furex.FillRect(off, frame, cl)
-	furex.DrawRect(off, frame, color.RGBA{0xcc, 0xcc, 0, 0x60}, 1)
+	paint.FillRect(off, frame, cl)
+	paint.DrawRect(off, frame, color.RGBA{0xcc, 0xcc, 0, 0x60}, 1)
 	paint.DrawText(off, "Attack", frame.Min.X+(frame.Max.X-frame.Min.X)/2-34, frame.Min.Y+(frame.Max.Y-frame.Min.Y)/2+8,
 		color.White, paint.FontSizeXLarge)
 	return off
