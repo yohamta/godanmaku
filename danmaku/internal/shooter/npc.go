@@ -9,13 +9,13 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
-type enemyController struct{}
+type NPCController struct{}
 
-func (c *enemyController) init(sh *Shooter) {
+func (c *NPCController) init(sh *Shooter) {
 	c.updateDestination(sh)
 }
 
-func (c *enemyController) update(sh *Shooter) {
+func (c *NPCController) update(sh *Shooter) {
 	sh.SetPosition(sh.x+sh.vx, sh.y+sh.vy)
 
 	if c.isArrived(sh) {
@@ -29,18 +29,18 @@ func (c *enemyController) update(sh *Shooter) {
 	}
 }
 
-func (c *enemyController) draw(sh *Shooter, screen *ebiten.Image) {
+func (c *NPCController) draw(sh *Shooter, screen *ebiten.Image) {
 	sh.spr.SetPosition(sh.x-shared.OffsetX, sh.y-shared.OffsetY)
 	sh.spr.SetIndex(util.DegreeToDirectionIndex(sh.degree))
 	sh.spr.Draw(screen)
 }
 
-func (c *enemyController) isArrived(sh *Shooter) bool {
+func (c *NPCController) isArrived(sh *Shooter) bool {
 	return math.Abs(sh.y-sh.destination.y) < sh.GetHeight() &&
 		math.Abs(sh.x-sh.destination.x) < sh.GetWidth()
 }
 
-func (c *enemyController) updateDestination(sh *Shooter) {
+func (c *NPCController) updateDestination(sh *Shooter) {
 	f := sh.field
 	x := (f.GetRight() - f.GetLeft()) * rand.Float64()
 	y := (f.GetBottom() - f.GetTop()) * rand.Float64()

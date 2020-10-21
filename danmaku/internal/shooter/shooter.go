@@ -16,6 +16,12 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
+func init() {
+	healthBar = NewHealthBar()
+}
+
+var healthBar *HealthBar
+
 // Target represents target
 type Target interface {
 	GetX() float64
@@ -43,7 +49,8 @@ type Shooter struct {
 	destination   struct{ x, y float64 }
 	shotsPool     *flyweight.Pool
 	collisionBox  []*collision.Box
-	controller    controller
+	controller    Controller
+	funnelOwner   *Shooter
 }
 
 func NewShooter() *Shooter {

@@ -4,7 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-type controller interface {
+type Controller interface {
 	init(sh *Shooter)
 	update(sh *Shooter)
 	draw(sh *Shooter, screen *ebiten.Image)
@@ -18,6 +18,7 @@ const (
 )
 
 var (
-	enemy  = new(enemyController)
-	player = new(playerController)
+	enemy  = new(NPCController)
+	player = new(PlayerController)
+	funnel = new(FunnelController)
 )

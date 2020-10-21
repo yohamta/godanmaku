@@ -10,11 +10,11 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
-type playerController struct{}
+type PlayerController struct{}
 
-func (c *playerController) init(sh *Shooter) {}
+func (c *PlayerController) init(sh *Shooter) {}
 
-func (c *playerController) createLocusEffect(sh *Shooter, slottle float64) {
+func (c *PlayerController) createLocusEffect(sh *Shooter, slottle float64) {
 	if slottle < 0.5 {
 		return
 	}
@@ -24,7 +24,7 @@ func (c *playerController) createLocusEffect(sh *Shooter, slottle float64) {
 	}
 }
 
-func (c *playerController) move(sh *Shooter) {
+func (c *PlayerController) move(sh *Shooter) {
 	x := sh.GetX()
 	y := sh.GetY()
 	f := sh.field
@@ -58,7 +58,7 @@ func (c *playerController) move(sh *Shooter) {
 	}
 }
 
-func (c *playerController) update(sh *Shooter) {
+func (c *PlayerController) update(sh *Shooter) {
 	x := sh.GetX()
 	y := sh.GetY()
 	f := sh.field
@@ -92,7 +92,7 @@ func (c *playerController) update(sh *Shooter) {
 	}
 }
 
-func (c *playerController) draw(sh *Shooter, screen *ebiten.Image) {
+func (c *PlayerController) draw(sh *Shooter, screen *ebiten.Image) {
 	sh.spr.SetPosition(sh.GetX()-shared.OffsetX, sh.GetY()-shared.OffsetY)
 	sh.spr.SetIndex(util.DegreeToDirectionIndex(sh.degree))
 	sh.spr.Draw(screen)
@@ -100,12 +100,12 @@ func (c *playerController) draw(sh *Shooter, screen *ebiten.Image) {
 		float64(sh.life)/float64(sh.maxLife), screen)
 }
 
-func (c *playerController) isArrived(sh *Shooter) bool {
+func (c *PlayerController) isArrived(sh *Shooter) bool {
 	return math.Abs(sh.y-sh.destination.y) < sh.GetHeight() &&
 		math.Abs(sh.x-sh.destination.x) < sh.GetWidth()
 }
 
-func (c *playerController) updateDestination(sh *Shooter) {
+func (c *PlayerController) updateDestination(sh *Shooter) {
 	f := sh.field
 	x := (f.GetRight() - f.GetLeft()) * rand.Float64()
 	y := (f.GetBottom() - f.GetTop()) * rand.Float64()
