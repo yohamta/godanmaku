@@ -10,7 +10,6 @@ var (
 	normalController = &normal{newBaseControlelr()}
 )
 
-// CreateLocusEffect creates an effect
 func CreateLocusEffect(x, y float64) {
 	e := (*Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
@@ -22,7 +21,6 @@ func CreateLocusEffect(x, y float64) {
 	e.fps = 10
 }
 
-// CreateHitEffect creates an effect
 func CreateHitEffect(x, y float64) {
 	e := (*Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
@@ -34,7 +32,6 @@ func CreateHitEffect(x, y float64) {
 	e.fps = 15
 }
 
-// CreateHitLargeEffect creates an effect
 func CreateHitLargeEffect(x, y float64) {
 	e := (*Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
@@ -47,7 +44,6 @@ func CreateHitLargeEffect(x, y float64) {
 	e.fps = 15
 }
 
-// CreateExplosion creates an effect
 func CreateExplosion(x, y float64) {
 	e := (*Effect)(shared.Effects.CreateFromPool())
 	if e == nil {
@@ -59,7 +55,6 @@ func CreateExplosion(x, y float64) {
 	e.fps = 20
 }
 
-// CreateJump creates an effect
 func CreateJump(x, y float64, wait int, callback func()) {
 	e := (*Effect)(shared.Effects.CreateFromPool())
 	if e == nil {

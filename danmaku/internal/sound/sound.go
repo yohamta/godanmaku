@@ -14,14 +14,12 @@ const (
 	sampleRate = 22050
 )
 
-// BgmKind represents kind of se
 type BgmKind int
 
 const (
 	BgmKindBattle BgmKind = iota
 )
 
-// SeKind represents kind of se
 type SeKind int
 
 const (
@@ -40,7 +38,6 @@ var (
 	seVolume128  = 64
 )
 
-// Load loads audio files
 func Load() {
 	audioContext, _ = audio.NewContext(sampleRate)
 
@@ -54,14 +51,12 @@ func Load() {
 
 }
 
-// PlayBgm playes SE
 func PlayBgm(kind BgmKind) {
 	bgmDic[kind].Rewind()
 	bgmDic[kind].SetVolume(float64(bgmVolume128) / 128)
 	bgmDic[kind].Play()
 }
 
-// PlaySe playes SE
 func PlaySe(kind SeKind) {
 	seDic[kind].Rewind()
 	seDic[kind].SetVolume(float64(seVolume128) / 128)

@@ -19,7 +19,6 @@ const (
 	fieldHeight = 500
 )
 
-// Field represents the game field
 type Field struct {
 	x             float64
 	y             float64
@@ -28,7 +27,6 @@ type Field struct {
 	boundaryImage *ebiten.Image
 }
 
-// NewField creates new field
 func NewField() *Field {
 	f := &Field{}
 	f.x = fieldWidth / 2
@@ -44,7 +42,6 @@ func NewField() *Field {
 	return f
 }
 
-// GetRandamPosition returns random position from the center
 func (f *Field) GetRandamPosition(centerX, centerY, radius float64) (float64, float64) {
 	rad := util.DegToRad(int(rand.Float64() * 360))
 	x := math.Max(math.Min(math.Cos(rad)*rand.Float64()*radius+centerX, f.width), 0)
@@ -52,39 +49,32 @@ func (f *Field) GetRandamPosition(centerX, centerY, radius float64) (float64, fl
 	return x, y
 }
 
-// Draw draws the field
 func (f *Field) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(-shared.OffsetX, -shared.OffsetY)
 	screen.DrawImage(f.boundaryImage, op)
 }
 
-// GetLeft returns left
 func (f *Field) GetLeft() float64 {
 	return f.x - f.width/2
 }
 
-// GetTop returns top
 func (f *Field) GetTop() float64 {
 	return f.y - f.height/2
 }
 
-// GetRight returns right
 func (f *Field) GetRight() float64 {
 	return f.x + f.width/2
 }
 
-// GetBottom returns bottom
 func (f *Field) GetBottom() float64 {
 	return f.y + f.height/2
 }
 
-// GetCenterX returns center x
 func (f *Field) GetCenterX() float64 {
 	return f.width / 2
 }
 
-// GetCenterY returns center x
 func (f *Field) GetCenterY() float64 {
 	return f.height / 2
 }

@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-// Weapon represents weapon
 type Weapon interface {
 	Fire(x, y float64, degree int)
 }

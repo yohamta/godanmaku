@@ -6,14 +6,12 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/list"
 )
 
-// Pool represents factory
 type Pool struct {
 	actives *list.List
 	pool    *list.List
 	ite     *Iterator
 }
 
-// NewPool creates new Pool
 func NewPool() *Pool {
 	p := &Pool{}
 	p.actives = list.NewList()
@@ -23,12 +21,10 @@ func NewPool() *Pool {
 	return p
 }
 
-// GetActiveNum returns the number of active item
 func (p *Pool) GetActiveNum() int {
 	return p.actives.Length()
 }
 
-// AddToPool adds resusable item
 func (p *Pool) AddToPool(item unsafe.Pointer) {
 	o := &Object{}
 	o.data = item
@@ -39,7 +35,6 @@ func (p *Pool) AddToPool(item unsafe.Pointer) {
 	p.pool.AddElement(elem)
 }
 
-// GetIterator adds resusable item
 func (p *Pool) GetIterator() *Iterator {
 	ite := p.ite
 	ite.current = p.actives.GetFirstElement()
@@ -47,7 +42,6 @@ func (p *Pool) GetIterator() *Iterator {
 	return ite
 }
 
-// CreateFromPool adds resusable item
 func (p *Pool) CreateFromPool() unsafe.Pointer {
 	e := p.pool.GetFirstElement()
 	if e == nil {
@@ -60,7 +54,6 @@ func (p *Pool) CreateFromPool() unsafe.Pointer {
 	return o.GetData()
 }
 
-// Sweep remove non active objects from active list
 func (p *Pool) Sweep() {
 	for ite := p.actives.GetIterator(); ite.HasNext(); {
 		elem := ite.Next()
@@ -72,7 +65,6 @@ func (p *Pool) Sweep() {
 	}
 }
 
-// Clean deactivate all items
 func (p *Pool) Clean() {
 	for ite := p.actives.GetIterator(); ite.HasNext(); {
 		elem := ite.Next()

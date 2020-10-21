@@ -3,7 +3,6 @@ package sprite
 import (
 	"image"
 
-	// import for side effect
 	_ "image/png"
 
 	"github.com/hajimehoshi/ebiten"
@@ -24,7 +23,6 @@ type size struct {
 	h int
 }
 
-// Sprite manage part of image for certain size
 type Sprite struct {
 	image     *ebiten.Image
 	subImages []*ebiten.Image
@@ -35,7 +33,6 @@ type Sprite struct {
 	length    int
 }
 
-// NewSprite create the Sprite struct
 func NewSprite(img *image.Image, columns int, rows int) *Sprite {
 	originalImage, _ := ebiten.NewImageFromImage(*img, ebiten.FilterDefault)
 
@@ -64,43 +61,35 @@ func NewSprite(img *image.Image, columns int, rows int) *Sprite {
 	return sprite
 }
 
-// Size returns frame width and height of the Sprite
 func (s *Sprite) Size() (int, int) {
 	return s.frame.w, s.frame.h
 }
 
-// GetWidth returns frame width and height of the Sprite
 func (s *Sprite) GetWidth() int {
 	return s.frame.w
 }
 
-// GetHeight returns frame width and height of the Sprite
 func (s *Sprite) GetHeight() int {
 	return s.frame.h
 }
 
-// SetPosition sets the position of the Sprite
 func (s *Sprite) SetPosition(x, y float64) {
 	s.position.x = x
 	s.position.y = y
 }
 
-// SetIndex sets the current frame of the Sprite
 func (s *Sprite) SetIndex(index int) {
 	s.index = index
 }
 
-// Index returns the current index of the Sprite
 func (s *Sprite) Index() int {
 	return s.index
 }
 
-// Length returns the length of the Sprite
 func (s *Sprite) Length() int {
 	return s.length
 }
 
-// Draw draws this sprite
 func (s *Sprite) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 
@@ -112,7 +101,6 @@ func (s *Sprite) Draw(screen *ebiten.Image) {
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
-// DrawAdditive draws additive image
 func (s *Sprite) DrawAdditive(screen *ebiten.Image, strength float64, scaleW float64, scaleH float64) {
 	op := &ebiten.DrawImageOptions{}
 
@@ -130,7 +118,6 @@ func (s *Sprite) DrawAdditive(screen *ebiten.Image, strength float64, scaleW flo
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
-// DrawWithTint draws this sprite
 func (s *Sprite) DrawWithTint(screen *ebiten.Image, r, g, b, a float64) {
 	op := &ebiten.DrawImageOptions{}
 
@@ -144,7 +131,6 @@ func (s *Sprite) DrawWithTint(screen *ebiten.Image, r, g, b, a float64) {
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
-// DrawWithHsv draws this sprite
 func (s *Sprite) DrawWithHsv(screen *ebiten.Image, hue, sat, val float64) {
 	op := &ebiten.DrawImageOptions{}
 
@@ -158,7 +144,6 @@ func (s *Sprite) DrawWithHsv(screen *ebiten.Image, hue, sat, val float64) {
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
-// DrawWithScale draws this sprite
 func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 	op := &ebiten.DrawImageOptions{}
 
@@ -172,7 +157,6 @@ func (s *Sprite) DrawWithScale(screen *ebiten.Image, scale float64) {
 	screen.DrawImage(s.subImages[s.index], op)
 }
 
-// DrawWithScaleRotate draws this sprite
 func (s *Sprite) DrawWithScaleRotate(screen *ebiten.Image, scale float64, rotate float64) {
 	op := &ebiten.DrawImageOptions{}
 

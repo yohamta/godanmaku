@@ -6,7 +6,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
-// Effect represents the base of player, enemy, shots
 type Effect struct {
 	x           float64
 	y           float64
@@ -24,24 +23,20 @@ type Effect struct {
 	sePlayed    bool
 }
 
-// NewEffect creates new effect
 func NewEffect() *Effect {
 	e := &Effect{}
 
 	return e
 }
 
-// IsActive returns if this is active
 func (e *Effect) IsActive() bool {
 	return e.isActive
 }
 
-// Draw draws the player
 func (e *Effect) Draw(screen *ebiten.Image) {
 	e.controller.draw(e, screen)
 }
 
-// Update updates the effect
 func (e *Effect) Update() {
 	e.controller.update(e)
 	e.updateCount++

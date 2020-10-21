@@ -8,7 +8,6 @@ import (
 
 type machingun struct{ baseWeapon }
 
-// Fire create shots
 func (w *machingun) Fire(x, y float64, degree int) {
 	if time.Since(w.lastShotTime).Milliseconds() < 75 {
 		return

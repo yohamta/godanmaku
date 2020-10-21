@@ -7,23 +7,19 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 )
 
-// DegreeToDirectionIndex convert degree into 1 to 8 integer
 func DegreeToDirectionIndex(degree int) int {
 	adjust := 22.5
 	return int(float64(degree)+90.0+360.0+adjust) % 360 / 45
 }
 
-// RadToDeg converts radian to degree
 func RadToDeg(radian float64) int {
 	return int(radian * 180 / math.Pi)
 }
 
-// DegToRad converts degree to radian
 func DegToRad(degree int) float64 {
 	return float64(degree) * math.Pi / 180
 }
 
-// Entity represents an entity
 type Entity interface {
 	GetX() float64
 	GetY() float64
@@ -31,7 +27,6 @@ type Entity interface {
 	GetHeight() float64
 }
 
-// Area represents an area
 type Area interface {
 	GetLeft() float64
 	GetRight() float64
@@ -39,7 +34,6 @@ type Area interface {
 	GetBottom() float64
 }
 
-// IsOutOfArea Returns if the entity is out of the certain area
 func IsOutOfArea(e Entity, area Area) bool {
 	if e.GetX()+e.GetWidth()/2 < area.GetLeft() {
 		return true
@@ -56,7 +50,6 @@ func IsOutOfArea(e Entity, area Area) bool {
 	return false
 }
 
-// IsOutOfAreaEnoughly Returns if the entity is enoughly out of the certain area
 func IsOutOfAreaEnoughly(e Entity, area Area) bool {
 	w := float64(shared.ScreenSize.X)
 	h := float64(shared.ScreenSize.Y)

@@ -37,7 +37,7 @@ func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 		sh.life = 3
 		sh.maxLife = sh.life
 		sh.spr = sprite.Enemy1
-		sh.controller = enemy
+		sh.controller = npc
 		break
 	}
 	sh.init()

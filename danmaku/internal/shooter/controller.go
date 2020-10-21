@@ -18,7 +18,6 @@ const (
 )
 
 var (
-	enemy  = new(NPCController)
+	npc    = new(NPCController)
 	player = new(PlayerController)
-	funnel = new(FunnelController)
 )

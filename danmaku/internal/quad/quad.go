@@ -6,7 +6,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/list"
 )
 
-// Object represents obejct to be contained
 type Object interface {
 	GetX() float64
 	GetY() float64
@@ -14,7 +13,6 @@ type Object interface {
 	GetHeight() float64
 }
 
-// Quad represents quad tree
 type Quad struct {
 	x1, x2, y1, y2 float64
 	ne             *Quad
@@ -27,7 +25,6 @@ type Quad struct {
 	descendants    []*Quad
 }
 
-// Node represents a node that a quad contains
 type Node struct {
 	x1, x2, y1, y2 float64
 	ptr            unsafe.Pointer
@@ -35,7 +32,6 @@ type Node struct {
 	quad           *Quad
 }
 
-// NewNode creates new ndoe
 func NewNode(p unsafe.Pointer) *Node {
 	n := &Node{}
 	n.ptr = p
@@ -43,17 +39,14 @@ func NewNode(p unsafe.Pointer) *Node {
 	return n
 }
 
-// GetItem returns the pointer of the item
 func (n *Node) GetItem() unsafe.Pointer {
 	return n.ptr
 }
 
-// SetItem sets the item to this node
 func (n *Node) SetItem(p unsafe.Pointer) {
 	n.ptr = p
 }
 
-// NewQuad creates new quad
 func NewQuad(x1, x2, y1, y2 float64, depth int) *Quad {
 	q := &Quad{}
 
@@ -81,7 +74,6 @@ func NewQuad(x1, x2, y1, y2 float64, depth int) *Quad {
 	return q
 }
 
-// GetIterator returns iterator
 func (q *Quad) GetIterator() *Iterator {
 	q.ite.index = 0
 	q.ite.current = q.nodes.GetIterator()
@@ -89,7 +81,6 @@ func (q *Quad) GetIterator() *Iterator {
 	return q.ite
 }
 
-// SearchQuad returns quad for the object
 func (q *Quad) SearchQuad(o Object) *Quad {
 	x1 := o.GetX() - o.GetWidth()/2
 	x2 := o.GetX() + o.GetWidth()/2
@@ -134,7 +125,6 @@ func findQuad(root *Quad, x1, x2, y1, y2 float64) *Quad {
 	return q
 }
 
-// RemoveNodeFromQuad removes a node from the quad
 func RemoveNodeFromQuad(node *Node) {
 	if node.quad == nil {
 		return
@@ -143,7 +133,6 @@ func RemoveNodeFromQuad(node *Node) {
 	node.quad = nil
 }
 
-// AddNode adds a node to the quad
 func (q *Quad) AddNode(o Object, node *Node) {
 	RemoveNodeFromQuad(node)
 

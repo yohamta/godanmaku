@@ -4,7 +4,6 @@ import (
 	"unsafe"
 )
 
-// List represents container
 type List struct {
 	length int
 	first  *Element
@@ -12,7 +11,6 @@ type List struct {
 	ite    *Iterator
 }
 
-// NewList creates new element
 func NewList() *List {
 	l := &List{}
 	l.ite = &Iterator{}
@@ -20,23 +18,19 @@ func NewList() *List {
 	return l
 }
 
-// Length returns length
 func (l *List) Length() int {
 	return l.length
 }
 
-// AddValue returns the value
 func (l *List) AddValue(value unsafe.Pointer) {
 	e := NewElement(value)
 	l.AddElement(e)
 }
 
-// GetFirstElement returns the fist element
 func (l *List) GetFirstElement() *Element {
 	return l.first
 }
 
-// RemoveElement removes the element
 func (l *List) RemoveElement(e *Element) {
 	prev := e.prev
 	next := e.next
@@ -53,7 +47,6 @@ func (l *List) RemoveElement(e *Element) {
 	l.length--
 }
 
-// AddElement adds new element
 func (l *List) AddElement(e *Element) {
 	e.prev = nil
 	e.next = nil
@@ -68,14 +61,12 @@ func (l *List) AddElement(e *Element) {
 	l.length++
 }
 
-// Clear adds new element
 func (l *List) Clear() {
 	l.first = nil
 	l.last = nil
 	l.length = 0
 }
 
-// GetIterator retusn iterator
 func (l *List) GetIterator() *Iterator {
 	l.ite.list = l
 	l.ite.current = l.GetFirstElement()

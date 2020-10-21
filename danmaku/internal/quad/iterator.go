@@ -4,14 +4,12 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/list"
 )
 
-// Iterator represents iterator
 type Iterator struct {
 	quad    *Quad
 	current *list.Iterator
 	index   int
 }
 
-// HasNext returns if this has next element
 func (ite *Iterator) HasNext() bool {
 	if ite.current.HasNext() {
 		return true
@@ -29,7 +27,6 @@ func (ite *Iterator) HasNext() bool {
 	return false
 }
 
-// Next returns next element
 func (ite *Iterator) Next() *Node {
 	if ite.HasNext() == false {
 		panic("something went wrong in quad iterator")

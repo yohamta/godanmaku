@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-// Collider represents collider
 type Collider interface {
 	GetX() float64
 	GetY() float64
@@ -13,7 +12,6 @@ type Collider interface {
 	GetCollisionBox() []*Box
 }
 
-// Box represents collision box
 type Box struct {
 	x, y, w, h float64
 }
@@ -81,7 +79,6 @@ var (
 	}
 )
 
-// GetCollisionBox returns collision box
 func GetCollisionBox(kind string) []*Box {
 	box := boxData[kind]
 	if box == nil {
@@ -90,7 +87,6 @@ func GetCollisionBox(kind string) []*Box {
 	return box
 }
 
-// IsCollideWith returns if it collides with another actor
 func IsCollideWith(c1, c2 Collider) bool {
 	x1 := c1.GetX() - c1.GetWidth()/2
 	y1 := c1.GetY() - c1.GetHeight()/2
