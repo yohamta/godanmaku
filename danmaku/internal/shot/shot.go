@@ -46,6 +46,18 @@ func init() {
 	}
 }
 
+type Shooter interface {
+	GetX() float64
+	GetY() float64
+	GetWidth() float64
+	GetHeight() float64
+	IsDead() bool
+}
+
+type Weapon interface {
+	Fire(shooter Shooter, x, y float64, degree int)
+}
+
 // Shot represents shooter
 type Shot struct {
 	controller    controller
@@ -62,6 +74,8 @@ type Shot struct {
 	updateCount   int
 	quadNode      *quad.Node
 	collisionBox  []*collision.Box
+	shooter       Shooter
+	funnelWeapon  Weapon
 }
 
 // NewShot returns initialized struct
@@ -149,13 +163,14 @@ func (s *Shot) setSpeed(speed float64, degree int) {
 	s.vy = math.Sin(util.DegToRad(s.degree)) * speed
 }
 
-func (s *Shot) init(controller controller, x, y float64, degree int) {
+func (s *Shot) init(controller controller, shooter Shooter, x, y float64, degree int) {
 	s.isActive = true
 	s.x = x
 	s.y = y
 	s.degree = degree
 	s.updateCount = 0
 	s.controller = controller
+	s.shooter = shooter
 	controller.init(s)
 }
 

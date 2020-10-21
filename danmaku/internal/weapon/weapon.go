@@ -2,16 +2,18 @@ package weapon
 
 import (
 	"time"
+
+	"github.com/yohamta/godanmaku/danmaku/internal/shot"
 )
 
 type Weapon interface {
-	Fire(x, y float64, degree int)
+	Fire(shooter shot.Shooter, x, y float64, degree int)
 }
 
-type shotFactory func(x, y float64, degree int)
+type ShotFactory func(shooter shot.Shooter, x, y float64, degree int)
 
 type baseWeapon struct {
-	shotFactory  shotFactory
+	shotFactory  ShotFactory
 	lastShotTime time.Time
 	playSound    bool
 }

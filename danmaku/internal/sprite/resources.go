@@ -43,7 +43,7 @@ func LoadSprites() {
 	BlueLaserLong = createSprite(&images.RASERLONG1, 6, 4)
 	Sparkle = createSprite(&images.SPARKLE, 8, 8)
 	Backfire = createSprite(&images.BACKFIRE, 8, 1)
-	Funnel = createSprite(&images.PBIT_1, 10, 1)
+	Funnel = createSprite(&images.PBIT_1, 5, 1)
 
 	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1, 1))
 	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1, 1))

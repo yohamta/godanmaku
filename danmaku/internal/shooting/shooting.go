@@ -31,12 +31,13 @@ import (
 )
 
 const (
-	maxPlayerShot  = 80
-	maxEnemyShot   = 300
-	maxEnemy       = 50
-	maxEffects     = 100
-	maxBackEffects = 100
-	quadTreeDepth  = 3
+	maxPlayerShot   = 300
+	maxPlayerFunnel = 20
+	maxEnemyShot    = 300
+	maxEnemy        = 50
+	maxEffects      = 100
+	maxBackEffects  = 100
+	quadTreeDepth   = 3
 )
 
 type State int
@@ -170,6 +171,12 @@ func initObjects() {
 		shared.PlayerShots.AddToPool(unsafe.Pointer(ptr))
 	}
 
+	// funnels
+	for i := 0; i < maxPlayerFunnel; i++ {
+		ptr := shooter.NewShooter()
+		shared.PlayerFunnels.AddToPool(unsafe.Pointer(ptr))
+	}
+
 	// enemyShots
 	for i := 0; i < maxEnemyShot; i++ {
 		ptr := shot.NewShot(fld)
@@ -218,13 +225,25 @@ func initUI() {
 func initStage() {
 	shared.Enemies.Clean()
 	shared.PlayerShots.Clean()
+	shared.PlayerFunnels.Clean()
 	shared.EnemyShots.Clean()
 	shared.Effects.Clean()
 	shared.BackEffects.Clean()
 
 	shooter.BuildShooter(shooter.P_ROBO1, player, fld,
 		fld.GetCenterX()/2, fld.GetCenterY()/2)
+
+	for i := 0; i < 7; i++ {
+		// test
+		funnel := (*shooter.Shooter)(shared.PlayerFunnels.CreateFromPool())
+		if funnel == nil {
+			return
+		}
+		shooter.BuildFunnel(funnel, player, fld)
+	}
+
 	initEnemies()
+
 	sound.PlayBgm(sound.BgmKindBattle)
 
 	state = statePlaying
@@ -260,10 +279,10 @@ func drawBackground(screen *ebiten.Image) {
 
 func drawResult(screen *ebiten.Image) {
 	center := screenCenter
+	center.Y -= 50
 	if state == stateLose {
 		sprite.Result.SetIndex(0)
 	} else {
-		center.Y -= 100
 		sprite.Result.SetIndex(1)
 	}
 	sprite.Result.SetPosition(float64(center.X), float64(center.Y))
@@ -288,7 +307,7 @@ func popNextEnemy() {
 }
 
 func initEnemies() {
-	enemyCount := 30
+	enemyCount := 100
 
 	wait := int(rand.Float64() * 10)
 	radius := 300.
@@ -412,6 +431,17 @@ func updateObjects() {
 		}
 	}
 
+	// player funnels
+	for ite := shared.PlayerFunnels.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		f := (*shooter.Shooter)(obj.GetData())
+		if f.IsActive() == false {
+			obj.SetInactive()
+			continue
+		}
+		f.Update()
+	}
+
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
@@ -474,6 +504,7 @@ func updateObjects() {
 
 	shared.EnemyShots.Sweep()
 	shared.PlayerShots.Sweep()
+	shared.PlayerFunnels.Sweep()
 	shared.Enemies.Sweep()
 	shared.Effects.Sweep()
 	shared.BackEffects.Sweep()
@@ -486,12 +517,6 @@ func drawObjects(screen *ebiten.Image) {
 		e.Draw(screen)
 	}
 
-	// player shots
-	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
-		p := (*shot.Shot)(ite.Next().GetData())
-		p.Draw(screen)
-	}
-
 	// enemies
 	for ite := shared.Enemies.GetIterator(); ite.HasNext(); {
 		obj := ite.Next()
@@ -501,6 +526,18 @@ func drawObjects(screen *ebiten.Image) {
 
 	if player.IsDead() == false {
 		player.Draw(screen)
+	}
+
+	// player funnels
+	for ite := shared.PlayerFunnels.GetIterator(); ite.HasNext(); {
+		f := (*shooter.Shooter)(ite.Next().GetData())
+		f.Draw(screen)
+	}
+
+	// player shots
+	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
+		p := (*shot.Shot)(ite.Next().GetData())
+		p.Draw(screen)
 	}
 
 	// enemy shots

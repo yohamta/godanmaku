@@ -14,36 +14,36 @@ var (
 	}
 )
 
-func PlayerShot(x, y float64, degree int) {
+func PlayerShot(shooter Shooter, x, y float64, degree int) {
 	s := (*Shot)(shared.PlayerShots.CreateFromPool())
 	if s == nil {
 		return
 	}
-	s.init(controllers["blue"], x, y, degree)
+	s.init(controllers["blue"], shooter, x, y, degree)
 }
 
-func BlueLaser(x, y float64, degree int) {
+func BlueLaser(shooter Shooter, x, y float64, degree int) {
 	s := (*Shot)(shared.PlayerShots.CreateFromPool())
 	if s == nil {
 		return
 	}
-	s.init(controllers["laser"], x, y, degree)
+	s.init(controllers["laser"], shooter, x, y, degree)
 	s.spr = sprite.BlueLaser
 }
 
-func BlueLaserLong(x, y float64, degree int) {
+func BlueLaserLong(shooter Shooter, x, y float64, degree int) {
 	s := (*Shot)(shared.PlayerShots.CreateFromPool())
 	if s == nil {
 		return
 	}
-	s.init(controllers["laser"], x, y, degree)
+	s.init(controllers["laser"], shooter, x, y, degree)
 	s.spr = sprite.BlueLaserLong
 }
 
-func EnemyShot(x, y float64, degree int) {
+func EnemyShot(shooter Shooter, x, y float64, degree int) {
 	s := (*Shot)(shared.EnemyShots.CreateFromPool())
 	if s == nil {
 		return
 	}
-	s.init(controllers["colorful"], x, y, degree)
+	s.init(controllers["colorful"], shooter, x, y, degree)
 }

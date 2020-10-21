@@ -14,10 +14,12 @@ type kind int
 
 const (
 	P_ROBO1 kind = iota
+	P_FUNNEL
 	E_ROBO1
 )
 
 var (
 	npc    = new(NPCController)
 	player = new(PlayerController)
+	funnel = new(FunnelController)
 )

@@ -22,14 +22,12 @@ func init() {
 
 var healthBar *HealthBar
 
-// Target represents target
 type Target interface {
 	GetX() float64
 	GetY() float64
 	IsDead() bool
 }
 
-// Shooter represents shooter
 type Shooter struct {
 	x, y          float64
 	width, height float64
@@ -50,7 +48,9 @@ type Shooter struct {
 	shotsPool     *flyweight.Pool
 	collisionBox  []*collision.Box
 	controller    Controller
-	funnelOwner   *Shooter
+	funnel        []*Shooter
+	owner         *Shooter
+	funnelDegree  int
 }
 
 func NewShooter() *Shooter {
@@ -150,7 +150,12 @@ func (sh *Shooter) SetPosition(x, y float64) {
 }
 
 func (sh *Shooter) Fire() {
-	sh.mainWeapon.Fire(sh.x, sh.y, sh.degree)
+	sh.mainWeapon.Fire(sh, sh.x, sh.y, sh.degree)
+	if len(sh.funnel) > 0 {
+		for f := range sh.funnel {
+			sh.funnel[f].Fire()
+		}
+	}
 }
 
 func (sh *Shooter) SetTarget(target Target) {

@@ -15,11 +15,12 @@ type Input struct {
 var (
 	ScreenSize image.Point
 
-	PlayerShots *flyweight.Pool = flyweight.NewPool()
-	EnemyShots  *flyweight.Pool = flyweight.NewPool()
-	BackEffects *flyweight.Pool = flyweight.NewPool()
-	Effects     *flyweight.Pool = flyweight.NewPool()
-	Enemies     *flyweight.Pool = flyweight.NewPool()
+	PlayerShots   *flyweight.Pool = flyweight.NewPool()
+	EnemyShots    *flyweight.Pool = flyweight.NewPool()
+	PlayerFunnels *flyweight.Pool = flyweight.NewPool()
+	BackEffects   *flyweight.Pool = flyweight.NewPool()
+	Effects       *flyweight.Pool = flyweight.NewPool()
+	Enemies       *flyweight.Pool = flyweight.NewPool()
 
 	OffsetX float64
 	OffsetY float64

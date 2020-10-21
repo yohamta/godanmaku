@@ -16,6 +16,7 @@ func (c *blue) init(s *Shot) {
 	s.setSize(10, 10)
 	s.setSpeed(3.56, s.degree)
 	s.collisionBox = collision.GetCollisionBox("WEAPON_NORMAL_1")
+	s.sprIndex = 0
 }
 
 func (c *blue) draw(s *Shot, screen *ebiten.Image) {
