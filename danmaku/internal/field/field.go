@@ -49,6 +49,11 @@ func (f *Field) GetRandamPosition(centerX, centerY, radius float64) (float64, fl
 	return x, y
 }
 
+func (f *Field) NormalizePosition(x, y, width, height float64) (float64, float64) {
+	return math.Max(math.Min(x, f.width-width/2), width/2),
+		math.Max(math.Min(y, f.height-height/2), height/2)
+}
+
 func (f *Field) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(-shared.OffsetX, -shared.OffsetY)

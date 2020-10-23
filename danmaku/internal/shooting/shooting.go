@@ -33,7 +33,7 @@ const (
 	maxPlayerShot   = 300
 	maxPlayerFunnel = 20
 	maxEnemyShot    = 300
-	maxEnemy        = 50
+	maxEnemy        = 100
 	maxEffects      = 100
 	maxBackEffects  = 100
 	quadTreeDepth   = 3
@@ -308,12 +308,13 @@ func popNextEnemy() {
 func initEnemies() {
 	enemyCount := 100
 
-	wait := int(rand.Float64() * 10)
-	radius := 300.
+	wait := int(rand.Float64() * 5)
+	radius := 100.
 	for i := 0; i < enemyCount; i++ {
-		// get enemy size
+		radius += 3
 		shooter.BuildShooter(shooter.E_ROBO1, tmpShooter, fld, 0, 0)
 		x, y := fld.GetRandamPosition(player.GetX(), player.GetY(), radius)
+		x, y = fld.NormalizePosition(x, y, tmpShooter.GetWidth(), tmpShooter.GetHeight())
 		enemyQueue.AddValue(unsafe.Pointer(&EnemyData{x: x, y: y}))
 
 		// craete jump effect
@@ -346,6 +347,9 @@ func checkCollision() {
 		qd := pShotQuadTree.SearchQuadtree(enemy)
 		for ite2 := qd.GetIterator(); ite2.HasNext(); {
 			shot := (*shot.Shot)(ite2.Next().GetItem())
+			if enemy.IsDead() {
+				continue
+			}
 			if shot.IsActive() == false {
 				continue
 			}
@@ -554,8 +558,8 @@ func drawObjects(screen *ebiten.Image) {
 
 func drawMessages(screen *ebiten.Image) {
 	if time.Since(dispTextTime).Seconds() <= 1 {
-		w := 3 * 24
 		h := 24
+		w := 3 * 24
 		shouldPaint := true
 		if time.Since(dispTextTime).Seconds() < 0.3 {
 			if updateCount%6 > 3 {
