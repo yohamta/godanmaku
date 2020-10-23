@@ -58,7 +58,6 @@ type Weapon interface {
 	Fire(shooter Shooter, x, y float64, degree int)
 }
 
-// Shot represents shooter
 type Shot struct {
 	controller    controller
 	x, y          float64
@@ -78,7 +77,6 @@ type Shot struct {
 	funnelWeapon  Weapon
 }
 
-// NewShot returns initialized struct
 func NewShot(f *field.Field) *Shot {
 	s := &Shot{}
 	s.field = f
@@ -86,52 +84,47 @@ func NewShot(f *field.Field) *Shot {
 	return s
 }
 
-// GetQuadNode return quad node
 func (s *Shot) GetQuadtreeNode() *quadtree.Node {
 	return s.quadNode
 }
 
-// SetQuadNode return quad node
 func (s *Shot) SetQuadtreeNode(n *quadtree.Node) {
 	s.quadNode = n
 }
 
-// IsActive returns if this is active
 func (s *Shot) IsActive() bool {
 	return s.isActive
 }
 
-// GetX returns x
 func (s *Shot) GetX() float64 {
 	return s.x
 }
 
-// GetY returns y
 func (s *Shot) GetY() float64 {
 	return s.y
 }
 
-// GetWidth returns width
 func (s *Shot) GetWidth() float64 {
 	return s.width
 }
 
-// GetHeight returns height
 func (s *Shot) GetHeight() float64 {
 	return s.height
 }
 
-// GetCollisionBox returns collision box
+// Implement quadtree.Collider interface
+func (s *Shot) GetRect() (x0 float64, y0 float64, x1 float64, y1 float64) {
+	return s.x - s.width/2, s.y - s.height/2, s.x + s.width/2, s.y + s.height/2
+}
+
 func (s *Shot) GetCollisionBox() []*collision.Box {
 	return s.collisionBox
 }
 
-// Draw draws this
 func (s *Shot) Draw(screen *ebiten.Image) {
 	s.controller.draw(s, screen)
 }
 
-// Update updates this shot
 func (s *Shot) Update() {
 	s.updateCount++
 	s.setPosition(s.x+s.vx, s.y+s.vy)
@@ -141,7 +134,6 @@ func (s *Shot) Update() {
 	s.controller.update(s)
 }
 
-// OnHit should be called on hit something
 func (s *Shot) OnHit() {
 	s.isActive = false
 	if rand.Float64() > 0.5 {

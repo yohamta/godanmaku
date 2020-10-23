@@ -97,6 +97,11 @@ func (sh *Shooter) GetHeight() float64 {
 	return sh.height
 }
 
+// Implement quadtree.Collider interface
+func (sh *Shooter) GetRect() (x0 float64, y0 float64, x1 float64, y1 float64) {
+	return sh.x - sh.width/2, sh.y - sh.height/2, sh.x + sh.width/2, sh.y + sh.height/2
+}
+
 func (sh *Shooter) GetCollisionBox() []*collision.Box {
 	return sh.collisionBox
 }

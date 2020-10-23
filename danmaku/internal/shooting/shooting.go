@@ -197,12 +197,12 @@ func initObjects() {
 	player = shooter.NewShooter()
 
 	// quad tree
-	x1 := fld.GetLeft()
-	x2 := fld.GetRight()
-	y1 := fld.GetTop()
-	y2 := fld.GetBottom()
-	pShotQuadTree = quadtree.NewQuadtree(x1, x2, y1, y2, quadTreeDepth)
-	eShotQuadTree = quadtree.NewQuadtree(x1, x2, y1, y2, quadTreeDepth)
+	x0 := fld.GetLeft()
+	y0 := fld.GetTop()
+	x1 := fld.GetRight()
+	y1 := fld.GetBottom()
+	pShotQuadTree = quadtree.NewQuadtree(x0, y0, x1, y1, quadTreeDepth)
+	eShotQuadTree = quadtree.NewQuadtree(x0, y0, x1, y1, quadTreeDepth)
 }
 
 func initUI() {
