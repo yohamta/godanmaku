@@ -1,11 +1,11 @@
-package quad
+package quadtree
 
 import (
 	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Iterator struct {
-	quad    *Quad
+	quad    *Quadtree
 	current *linkedlist.Iterator
 	index   int
 }

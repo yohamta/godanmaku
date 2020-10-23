@@ -7,7 +7,7 @@ import (
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
-	"github.com/yohamta/godanmaku/danmaku/internal/quad"
+	"github.com/yohamta/godanmaku/danmaku/internal/quadtree"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
@@ -72,7 +72,7 @@ type Shot struct {
 	spr           *sprite.Sprite
 	sprIndex      int
 	updateCount   int
-	quadNode      *quad.Node
+	quadNode      *quadtree.Node
 	collisionBox  []*collision.Box
 	shooter       Shooter
 	funnelWeapon  Weapon
@@ -87,12 +87,12 @@ func NewShot(f *field.Field) *Shot {
 }
 
 // GetQuadNode return quad node
-func (s *Shot) GetQuadNode() *quad.Node {
+func (s *Shot) GetQuadtreeNode() *quadtree.Node {
 	return s.quadNode
 }
 
 // SetQuadNode return quad node
-func (s *Shot) SetQuadNode(n *quad.Node) {
+func (s *Shot) SetQuadtreeNode(n *quadtree.Node) {
 	s.quadNode = n
 }
 

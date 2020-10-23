@@ -16,7 +16,7 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/quad"
+	"github.com/yohamta/godanmaku/danmaku/internal/quadtree"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sound"
@@ -68,8 +68,8 @@ var (
 	dispTextTime time.Time
 	dispText     string
 
-	pShotQuadTree *quad.Quad
-	eShotQuadTree *quad.Quad
+	pShotQuadTree *quadtree.Quadtree
+	eShotQuadTree *quadtree.Quadtree
 
 	screenSize   image.Point
 	screenCenter image.Point
@@ -166,7 +166,7 @@ func initObjects() {
 	// shots
 	for i := 0; i < maxPlayerShot; i++ {
 		ptr := shot.NewShot(fld)
-		ptr.SetQuadNode(quad.NewNode(unsafe.Pointer(ptr)))
+		ptr.SetQuadtreeNode(quadtree.NewNode(unsafe.Pointer(ptr)))
 		shared.PlayerShots.AddToPool(unsafe.Pointer(ptr))
 	}
 
@@ -179,7 +179,7 @@ func initObjects() {
 	// enemyShots
 	for i := 0; i < maxEnemyShot; i++ {
 		ptr := shot.NewShot(fld)
-		ptr.SetQuadNode(quad.NewNode(unsafe.Pointer(ptr)))
+		ptr.SetQuadtreeNode(quadtree.NewNode(unsafe.Pointer(ptr)))
 		shared.EnemyShots.AddToPool(unsafe.Pointer(ptr))
 	}
 
@@ -201,8 +201,8 @@ func initObjects() {
 	x2 := fld.GetRight()
 	y1 := fld.GetTop()
 	y2 := fld.GetBottom()
-	pShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
-	eShotQuadTree = quad.NewQuad(x1, x2, y1, y2, quadTreeDepth)
+	pShotQuadTree = quadtree.NewQuadtree(x1, x2, y1, y2, quadTreeDepth)
+	eShotQuadTree = quadtree.NewQuadtree(x1, x2, y1, y2, quadTreeDepth)
 }
 
 func initUI() {
@@ -326,13 +326,13 @@ func updateQuadTree() {
 	// player shots
 	for ite := shared.PlayerShots.GetIterator(); ite.HasNext(); {
 		p := (*shot.Shot)(ite.Next().GetData())
-		pShotQuadTree.AddNode(p, p.GetQuadNode())
+		pShotQuadTree.AddNode(p, p.GetQuadtreeNode())
 	}
 
 	// enemy shots
 	for ite := shared.EnemyShots.GetIterator(); ite.HasNext(); {
 		e := (*shot.Shot)(ite.Next().GetData())
-		eShotQuadTree.AddNode(e, e.GetQuadNode())
+		eShotQuadTree.AddNode(e, e.GetQuadtreeNode())
 	}
 }
 
@@ -343,7 +343,7 @@ func checkCollision() {
 		if enemy.IsDead() {
 			continue
 		}
-		qd := pShotQuadTree.SearchQuad(enemy)
+		qd := pShotQuadTree.SearchQuadtree(enemy)
 		for ite2 := qd.GetIterator(); ite2.HasNext(); {
 			shot := (*shot.Shot)(ite2.Next().GetItem())
 			if shot.IsActive() == false {
@@ -368,7 +368,7 @@ func checkCollision() {
 
 	// enemy shots
 	{
-		qd := eShotQuadTree.SearchQuad(player)
+		qd := eShotQuadTree.SearchQuadtree(player)
 		for ite2 := qd.GetIterator(); ite2.HasNext(); {
 			shot := (*shot.Shot)(ite2.Next().GetItem())
 			if player.IsDead() {
@@ -447,7 +447,7 @@ func updateObjects() {
 		p := (*shot.Shot)(obj.GetData())
 		if p.IsActive() == false {
 			obj.SetInactive()
-			quad.RemoveNodeFromQuad(p.GetQuadNode())
+			quadtree.RemoveNodeFromQuadtree(p.GetQuadtreeNode())
 			continue
 		}
 		p.Update()
@@ -459,7 +459,7 @@ func updateObjects() {
 		e := (*shot.Shot)(obj.GetData())
 		if e.IsActive() == false {
 			obj.SetInactive()
-			quad.RemoveNodeFromQuad(e.GetQuadNode())
+			quadtree.RemoveNodeFromQuadtree(e.GetQuadtreeNode())
 			continue
 		}
 		e.Update()
