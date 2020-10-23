@@ -3,7 +3,7 @@ package quad
 import (
 	"unsafe"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Object interface {
@@ -20,7 +20,7 @@ type Quad struct {
 	se             *Quad
 	sw             *Quad
 	isLeaf         bool
-	nodes          *list.List
+	nodes          *linkedlist.List
 	ite            *Iterator
 	descendants    []*Quad
 }
@@ -28,14 +28,14 @@ type Quad struct {
 type Node struct {
 	x1, x2, y1, y2 float64
 	ptr            unsafe.Pointer
-	element        *list.Element
+	element        *linkedlist.Element
 	quad           *Quad
 }
 
 func NewNode(p unsafe.Pointer) *Node {
 	n := &Node{}
 	n.ptr = p
-	n.element = list.NewElement(unsafe.Pointer(n))
+	n.element = linkedlist.NewElement(unsafe.Pointer(n))
 	return n
 }
 
@@ -54,7 +54,7 @@ func NewQuad(x1, x2, y1, y2 float64, depth int) *Quad {
 	q.x2 = x2
 	q.y1 = y1
 	q.y2 = y2
-	q.nodes = list.NewList()
+	q.nodes = linkedlist.NewList()
 	q.descendants = []*Quad{q}
 	q.ite = &Iterator{quad: q}
 

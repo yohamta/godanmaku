@@ -1,11 +1,11 @@
 package flyweight
 
 import (
-	"github.com/yohamta/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Iterator struct {
-	current *list.Element
+	current *linkedlist.Element
 }
 
 func (ite *Iterator) HasNext() bool {

@@ -12,6 +12,7 @@ import (
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
@@ -19,8 +20,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/sound"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/list"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 
@@ -60,7 +59,7 @@ var (
 	player      *shooter.Shooter
 	state       State
 	fld         *field.Field
-	enemyQueue  *list.List
+	enemyQueue  *linkedlist.List
 	tmpShooter  *shooter.Shooter
 	endTime     time.Time
 	killNum     int
@@ -154,7 +153,7 @@ func initObjects() {
 	rand.Seed(time.Now().Unix())
 
 	fld = field.NewField()
-	enemyQueue = list.NewList()
+	enemyQueue = linkedlist.NewList()
 	tmpShooter = shooter.NewShooter()
 	killNum = 0
 

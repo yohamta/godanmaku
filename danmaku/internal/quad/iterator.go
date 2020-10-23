@@ -1,12 +1,12 @@
 package quad
 
 import (
-	"github.com/yohamta/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Iterator struct {
 	quad    *Quad
-	current *list.Iterator
+	current *linkedlist.Iterator
 	index   int
 }
 

@@ -3,19 +3,19 @@ package flyweight
 import (
 	"unsafe"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Pool struct {
-	actives *list.List
-	pool    *list.List
+	actives *linkedlist.List
+	pool    *linkedlist.List
 	ite     *Iterator
 }
 
 func NewPool() *Pool {
 	p := &Pool{}
-	p.actives = list.NewList()
-	p.pool = list.NewList()
+	p.actives = linkedlist.NewList()
+	p.pool = linkedlist.NewList()
 	p.ite = &Iterator{}
 
 	return p
@@ -30,7 +30,7 @@ func (p *Pool) AddToPool(item unsafe.Pointer) {
 	o.data = item
 	o.isActive = false
 	ptr := unsafe.Pointer(o)
-	elem := list.NewElement(ptr)
+	elem := linkedlist.NewElement(ptr)
 	o.elem = elem
 	p.pool.AddElement(elem)
 }

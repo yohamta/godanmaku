@@ -3,13 +3,13 @@ package flyweight
 import (
 	"unsafe"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/list"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Object struct {
 	data     unsafe.Pointer
 	isActive bool
-	elem     *list.Element
+	elem     *linkedlist.Element
 }
 
 func (o *Object) GetData() unsafe.Pointer {
