@@ -8,25 +8,20 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/hajimehoshi/ebiten"
 	"github.com/yohamta/furex"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-
 	"github.com/yohamta/godanmaku/danmaku/internal/quadtree"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/sound"
-
-	"github.com/yohamta/godanmaku/danmaku/internal/effect"
-
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
-
-	"github.com/hajimehoshi/ebiten"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 const (
