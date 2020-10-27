@@ -9,23 +9,27 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/fonts"
 	"golang.org/x/image/font"
 
-	// "github.com/hajimehoshi/ebiten/text"
 	"github.com/hajimehoshi/ebiten/text"
 )
 
-// FontSize represents font size
 type FontSize int
 
 const (
-	// FontSizeXLarge represents xlarge font
 	FontSizeXLarge FontSize = iota
+	FontSizeMedium
+	FontSizeSmall
+)
+
+type HAlign int
+
+const (
+	HAlignLeft HAlign = iota
 )
 
 var (
-	pixelMPlusRegular font.Face
+	fontMap = map[FontSize]font.Face{}
 )
 
-// LoadFonts loads fonts
 func LoadFonts() {
 	tt, err := truetype.Parse(fonts.PIXELMPLUS12REGULAR)
 	if err != nil {
@@ -33,14 +37,42 @@ func LoadFonts() {
 	}
 
 	const dpi = 72
-	pixelMPlusRegular = truetype.NewFace(tt, &truetype.Options{
+
+	fontMap[FontSizeXLarge] = truetype.NewFace(tt, &truetype.Options{
 		Size:    24,
+		DPI:     dpi,
+		Hinting: font.HintingFull,
+	})
+
+	fontMap[FontSizeMedium] = truetype.NewFace(tt, &truetype.Options{
+		Size:    12,
+		DPI:     dpi,
+		Hinting: font.HintingFull,
+	})
+
+	fontMap[FontSizeSmall] = truetype.NewFace(tt, &truetype.Options{
+		Size:    10,
 		DPI:     dpi,
 		Hinting: font.HintingFull,
 	})
 }
 
-// DrawText draws text
+type DrawTextOptions struct {
+	Color    color.Color
+	Width    int
+	HAligh   HAlign
+	FontSize FontSize
+}
+
 func DrawText(target *ebiten.Image, txt string, x, y int, clr color.Color, fontSize FontSize) {
-	text.Draw(target, txt, pixelMPlusRegular, x, y, clr)
+	text.Draw(target, txt, fontMap[fontSize], x, y, clr)
+}
+
+func DrawTextWithOptions(target *ebiten.Image, txt string, x, y int, opts DrawTextOptions) {
+	f := fontMap[opts.FontSize]
+	c := opts.Color
+	r := text.BoundString(f, txt)
+	x2 := -r.Min.X + x
+	y2 := -r.Min.Y + y
+	text.Draw(target, txt, f, x2, y2, c)
 }

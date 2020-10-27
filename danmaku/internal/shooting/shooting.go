@@ -1,6 +1,7 @@
 package shooting
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"math"
@@ -48,8 +49,8 @@ type EnemyData struct {
 }
 
 var (
-	isInitUIDone bool
-	battleView   *furex.View
+	isInitialized bool
+	battleView    *furex.View
 
 	player      *shooter.Shooter
 	state       State
@@ -69,19 +70,17 @@ var (
 	screenSize   image.Point
 	screenCenter image.Point
 
+	// UI components
 	fireButton *FireButton
 	joystick   *Joystick
+	console    *Console
 )
 
 type Shooting struct{}
 
 func NewShooting() *Shooting {
 	s := &Shooting{}
-
 	loadResources()
-
-	initObjects()
-	initStage()
 
 	return s
 }
@@ -95,13 +94,17 @@ func (s *Shooting) Layout(width, height int) {
 	if battleView != nil {
 		battleView.Layout(0, 0, screenSize.X, screenSize.Y)
 	}
-	if isInitUIDone == false {
-		initUI()
-		isInitUIDone = true
+	if isInitialized == false {
+		initAll()
+		isInitialized = true
 	}
 }
 
 func (s *Shooting) Update() {
+	if isInitialized == false {
+		return
+	}
+
 	updateCount++
 
 	updateInput()
@@ -124,6 +127,10 @@ func (s *Shooting) Update() {
 }
 
 func (s *Shooting) Draw(screen *ebiten.Image) {
+	if isInitialized == false {
+		return
+	}
+
 	shared.OffsetX = player.GetX() - float64(screenCenter.X)
 	shared.OffsetY = player.GetY() - float64(screenCenter.Y)
 
@@ -139,7 +146,9 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 		drawResult(screen)
 	}
 
-	battleView.Draw(screen)
+	if isInitialized {
+		battleView.Draw(screen)
+	}
 }
 
 func initObjects() {
@@ -200,12 +209,20 @@ func initObjects() {
 	eShotQuadTree = quadtree.NewQuadtree(x0, y0, x1, y1, quadTreeDepth)
 }
 
+func initAll() {
+	initUI()
+	initObjects()
+	initStage()
+}
+
 func initUI() {
 	battleView = furex.NewView()
-	battleView.Layout(0, 0, screenSize.X, screenSize.Y)
 
 	flex := furex.NewFlex(0, 0, screenSize.X, screenSize.Y)
 	battleView.AddLayer(furex.NewLayerWithContainer(flex))
+
+	console = NewConsole()
+	flex.AddChild(console)
 
 	joystick = NewJoystick()
 	flex.AddChild(joystick)
@@ -214,6 +231,7 @@ func initUI() {
 	flex.AddChild(fireButton)
 
 	battleView.AddLayer(furex.NewLayerWithContainer(flex))
+	battleView.Layout(0, 0, screenSize.X, screenSize.Y)
 }
 
 func initStage() {
@@ -226,6 +244,9 @@ func initStage() {
 
 	shooter.BuildShooter(shooter.P_ROBO1, player, fld,
 		fld.GetCenterX()/2, fld.GetCenterY()/2)
+
+	console.Clear()
+	killNum = 0
 
 	for i := 0; i < 7; i++ {
 		// test
@@ -305,6 +326,7 @@ func initEnemies() {
 
 	wait := int(rand.Float64() * 5)
 	radius := 100.
+	console.Log("敵の増援があらわれた！")
 	for i := 0; i < enemyCount; i++ {
 		radius += 3
 		shooter.BuildShooter(shooter.E_ROBO1, tmpShooter, fld, 0, 0)
@@ -356,8 +378,7 @@ func checkCollision() {
 			shot.OnHit()
 			if enemy.IsDead() {
 				killNum++
-				dispTextTime = time.Now()
-				dispText = "[撃破]"
+				console.Log(fmt.Sprintf("%s を撃破！(%d機目)", enemy.GetName(), killNum))
 			} else {
 				dispTextTime = time.Now()
 				dispText = "[命中]"
@@ -553,7 +574,6 @@ func drawObjects(screen *ebiten.Image) {
 
 func drawMessages(screen *ebiten.Image) {
 	if time.Since(dispTextTime).Seconds() <= 1 {
-		h := 24
 		w := 3 * 24
 		shouldPaint := true
 		if time.Since(dispTextTime).Seconds() < 0.3 {
@@ -562,8 +582,8 @@ func drawMessages(screen *ebiten.Image) {
 			}
 		}
 		if shouldPaint {
-			paint.DrawText(screen, dispText, screenSize.X/2-w/2,
-				h+10, color.White, paint.FontSizeXLarge)
+			paint.DrawText(screen, dispText, screenSize.X/4*3-w/2,
+				screenSize.Y-130, color.White, paint.FontSizeXLarge)
 		}
 	}
 }

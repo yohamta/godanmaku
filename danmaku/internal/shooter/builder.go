@@ -24,6 +24,7 @@ func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 
 	switch kind {
 	case P_ROBO1:
+		sh.name = "Strike"
 		sh.setSize(16, 16)
 		sh.SetSpeed(0.96, 90)
 		sh.SetSpeed(2, 270)
@@ -46,6 +47,7 @@ func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 
 		break
 	case E_ROBO1:
+		sh.name = "Radar"
 		sh.setSize(24, 24)
 		sh.SetSpeed(0.96, 90)
 		sh.SetWeapon(weapon.Normal(shot.EnemyShot, false))

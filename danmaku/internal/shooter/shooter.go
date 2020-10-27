@@ -37,6 +37,7 @@ type Shooter struct {
 	vx            float64
 	vy            float64
 	degree        int
+	name          string
 	spr           *sprite.Sprite
 	sprIndex      int
 	life          int
@@ -95,6 +96,10 @@ func (sh *Shooter) GetWidth() float64 {
 
 func (sh *Shooter) GetHeight() float64 {
 	return sh.height
+}
+
+func (sh *Shooter) GetName() string {
+	return sh.name
 }
 
 // Implement quadtree.Collider interface
