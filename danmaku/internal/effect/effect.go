@@ -7,20 +7,21 @@ import (
 )
 
 type Effect struct {
-	x           float64
-	y           float64
-	isActive    bool
-	controller  controller
-	updateCount int
-	spriteFrame int
-	waitFrame   int
-	callback    func()
-	scale       float64
-	rotate      float64
-	sprite      *sprite.Sprite
-	fps         int
-	se          sound.SeKind
-	sePlayed    bool
+	x             float64
+	y             float64
+	isActive      bool
+	controller    controller
+	updateCount   int
+	spriteFrame   int
+	waitFrame     int
+	callback      func()
+	callbackFrame int
+	scale         float64
+	rotate        float64
+	sprite        *sprite.Sprite
+	fps           int
+	se            sound.SeKind
+	sePlayed      bool
 }
 
 func NewEffect() *Effect {
@@ -53,6 +54,7 @@ func (e *Effect) init(c controller, x, y float64) {
 	e.scale = 1
 	e.rotate = 0
 	e.callback = nil
+	e.callbackFrame = 0
 	e.se = -1
 	e.sePlayed = false
 	c.init(e)

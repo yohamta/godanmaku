@@ -65,5 +65,6 @@ func CreateJump(x, y float64, wait int, callback func()) {
 	e.se = sound.SeKindJump
 	e.waitFrame = wait
 	e.callback = callback
+	e.callbackFrame = 3
 	e.fps = 12
 }

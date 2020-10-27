@@ -324,7 +324,7 @@ func popNextEnemy() {
 func initEnemies() {
 	enemyCount := 100
 
-	wait := int(rand.Float64() * 5)
+	wait := 1
 	radius := 100.
 	console.Log("敵の増援があらわれた！")
 	for i := 0; i < enemyCount; i++ {
