@@ -75,6 +75,7 @@ type Shot struct {
 	collisionBox  []*collision.Box
 	shooter       Shooter
 	funnelWeapon  Weapon
+	itemKind      ItemKind
 }
 
 func NewShot(f *field.Field) *Shot {
@@ -141,6 +142,14 @@ func (s *Shot) OnHit() {
 	} else {
 		effect.CreateHitLargeEffect(s.x, s.y)
 	}
+}
+
+func (s *Shot) GetItemKind() ItemKind {
+	return s.itemKind
+}
+
+func (s *Shot) SetInactive() {
+	s.isActive = false
 }
 
 func (s *Shot) setSize(width, height float64) {

@@ -32,6 +32,7 @@ const (
 	maxEnemy        = 100
 	maxEffects      = 100
 	maxBackEffects  = 100
+	maxItems        = 10
 	quadTreeDepth   = 3
 )
 
@@ -197,6 +198,11 @@ func initObjects() {
 		shared.BackEffects.AddToPool(unsafe.Pointer(effect.NewEffect()))
 	}
 
+	// items
+	for i := 0; i < maxItems; i++ {
+		shared.Items.AddToPool(unsafe.Pointer(shot.NewShot(fld)))
+	}
+
 	// player
 	player = shooter.NewShooter()
 
@@ -241,21 +247,13 @@ func initStage() {
 	shared.EnemyShots.Clean()
 	shared.Effects.Clean()
 	shared.BackEffects.Clean()
+	shared.Items.Clean()
 
 	shooter.BuildShooter(shooter.P_ROBO1, player, fld,
 		fld.GetCenterX()/2, fld.GetCenterY()/2)
 
 	console.Clear()
 	killNum = 0
-
-	for i := 0; i < 7; i++ {
-		// test
-		funnel := (*shooter.Shooter)(shared.PlayerFunnels.CreateFromPool())
-		if funnel == nil {
-			return
-		}
-		shooter.BuildFunnel(funnel, player, fld)
-	}
 
 	initEnemies()
 
@@ -378,7 +376,8 @@ func checkCollision() {
 			shot.OnHit()
 			if enemy.IsDead() {
 				killNum++
-				console.Log(fmt.Sprintf("%s を撃破！(%d機目)", enemy.GetName(), killNum))
+				popItem(enemy.GetX(), enemy.GetY())
+				console.Log(fmt.Sprintf("%s を撃破！", enemy.GetName()))
 			} else {
 				dispTextTime = time.Now()
 				dispText = "[命中]"
@@ -406,6 +405,33 @@ func checkCollision() {
 			dispTextTime = time.Now()
 			dispText = "[被弾]"
 		}
+	}
+
+	// item
+	{
+		for ite := shared.Items.GetIterator(); ite.HasNext(); {
+			i := (*shot.Shot)(ite.Next().GetData())
+			if player.IsDead() {
+				break
+			}
+			if i.IsActive() == false {
+				continue
+			}
+			if collision.IsCollideWith(player, i) == false {
+				continue
+			}
+			i.SetInactive()
+			getItem(i.GetItemKind())
+		}
+	}
+}
+
+func getItem(itemKind shot.ItemKind) {
+	switch itemKind {
+	case shot.ItemKindPowerUp:
+		addFunnel()
+	case shot.ItemKindRecovery:
+		player.Recovery()
 	}
 }
 
@@ -521,12 +547,24 @@ func updateObjects() {
 		e.Update()
 	}
 
+	// items
+	for ite := shared.Items.GetIterator(); ite.HasNext(); {
+		obj := ite.Next()
+		i := (*shot.Shot)(obj.GetData())
+		if i.IsActive() == false {
+			obj.SetInactive()
+			continue
+		}
+		i.Update()
+	}
+
 	shared.EnemyShots.Sweep()
 	shared.PlayerShots.Sweep()
 	shared.PlayerFunnels.Sweep()
 	shared.Enemies.Sweep()
 	shared.Effects.Sweep()
 	shared.BackEffects.Sweep()
+	shared.Items.Sweep()
 }
 
 func drawObjects(screen *ebiten.Image) {
@@ -570,6 +608,29 @@ func drawObjects(screen *ebiten.Image) {
 		e := (*effect.Effect)(ite.Next().GetData())
 		e.Draw(screen)
 	}
+
+	// items
+	for ite := shared.Items.GetIterator(); ite.HasNext(); {
+		i := (*shot.Shot)(ite.Next().GetData())
+		i.Draw(screen)
+	}
+}
+
+func popItem(x, y float64) {
+	console.Log("アイテム出現！")
+	if rand.Float64() > 0.4 {
+		shot.RecoveryItem(x, y, rand.Intn(359))
+	} else {
+		shot.PowerUpItem(x, y, rand.Intn(359))
+	}
+}
+
+func addFunnel() {
+	funnel := (*shooter.Shooter)(shared.PlayerFunnels.CreateFromPool())
+	if funnel == nil {
+		return
+	}
+	shooter.BuildFunnel(funnel, player, fld)
 }
 
 func drawMessages(screen *ebiten.Image) {

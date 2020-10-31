@@ -159,6 +159,10 @@ func (sh *Shooter) SetPosition(x, y float64) {
 	sh.y = y
 }
 
+func (sh *Shooter) Recovery() {
+	sh.life = sh.maxLife
+}
+
 func (sh *Shooter) Fire() {
 	sh.mainWeapon.Fire(sh, sh.x, sh.y, sh.degree)
 	if len(sh.funnel) > 0 {

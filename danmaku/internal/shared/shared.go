@@ -21,6 +21,7 @@ var (
 	BackEffects   *flyweight.Pool = flyweight.NewPool()
 	Effects       *flyweight.Pool = flyweight.NewPool()
 	Enemies       *flyweight.Pool = flyweight.NewPool()
+	Items         *flyweight.Pool = flyweight.NewPool()
 
 	OffsetX float64
 	OffsetY float64
