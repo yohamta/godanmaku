@@ -64,6 +64,7 @@ var (
 
 	dispTextTime time.Time
 	dispText     string
+	dispColor    color.Color
 
 	pShotQuadTree *quadtree.Quadtree
 	eShotQuadTree *quadtree.Quadtree
@@ -390,6 +391,7 @@ func checkCollision() {
 			} else {
 				dispTextTime = time.Now()
 				dispText = "[命中]"
+				dispColor = color.White
 			}
 		}
 	}
@@ -414,6 +416,7 @@ func checkCollision() {
 
 			dispTextTime = time.Now()
 			dispText = "[被弾]"
+			dispColor = textColorWarn
 		}
 	}
 
@@ -660,7 +663,7 @@ func drawMessages(screen *ebiten.Image) {
 		}
 		if shouldPaint {
 			paint.DrawText(screen, dispText, screenSize.X/4*3-w/2,
-				screenSize.Y-130, color.White, paint.FontSizeXLarge)
+				screenSize.Y-130, dispColor, paint.FontSizeXLarge)
 		}
 	}
 }
