@@ -254,6 +254,7 @@ func initStage() {
 
 	console.Clear()
 	killNum = 0
+	enemyQueue.Clear()
 
 	initEnemies()
 
