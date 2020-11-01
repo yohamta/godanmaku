@@ -20,47 +20,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Godanmaku</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-      rel="stylesheet"
-    />
   </head>
   <body>
-    <div id="play">
-      <button class="button" style="margin: 20px;" onclick="playGame()">Click here to play</button>
-    </div>
-    <div id="loading" hidden>
-      <p>Now loading...</p>
-    </div>
-
-    <script>
-      function hideLoading() {
-        document.getElementById("loading").hidden = true;
-      }
-
-      function playGame() {
-        document.getElementById("play").hidden = true;
-        document.getElementById("loading").hidden = false;
-
-        // Polyfill
-        if (!WebAssembly.instantiateStreaming) {
-          WebAssembly.instantiateStreaming = async (resp, importObject) => {
-            const source = await (await resp).arrayBuffer();
-            return await WebAssembly.instantiate(source, importObject);
-          };
-        }
-
-        const go = new Go();
-        WebAssembly.instantiateStreaming(
-          fetch("godanmaku.wasm"),
-          go.importObject
-        ).then((result) => {
-          hideLoading();
-          go.run(result.instance);
-        });
-      }
-    </script>
+    <p id="loading">Now loading...</p>
 
     <script src="wasm_exec.js"></script>
+
+    <script>
+      // Polyfill
+      if (!WebAssembly.instantiateStreaming) {
+        WebAssembly.instantiateStreaming = async (resp, importObject) => {
+          const source = await (await resp).arrayBuffer();
+          return await WebAssembly.instantiate(source, importObject);
+        };
+      }
+
+      const go = new Go();
+      WebAssembly.instantiateStreaming(
+        fetch("godanmaku.wasm"),
+        go.importObject
+      ).then((result) => {
+        document.getElementById("loading").hidden = true;
+        go.run(result.instance);
+      });
+    </script>
   </body>
 </html>
