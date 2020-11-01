@@ -45,7 +45,6 @@
         // Polyfill
         if (!WebAssembly.instantiateStreaming) {
           WebAssembly.instantiateStreaming = async (resp, importObject) => {
-            hideLoading();
             const source = await (await resp).arrayBuffer();
             return await WebAssembly.instantiate(source, importObject);
           };
