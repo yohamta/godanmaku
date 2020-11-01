@@ -10,8 +10,13 @@ import (
 
 const maxLogs = 5
 
+type Log struct {
+	log   string
+	color color.Color
+}
+
 type Console struct {
-	logs  [maxLogs]string
+	logs  [maxLogs]Log
 	first int
 	size  int
 }
@@ -22,7 +27,7 @@ func NewConsole() *Console {
 	return c
 }
 
-func (c *Console) Log(log string) {
+func (c *Console) Log(log Log) {
 	if c.size == maxLogs {
 		if c.first == maxLogs-1 {
 			c.first = 0
@@ -52,10 +57,10 @@ func (c *Console) Clear() {
 
 func (c *Console) Draw(screen *ebiten.Image, frame image.Rectangle) {
 	for i := 0; i < c.size; i++ {
-		t := c.logs[(c.first+i)%(maxLogs)]
-		paint.DrawTextWithOptions(screen, t, frame.Min.X+4,
+		log := c.logs[(c.first+i)%(maxLogs)]
+		paint.DrawTextWithOptions(screen, log.log, frame.Min.X+4,
 			frame.Min.Y+i*10+4, paint.DrawTextOptions{
-				Color:    color.White,
+				Color:    log.color,
 				Width:    screenSize.X,
 				HAligh:   paint.HAlignLeft,
 				FontSize: paint.FontSizeSmall,

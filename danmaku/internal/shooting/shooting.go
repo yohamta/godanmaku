@@ -324,7 +324,10 @@ func initEnemies() {
 
 	wait := 1
 	radius := 100.
-	console.Log("敵の増援があらわれた！")
+	console.Log(Log{
+		log:   getText("NEW_ENEMY_APPEAR"),
+		color: textColorWarn,
+	})
 	for i := 0; i < enemyCount; i++ {
 		radius += 3
 		shooter.BuildShooter(shooter.E_ROBO1, tmpShooter, fld, 0, 0)
@@ -377,7 +380,10 @@ func checkCollision() {
 			if enemy.IsDead() {
 				killNum++
 				popItem(enemy.GetX(), enemy.GetY())
-				console.Log(fmt.Sprintf("%s を撃破！", enemy.GetName()))
+				console.Log(Log{
+					log:   fmt.Sprintf(getText("DESTROY_ENEMY"), enemy.GetName()),
+					color: textColorAchievement,
+				})
 			} else {
 				dispTextTime = time.Now()
 				dispText = "[命中]"
@@ -617,7 +623,10 @@ func drawObjects(screen *ebiten.Image) {
 }
 
 func popItem(x, y float64) {
-	console.Log("アイテム出現！")
+	console.Log(Log{
+		log:   getText("ITEM_APPEAR"),
+		color: textColorInfo,
+	})
 	if rand.Float64() > 0.4 {
 		shot.RecoveryItem(x, y, rand.Intn(359))
 	} else {
