@@ -7,7 +7,7 @@ import (
 )
 
 type Weapon interface {
-	Fire(shooter shot.Shooter, x, y float64, degree int)
+	Fire(shooter shot.Shooter, x, y float64, degree int) bool
 }
 
 type ShotFactory func(shooter shot.Shooter, x, y float64, degree int)

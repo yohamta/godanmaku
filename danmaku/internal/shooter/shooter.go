@@ -163,13 +163,17 @@ func (sh *Shooter) Recovery() {
 	sh.life = sh.maxLife
 }
 
-func (sh *Shooter) Fire() {
-	sh.mainWeapon.Fire(sh, sh.x, sh.y, sh.degree)
+func (sh *Shooter) Fire() bool {
+	var ret = false
+	ret = sh.mainWeapon.Fire(sh, sh.x, sh.y, sh.degree)
 	if len(sh.funnel) > 0 {
 		for f := range sh.funnel {
-			sh.funnel[f].Fire()
+			if sh.funnel[f].Fire() {
+				ret = true
+			}
 		}
 	}
+	return ret
 }
 
 func (sh *Shooter) SetTarget(target Target) {

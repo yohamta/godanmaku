@@ -377,6 +377,8 @@ func checkCollision() {
 
 			enemy.AddDamage(1)
 			shot.OnHit()
+			sound.PlaySe(sound.SeKindHit2)
+
 			if enemy.IsDead() {
 				killNum++
 				popItem(enemy.GetX(), enemy.GetY())
@@ -407,6 +409,7 @@ func checkCollision() {
 			}
 			player.AddDamage(1)
 			shot.OnHit()
+			sound.PlaySe(sound.SeKindHit2)
 
 			dispTextTime = time.Now()
 			dispText = "[被弾]"
@@ -428,6 +431,7 @@ func checkCollision() {
 			}
 			i.SetInactive()
 			getItem(i.GetItemKind())
+			sound.PlaySe(sound.SeKindItemGet)
 		}
 	}
 }
@@ -478,7 +482,9 @@ func updateObjects() {
 	if player.IsDead() == false {
 		player.Update()
 		if shared.GameInput.Fire {
-			player.Fire()
+			if player.Fire() {
+				sound.PlaySe(sound.SeKindShot)
+			}
 		}
 	}
 

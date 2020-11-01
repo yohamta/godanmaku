@@ -28,6 +28,7 @@ const (
 	SeKindShot
 	SeKindBomb
 	SeKindJump
+	SeKindItemGet
 )
 
 var (
@@ -35,19 +36,20 @@ var (
 	seDic        = map[SeKind]*audio.Player{}
 	bgmDic       = map[BgmKind]*audio.Player{}
 	bgmVolume128 = 128
-	seVolume128  = 64
+	seVolume128  = 128
 )
 
 func Load() {
 	audioContext, _ = audio.NewContext(sampleRate)
 
-	bgmDic[BgmKindBattle] = loadMp3(audioContext, &audios.BATTLE)
+	bgmDic[BgmKindBattle] = loadMp3(audioContext, &audios.BGM_MAOUDAMASHII_8BIT18)
 
-	seDic[SeKindHit] = loadWav(audioContext, &audios.HIT)
-	seDic[SeKindHit2] = loadWav(audioContext, &audios.HIT2)
-	seDic[SeKindShot] = loadWav(audioContext, &audios.SHOT)
-	seDic[SeKindBomb] = loadWav(audioContext, &audios.BOMB)
+	seDic[SeKindHit] = loadMp3NoLoop(audioContext, &audios.TM2_HIT000)
+	seDic[SeKindHit2] = loadMp3NoLoop(audioContext, &audios.TM2_BOM001)
+	seDic[SeKindShot] = loadMp3NoLoop(audioContext, &audios.SILENCER)
+	seDic[SeKindBomb] = loadMp3NoLoop(audioContext, &audios.BAKUHA)
 	seDic[SeKindJump] = loadWav(audioContext, &audios.JUMP)
+	seDic[SeKindItemGet] = loadMp3NoLoop(audioContext, &audios.SE_MAOUDAMASHII_BATTLE02)
 
 }
 
@@ -67,6 +69,12 @@ func loadWav(c *audio.Context, wavBytes *[]byte) *audio.Player {
 	s, _ := wav.Decode(c, audio.BytesReadSeekCloser(*wavBytes))
 	b, _ := ioutil.ReadAll(s)
 	player, _ := audio.NewPlayerFromBytes(audioContext, b)
+	return player
+}
+
+func loadMp3NoLoop(c *audio.Context, mp3Bytes *[]byte) *audio.Player {
+	s, _ := mp3.Decode(audioContext, audio.BytesReadSeekCloser(*mp3Bytes))
+	player, _ := audio.NewPlayer(audioContext, s)
 	return player
 }
 

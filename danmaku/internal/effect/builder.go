@@ -28,7 +28,6 @@ func CreateHitEffect(x, y float64) {
 	}
 	e.init(normalController, x, y)
 	e.sprite = sprite.Hit
-	e.se = sound.SeKindHit2
 	e.fps = 15
 }
 
@@ -39,7 +38,6 @@ func CreateHitLargeEffect(x, y float64) {
 	}
 	e.init(normalController, x, y)
 	e.sprite = sprite.Hit
-	e.se = sound.SeKindHit2
 	e.scale = 2
 	e.fps = 15
 }
@@ -62,7 +60,6 @@ func CreateJump(x, y float64, wait int, callback func()) {
 	}
 	e.init(normalController, x, y)
 	e.sprite = sprite.Jump
-	e.se = sound.SeKindJump
 	e.waitFrame = wait
 	e.callback = callback
 	e.callbackFrame = 3

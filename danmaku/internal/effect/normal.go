@@ -23,7 +23,8 @@ func (c *normal) update(e *Effect) {
 		e.spriteFrame++
 	}
 	if e.updateCount >= e.waitFrame && e.se != -1 && !e.sePlayed {
-		sound.PlaySe(sound.SeKindJump)
+		sound.PlaySe(e.se)
+		e.sePlayed = true
 	}
 	if e.callbackFrame == e.spriteFrame {
 		if e.callback != nil {
