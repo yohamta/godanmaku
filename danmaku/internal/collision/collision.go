@@ -79,6 +79,11 @@ var (
 	}
 )
 
+func CollisionBox(x, y, w, h float64) []*Box {
+	box := []*Box{&Box{x, y, w, h}}
+	return box
+}
+
 func GetCollisionBox(kind string) []*Box {
 	box := boxData[kind]
 	if box == nil {

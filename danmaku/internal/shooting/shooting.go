@@ -53,7 +53,9 @@ var (
 	isInitialized bool
 	battleView    *furex.View
 
-	player      *shooter.Shooter
+	player *shooter.Shooter
+	graze  *shooter.Shooter
+
 	state       State
 	fld         *field.Field
 	enemyQueue  *linkedlist.List
@@ -71,6 +73,12 @@ var (
 
 	screenSize   image.Point
 	screenCenter image.Point
+
+	// Graze
+	grazeCount     int
+	grazeBonus     int
+	grazeBonusTime int
+	earnedBonus    int
 
 	// UI components
 	fireButton *FireButton
@@ -207,6 +215,9 @@ func initObjects() {
 	// player
 	player = shooter.NewShooter()
 
+	// graze
+	graze = shooter.NewShooter()
+
 	// quad tree
 	x0 := fld.GetLeft()
 	y0 := fld.GetTop()
@@ -250,8 +261,10 @@ func initStage() {
 	shared.BackEffects.Clean()
 	shared.Items.Clean()
 
+	// player
 	shooter.BuildShooter(shooter.P_ROBO1, player, fld,
 		fld.GetCenterX()/2, fld.GetCenterY()/2)
+	shooter.BuildGraze(graze, player)
 
 	console.Clear()
 	killNum = 0
@@ -407,9 +420,15 @@ func checkCollision() {
 			if shot.IsActive() == false {
 				continue
 			}
+			if shot.IsGrazed() == false &&
+				collision.IsCollideWith(graze, shot) == true {
+				checkGraze(shot)
+			}
+
 			if collision.IsCollideWith(player, shot) == false {
 				continue
 			}
+			resetGraze()
 			player.AddDamage(1)
 			shot.OnHit()
 			sound.PlaySe(sound.SeKindHit2)
@@ -438,6 +457,30 @@ func checkCollision() {
 			sound.PlaySe(sound.SeKindItemGet)
 		}
 	}
+}
+
+func resetGraze() {
+	grazeCount = 0
+	grazeBonusTime = 0
+}
+
+func checkGraze(s *shot.Shot) {
+	if shared.Enemies.GetActiveNum() < 4 &&
+		shared.EnemyShots.GetActiveNum() < 32 {
+		return
+	}
+	grazeCount++
+	grazeBonusTime = 60
+	grazeBonus = grazeBonus + 1
+	if grazeBonus > 100 {
+		grazeBonus = 100
+	}
+	earnedBonus += grazeBonus
+	s.SetGrazed()
+
+	x := (s.GetX() + graze.GetX()) / 2
+	y := (s.GetY() + graze.GetY()) / 2
+	effect.CreateGraze(x, y)
 }
 
 func getItem(itemKind shot.ItemKind) {
@@ -491,6 +534,9 @@ func updateObjects() {
 			}
 		}
 	}
+
+	// graze
+	graze.Update()
 
 	// player funnels
 	for ite := shared.PlayerFunnels.GetIterator(); ite.HasNext(); {
@@ -633,6 +679,17 @@ func drawObjects(screen *ebiten.Image) {
 }
 
 func popItem(x, y float64) {
+	a := shared.Enemies.GetActiveNum()
+	if a > 20 {
+		a = 20
+	}
+	chance := a + grazeCount + 10
+	if chance >= 50 {
+		chance = 50
+	}
+	if rand.Intn(100) > chance {
+		return
+	}
 	console.Log(Log{
 		log:   getText("ITEM_APPEAR"),
 		color: textColorInfo,

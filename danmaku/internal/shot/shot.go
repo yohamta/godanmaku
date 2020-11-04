@@ -76,6 +76,7 @@ type Shot struct {
 	shooter       Shooter
 	funnelWeapon  Weapon
 	itemKind      ItemKind
+	isGrazed      bool
 }
 
 func NewShot(f *field.Field) *Shot {
@@ -152,6 +153,14 @@ func (s *Shot) SetInactive() {
 	s.isActive = false
 }
 
+func (s *Shot) SetGrazed() {
+	s.isGrazed = true
+}
+
+func (s *Shot) IsGrazed() bool {
+	return s.isGrazed
+}
+
 func (s *Shot) setSize(width, height float64) {
 	s.width = width
 	s.height = height
@@ -172,6 +181,7 @@ func (s *Shot) init(controller controller, shooter Shooter, x, y float64, degree
 	s.updateCount = 0
 	s.controller = controller
 	s.shooter = shooter
+	s.isGrazed = false
 	controller.init(s)
 }
 

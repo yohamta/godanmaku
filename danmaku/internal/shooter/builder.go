@@ -15,6 +15,17 @@ func BuildFunnel(funnel *Shooter, owner *Shooter, f *field.Field) {
 	funnel.Update()
 }
 
+func BuildGraze(sh *Shooter, player *Shooter) {
+	sh.isActive = true
+	sh.SetPosition(player.GetPosition())
+	sh.controller = graze
+	w := sh.GetWidth() + 16.
+	h := sh.GetHeight() + 16.
+	sh.setSize(w, h)
+	sh.owner = player
+	sh.collisionBox = collision.CollisionBox(0, 0, w, h)
+}
+
 func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 	sh.isActive = true
 	sh.field = f

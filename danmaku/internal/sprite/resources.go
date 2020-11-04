@@ -28,6 +28,7 @@ var (
 	Funnel        *Sprite
 	ItemP         *Sprite
 	ItemL         *Sprite
+	Graze         *Sprite
 )
 
 func LoadSprites() {
@@ -48,6 +49,7 @@ func LoadSprites() {
 	Funnel = createSprite(&images.PBIT_1, 5, 1)
 	ItemP = createSprite(&images.ITEM_P, 1, 1)
 	ItemL = createSprite(&images.ITEM_LIFE, 1, 1)
+	Graze = createSprite(&images.KASRUI, 5, 1)
 
 	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1, 1))
 	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1, 1))

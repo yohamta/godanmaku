@@ -65,3 +65,13 @@ func CreateJump(x, y float64, wait int, callback func()) {
 	e.callbackFrame = 3
 	e.fps = 12
 }
+
+func CreateGraze(x, y float64) {
+	e := (*Effect)(shared.Effects.CreateFromPool())
+	if e == nil {
+		return
+	}
+	e.init(normalController, x, y)
+	e.sprite = sprite.Graze
+	e.fps = 10
+}
