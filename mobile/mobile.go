@@ -1,7 +1,7 @@
 package mobile
 
 import (
-	"github.com/hajimehoshi/ebiten/mobile"
+	"github.com/hajimehoshi/ebiten/v2/mobile"
 
 	"github.com/yohamta/godanmaku/danmaku"
 )

@@ -4,7 +4,7 @@ import (
 	"math"
 	"math/rand"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )

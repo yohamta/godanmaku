@@ -1,7 +1,7 @@
 package shot
 
 import (
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 )
 
 type controller interface {

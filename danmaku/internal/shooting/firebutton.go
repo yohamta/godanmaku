@@ -7,7 +7,7 @@ import (
 
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 )
 
 const (
@@ -80,7 +80,7 @@ func (fb *FireButton) makeOffsetImages() {
 }
 
 func (fb *FireButton) makeOffImageForState(isOn bool) *ebiten.Image {
-	off, _ := ebiten.NewImage(fireButtonWidth, fireButtonHeight, ebiten.FilterDefault)
+	off := ebiten.NewImage(fireButtonWidth, fireButtonHeight)
 	var cl color.RGBA
 	frame := image.Rect(0, 0, fireButtonWidth, fireButtonHeight)
 	if isOn {

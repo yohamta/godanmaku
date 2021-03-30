@@ -3,7 +3,7 @@ package danmaku
 import (
 	"image"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
 )
 
@@ -32,7 +32,7 @@ func NewGame() (*Game, error) {
 	return game, nil
 }
 
-func (g *Game) Update(screen *ebiten.Image) error {
+func (g *Game) Update() error {
 	if isWindowSizeSet && isInitialized == false {
 		stg = shooting.NewShooting()
 		stg.Layout(screenSize.X, screenSize.Y)

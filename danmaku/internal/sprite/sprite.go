@@ -5,7 +5,7 @@ import (
 
 	_ "image/png"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 )
 
 type frame struct {
@@ -34,7 +34,7 @@ type Sprite struct {
 }
 
 func NewSprite(img *image.Image, columns int, rows int) *Sprite {
-	originalImage, _ := ebiten.NewImageFromImage(*img, ebiten.FilterDefault)
+	originalImage := ebiten.NewImageFromImage(*img)
 
 	sprite := &Sprite{}
 	sprite.image = originalImage
@@ -52,7 +52,7 @@ func NewSprite(img *image.Image, columns int, rows int) *Sprite {
 			x := sprite.frame.w * j
 			rect := image.Rect(x, y, x+sprite.frame.w, y+sprite.frame.h)
 			sub := originalImage.SubImage(rect)
-			ebitenImage, _ := ebiten.NewImageFromImage(sub, ebiten.FilterDefault)
+			ebitenImage := ebiten.NewImageFromImage(sub)
 			subImages = append(subImages, ebitenImage)
 		}
 	}

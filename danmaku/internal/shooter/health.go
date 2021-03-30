@@ -4,7 +4,7 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 
@@ -30,17 +30,17 @@ func NewHealthBar() *HealthBar {
 }
 
 func (b *HealthBar) createOffsetImage() {
-	img1, _ := ebiten.NewImage(barWidth, barHeight, ebiten.FilterDefault)
+	img1 := ebiten.NewImage(barWidth, barHeight)
 	borderColor := color.RGBA{0x60, 0x60, 0x60, 0xff}
 	paint.DrawRect(img1, image.Rect(0, 0, barWidth, barHeight), borderColor, 1)
 	b.barBorder = img1
 
-	img2, _ := ebiten.NewImage(barWidth, barHeight, ebiten.FilterDefault)
+	img2 := ebiten.NewImage(barWidth, barHeight)
 	c2 := color.RGBA{0x66, 0xff, 0x66, 0xff}
 	paint.FillRect(img2, image.Rect(0, 0, 1, barHeight), c2)
 	b.barInside = img2
 
-	img3, _ := ebiten.NewImage(barWidth, barHeight, ebiten.FilterDefault)
+	img3 := ebiten.NewImage(barWidth, barHeight)
 	c3 := color.RGBA{0xff, 0x66, 0x66, 0xff}
 	paint.FillRect(img3, image.Rect(0, 0, 1, barHeight), c3)
 	b.barInside2 = img3

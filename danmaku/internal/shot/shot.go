@@ -9,7 +9,7 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/quadtree"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"

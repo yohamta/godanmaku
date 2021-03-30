@@ -10,7 +10,7 @@ import (
 
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 
@@ -35,7 +35,7 @@ func NewField() *Field {
 	f.height = fieldHeight
 
 	borderColor := color.RGBA{0xff, 0, 0, 0x50}
-	offsetImage, _ := ebiten.NewImage(int(f.width), int(f.height), ebiten.FilterDefault)
+	offsetImage := ebiten.NewImage(int(f.width), int(f.height))
 	paint.DrawRect(offsetImage, image.Rect(0, 0, int(f.width), int(f.height)), borderColor, 1)
 	f.boundaryImage = offsetImage
 

@@ -1,7 +1,7 @@
 package shooter
 
 import (
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 )
 
 type Controller interface {

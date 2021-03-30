@@ -1,12 +1,14 @@
 module github.com/yohamta/godanmaku
 
-go 1.14
+go 1.16
 
 require (
+	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20210311203641-62640a716d48 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
-	github.com/hajimehoshi/ebiten v1.12.1
-	github.com/hajimehoshi/oto v0.6.6 // indirect
-	github.com/yohamta/furex v0.1.2
-	golang.org/x/image v0.0.0-20200927104501-e162460cd6b5
-	golang.org/x/sys v0.0.0-20201018230417-eeed37f84f13 // indirect
+	github.com/hajimehoshi/ebiten/v2 v2.0.7 // indirect
+	github.com/yohamta/furex v0.1.3
+	golang.org/x/exp v0.0.0-20210220032938-85be41e4509f // indirect
+	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb
+	golang.org/x/mobile v0.0.0-20210220033013-bdb1ca9a1e08 // indirect
+	golang.org/x/sys v0.0.0-20210326220804-49726bf1d181 // indirect
 )

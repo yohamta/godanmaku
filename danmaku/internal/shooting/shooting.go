@@ -9,7 +9,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/furex"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"

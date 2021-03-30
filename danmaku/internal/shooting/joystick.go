@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 
@@ -23,7 +23,7 @@ type Joystick struct {
 	animateAlpha   int
 	center         image.Point
 	isReadingTouch bool
-	touchID        int
+	touchID        ebiten.TouchID
 	isFirstTouch   bool
 	horizontal     float64
 	vertical       float64
@@ -62,7 +62,7 @@ func (joystick *Joystick) GetPosition() image.Point {
 	return image.Pt(0, 0)
 }
 
-func (joystick *Joystick) HandleJustPressedTouchID(touchID int) bool {
+func (joystick *Joystick) HandleJustPressedTouchID(touchID ebiten.TouchID) bool {
 	joystick.touchID = touchID
 	x, y := ebiten.TouchPosition(touchID)
 	joystick.center.X = x
@@ -79,7 +79,7 @@ func (joystick *Joystick) HandleJustReleasedTouchID(touchID int) {
 
 func (joystick *Joystick) createOffsetImage() {
 	panelSize := joystick.panelSize
-	offsetImage, _ := ebiten.NewImage(panelSize, panelSize, ebiten.FilterDefault)
+	offsetImage := ebiten.NewImage(panelSize, panelSize)
 
 	panelNum := joystick.panelNum
 	keySize := joystick.keySize

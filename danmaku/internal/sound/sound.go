@@ -1,13 +1,14 @@
 package sound
 
 import (
+	"bytes"
 	"io/ioutil"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/audios"
 
-	"github.com/hajimehoshi/ebiten/audio"
-	"github.com/hajimehoshi/ebiten/audio/mp3"
-	"github.com/hajimehoshi/ebiten/audio/wav"
+	"github.com/hajimehoshi/ebiten/v2/audio"
+	"github.com/hajimehoshi/ebiten/v2/audio/mp3"
+	"github.com/hajimehoshi/ebiten/v2/audio/wav"
 )
 
 const (
@@ -40,7 +41,7 @@ var (
 )
 
 func Load() {
-	audioContext, _ = audio.NewContext(sampleRate)
+	audioContext = audio.NewContext(sampleRate)
 
 	bgmDic[BgmKindBattle] = loadMp3(audioContext, &audios.BGM_MAOUDAMASHII_8BIT18)
 
@@ -66,20 +67,20 @@ func PlaySe(kind SeKind) {
 }
 
 func loadWav(c *audio.Context, wavBytes *[]byte) *audio.Player {
-	s, _ := wav.Decode(c, audio.BytesReadSeekCloser(*wavBytes))
+	s, _ := wav.Decode(c, bytes.NewReader(*wavBytes))
 	b, _ := ioutil.ReadAll(s)
-	player, _ := audio.NewPlayerFromBytes(audioContext, b)
+	player := audio.NewPlayerFromBytes(audioContext, b)
 	return player
 }
 
 func loadMp3NoLoop(c *audio.Context, mp3Bytes *[]byte) *audio.Player {
-	s, _ := mp3.Decode(audioContext, audio.BytesReadSeekCloser(*mp3Bytes))
+	s, _ := mp3.Decode(audioContext, bytes.NewReader(*mp3Bytes))
 	player, _ := audio.NewPlayer(audioContext, s)
 	return player
 }
 
 func loadMp3(c *audio.Context, mp3Bytes *[]byte) *audio.Player {
-	s, _ := mp3.Decode(audioContext, audio.BytesReadSeekCloser(*mp3Bytes))
+	s, _ := mp3.Decode(audioContext, bytes.NewReader(*mp3Bytes))
 	infiniteStream := audio.NewInfiniteLoop(s, s.Length())
 	player, _ := audio.NewPlayer(audioContext, infiniteStream)
 	return player

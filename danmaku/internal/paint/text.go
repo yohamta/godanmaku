@@ -5,11 +5,11 @@ import (
 	"log"
 
 	"github.com/golang/freetype/truetype"
-	"github.com/hajimehoshi/ebiten"
+	ebiten "github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/fonts"
 	"golang.org/x/image/font"
 
-	"github.com/hajimehoshi/ebiten/text"
+	"github.com/hajimehoshi/ebiten/v2/text"
 )
 
 type FontSize int
