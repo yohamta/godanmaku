@@ -7,7 +7,7 @@ import (
 
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 
-	ebiten "github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 const (

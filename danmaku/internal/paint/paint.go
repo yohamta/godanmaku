@@ -4,7 +4,7 @@ import (
 	"image"
 	"image/color"
 
-	ebiten "github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 var imgOfAPixel *ebiten.Image

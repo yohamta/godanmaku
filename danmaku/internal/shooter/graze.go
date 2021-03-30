@@ -1,7 +1,7 @@
 package shooter
 
 import (
-	ebiten "github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type GrazeController struct{}

@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"math"
 
-	ebiten "github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 

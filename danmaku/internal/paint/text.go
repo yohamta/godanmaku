@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/golang/freetype/truetype"
-	ebiten "github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/fonts"
 	"golang.org/x/image/font"
 

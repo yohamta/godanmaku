@@ -10,7 +10,7 @@ import (
 
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
-	ebiten "github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 

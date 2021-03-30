@@ -3,7 +3,7 @@ package danmaku
 import (
 	"image"
 
-	ebiten "github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
 )
 
