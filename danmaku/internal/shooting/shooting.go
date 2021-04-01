@@ -84,6 +84,8 @@ var (
 	fireButton *FireButton
 	joystick   *Joystick
 	console    *Console
+
+	offsetImage *ebiten.Image
 )
 
 type Shooting struct{}
@@ -144,21 +146,24 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	shared.OffsetX = player.GetX() - float64(screenCenter.X)
 	shared.OffsetY = player.GetY() - float64(screenCenter.Y)
 
-	drawBackground(screen)
-	drawObjects(screen)
-	drawMessages(screen)
+	drawBackground(offsetImage)
+	drawObjects(offsetImage)
+	drawMessages(offsetImage)
 
 	switch state {
 	case statePlaying:
 	case stateLose:
 		fallthrough
 	case stateWin:
-		drawResult(screen)
+		drawResult(offsetImage)
 	}
 
 	if isInitialized {
-		battleView.Draw(screen)
+		battleView.Draw(offsetImage)
 	}
+
+	op := &ebiten.DrawImageOptions{}
+	screen.DrawImage(offsetImage, op)
 }
 
 func initObjects() {
@@ -250,6 +255,8 @@ func initUI() {
 
 	battleView.AddLayer(furex.NewLayerWithContainer(flex))
 	battleView.Layout(0, 0, screenSize.X, screenSize.Y)
+
+	offsetImage = ebiten.NewImage(screenSize.X, screenSize.Y)
 }
 
 func initStage() {
