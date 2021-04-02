@@ -73,7 +73,7 @@ func (joystick *Joystick) HandleJustPressedTouchID(touchID ebiten.TouchID) bool 
 	return true
 }
 
-func (joystick *Joystick) HandleJustReleasedTouchID(touchID int) {
+func (joystick *Joystick) HandleJustReleasedTouchID(touchID ebiten.TouchID) {
 	joystick.isReadingTouch = false
 }
 
