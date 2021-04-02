@@ -44,8 +44,8 @@ func Fragment(position vec4, texCoord vec2, color vec4) vec4 {
 
 	base_color = base_color * vignetteIntensity(remappedUV, img_dst_tex_size, 2.0, 0.1)
 
-	base_color = base_color * scanLineIntensity(remappedUV.x, img_dst_tex_size.y, 0.05)
-	base_color = base_color * scanLineIntensity(remappedUV.y, img_dst_tex_size.x, 0.05)
+	base_color = base_color * scanLineIntensity(remappedUV.x, img_dst_tex_size.y, 0.13)
+	base_color = base_color * scanLineIntensity(remappedUV.y, img_dst_tex_size.x, 0.13)
 
 	// increase brightness
 	base_color = base_color * vec4(vec3(1.1), 1.0)
