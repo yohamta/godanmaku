@@ -1,3 +1,7 @@
+# How to Install file2byteslice:
+# go get github.com/hajimehoshi/file2byteslice
+# go install github.com/hajimehoshi/file2byteslice
+
 INPUT_FILE=
 OUTPUT_FILE=
 PACKAGE_NAME=
@@ -11,7 +15,7 @@ generate () {
     INPUT_FILE=$DIRECTORY/$f
     OUTPUT_FILE=$DIRECTORY/${f%.*}.go
     VARIABLE_NAME=`echo ${f%.*} | tr '[:lower:]' '[:upper:]'`
-    file2byteslice -input $INPUT_FILE -output $OUTPUT_FILE -package $PACKAGE_NAME -var $VARIABLE_NAME
+    $GOROOT/bin/file2byteslice -input $INPUT_FILE -output $OUTPUT_FILE -package $PACKAGE_NAME -var $VARIABLE_NAME
   done
 }
 

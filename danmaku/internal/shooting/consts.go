@@ -12,7 +12,7 @@ var (
 	textJp = map[string]string{
 		"NEW_ENEMY_APPEAR": "敵の増援が出現!",
 		"ITEM_APPEAR":      "アイテム出現!",
-		"DESTROY_ENEMY":    "%s を撃破!",
+		"DESTROY_ENEMY":    "敵機撃破!",
 	}
 )
 

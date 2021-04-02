@@ -59,7 +59,7 @@ func (c *Console) Draw(screen *ebiten.Image, frame image.Rectangle) {
 	for i := 0; i < c.size; i++ {
 		log := c.logs[(c.first+i)%(maxLogs)]
 		paint.DrawTextWithOptions(screen, log.log, frame.Min.X+4,
-			frame.Min.Y+i*10+4, paint.DrawTextOptions{
+			frame.Min.Y+i*12+4, paint.DrawTextOptions{
 				Color:    log.color,
 				Width:    screenSize.X,
 				HAligh:   paint.HAlignLeft,

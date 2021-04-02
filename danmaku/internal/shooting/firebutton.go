@@ -90,7 +90,7 @@ func (fb *FireButton) makeOffImageForState(isOn bool) *ebiten.Image {
 	}
 	paint.FillRect(off, frame, cl)
 	paint.DrawRect(off, frame, color.RGBA{0xcc, 0xcc, 0, 0x60}, 1)
-	paint.DrawText(off, "Attack", frame.Min.X+(frame.Max.X-frame.Min.X)/2-34, frame.Min.Y+(frame.Max.Y-frame.Min.Y)/2+8,
-		color.White, paint.FontSizeXLarge)
+	paint.DrawText(off, "攻撃", frame.Min.X+(frame.Max.X-frame.Min.X)/2-25, frame.Min.Y+(frame.Max.Y-frame.Min.Y)/2+8,
+		color.Black, paint.FontSizeXLarge)
 	return off
 }

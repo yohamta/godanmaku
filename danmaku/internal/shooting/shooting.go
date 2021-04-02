@@ -1,7 +1,6 @@
 package shooting
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"math"
@@ -421,7 +420,7 @@ func checkCollision() {
 				killNum++
 				popItem(enemy.GetX(), enemy.GetY())
 				console.Log(Log{
-					log:   fmt.Sprintf(getText("DESTROY_ENEMY"), enemy.GetName()),
+					log:   getText("DESTROY_ENEMY"),
 					color: textColorAchievement,
 				})
 			} else {

@@ -27,6 +27,7 @@ github.com/hajimehoshi/ebiten v1.12.10 h1:SEe/9TTigPqj3vaI8dLhF5OqaYmLd1pINDOWeQ
 github.com/hajimehoshi/ebiten v1.12.10/go.mod h1:1XI25ImVCDPJiXox4h9yK/CvN5sjDYnbF4oZcFzPXHw=
 github.com/hajimehoshi/ebiten/v2 v2.0.7 h1:QPc4jP+AcV+RgpTBQ519uAVJiiXEs80zxmU7HEIilwI=
 github.com/hajimehoshi/ebiten/v2 v2.0.7/go.mod h1:uS3OjMW3f2DRDMtWoIF7yMMmrMkv+fZ6pXcwR1pfA0Y=
+github.com/hajimehoshi/file2byteslice v0.0.0-20200812174855-0e5e8a80490e h1:4IP7CPObI35+mQShFOYg2JMHDJKciLTW5599inhFfkA=
 github.com/hajimehoshi/file2byteslice v0.0.0-20200812174855-0e5e8a80490e/go.mod h1:CqqAHp7Dk/AqQiwuhV1yT2334qbA/tFWQW0MD2dGqUE=
 github.com/hajimehoshi/go-inovation v0.0.0-20200828134421-2b466f1a7a6f h1:evdRas3TNQqKB+BbMdWMU9jBJinJJPYWqusLyuk5eMA=
 github.com/hajimehoshi/go-inovation v0.0.0-20200828134421-2b466f1a7a6f/go.mod h1:Eng691hBaK0gGTCK6C0Ehp4pz6+GXaYMPhAWriY8xKE=

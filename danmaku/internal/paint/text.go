@@ -31,7 +31,7 @@ var (
 )
 
 func LoadFonts() {
-	tt, err := truetype.Parse(fonts.PIXELMPLUS12REGULAR)
+	tt, err := truetype.Parse(fonts.SOUKOUMINCHO)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +51,7 @@ func LoadFonts() {
 	})
 
 	fontMap[FontSizeSmall] = truetype.NewFace(tt, &truetype.Options{
-		Size:    10,
+		Size:    12,
 		DPI:     dpi,
 		Hinting: font.HintingFull,
 	})
