@@ -1,6 +1,7 @@
 # Simple shooting game using ebiten and Golang
 
-<image src="https://user-images.githubusercontent.com/1475839/113432126-c712f880-9417-11eb-8b44-06891d02811b.png" width="300px" />
+![demo]()
+<image src="https://github.com/yohamta/godanmaku/blob/master/screenshots/battle1.gif" width="300px" />
 
 ## demo
 https://godanmaku.web.app/
