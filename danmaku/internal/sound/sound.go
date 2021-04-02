@@ -36,8 +36,8 @@ var (
 	audioContext *audio.Context
 	seDic        = map[SeKind]*audio.Player{}
 	bgmDic       = map[BgmKind]*audio.Player{}
-	bgmVolume128 = 128
-	seVolume128  = 128
+	bgmVolume128 = 32
+	seVolume128  = 32
 )
 
 func Load() {
