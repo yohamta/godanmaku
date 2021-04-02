@@ -18,6 +18,7 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 	"github.com/yohamta/godanmaku/danmaku/internal/quadtree"
+	"github.com/yohamta/godanmaku/danmaku/internal/shaders"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooter"
 	"github.com/yohamta/godanmaku/danmaku/internal/shot"
@@ -86,6 +87,9 @@ var (
 	console    *Console
 
 	offsetImage *ebiten.Image
+
+	// Shader
+	shader *ebiten.Shader
 )
 
 type Shooting struct{}
@@ -162,8 +166,12 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 		battleView.Draw(offsetImage)
 	}
 
-	op := &ebiten.DrawImageOptions{}
-	screen.DrawImage(offsetImage, op)
+	op := &ebiten.DrawRectShaderOptions{}
+	op.Uniforms = map[string]interface{}{
+		"Time": float32(updateCount),
+	}
+	op.Images[0] = offsetImage
+	screen.DrawRectShader(screenSize.X, screenSize.Y, shader, op)
 }
 
 func initObjects() {
@@ -236,9 +244,19 @@ func initAll() {
 	initUI()
 	initObjects()
 	initStage()
+	initShaders()
+}
+
+func initShaders() {
+	var err error
+	shader, err = ebiten.NewShader([]byte(shaders.CRT))
+	if err != nil {
+		panic(err)
+	}
 }
 
 func initUI() {
+	offsetImage = ebiten.NewImage(screenSize.X, screenSize.Y)
 	battleView = furex.NewView()
 
 	flex := furex.NewFlex(0, 0, screenSize.X, screenSize.Y)
@@ -255,8 +273,6 @@ func initUI() {
 
 	battleView.AddLayer(furex.NewLayerWithContainer(flex))
 	battleView.Layout(0, 0, screenSize.X, screenSize.Y)
-
-	offsetImage = ebiten.NewImage(screenSize.X, screenSize.Y)
 }
 
 func initStage() {
