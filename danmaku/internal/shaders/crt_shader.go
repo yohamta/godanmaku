@@ -48,7 +48,7 @@ func Fragment(position vec4, texCoord vec2, color vec4) vec4 {
 	base_color = base_color * scanLineIntensity(remappedUV.y, img_dst_tex_size.x, 0.13)
 
 	// increase brightness
-	base_color = base_color * vec4(vec3(1.1), 1.0)
+	base_color = base_color * vec4(vec3(1.3), 1.0)
 
 	return get_color_scanline(remappedUV, img_dst_tex_size, base_color, Time, 0.03, 4.0, 0.9, 10.0)
 }
