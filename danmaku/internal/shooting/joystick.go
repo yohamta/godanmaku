@@ -54,12 +54,12 @@ func NewJoystick() *Joystick {
 	return joystick
 }
 
-func (joystick *Joystick) GetSize() image.Point {
-	return screenSize
+func (joystick *Joystick) Size() (int, int) {
+	return screenSize.X, screenSize.Y
 }
 
-func (joystick *Joystick) GetPosition() image.Point {
-	return image.Pt(0, 0)
+func (joystick *Joystick) Position() (int, int) {
+	return 0, 0
 }
 
 func (joystick *Joystick) HandleJustPressedTouchID(touchID ebiten.TouchID) bool {

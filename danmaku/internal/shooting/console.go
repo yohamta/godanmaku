@@ -40,14 +40,12 @@ func (c *Console) Log(log Log) {
 	c.logs[(c.first+c.size-1)%(maxLogs)] = log
 }
 
-func (c *Console) Update() {}
-
-func (c *Console) GetSize() image.Point {
-	return screenSize
+func (c *Console) Size() (int, int) {
+	return screenSize.X, screenSize.Y
 }
 
-func (c *Console) GetPosition() image.Point {
-	return image.Pt(0, 0)
+func (c *Console) Position() (int, int) {
+	return 0, 0
 }
 
 func (c *Console) Clear() {

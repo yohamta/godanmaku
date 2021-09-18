@@ -34,14 +34,14 @@ func NewFireButton() *FireButton {
 	return fb
 }
 
-func (fb *FireButton) GetSize() image.Point {
-	return image.Pt(fireButtonWidth, fireButtonHeight)
+func (fb *FireButton) Size() (int, int) {
+	return fireButtonWidth, fireButtonHeight
 }
 
-func (fb *FireButton) GetPosition() image.Point {
+func (fb *FireButton) Position() (int, int) {
 	x := screenSize.X/2 + screenSize.X/4 - fireButtonWidth/2
 	y := screenSize.Y - fireButtonHeight - 40
-	return image.Pt(x, y)
+	return x, y
 }
 
 func (fb *FireButton) Update() {
@@ -54,12 +54,12 @@ func (fb *FireButton) Update() {
 	fb.alpha = a
 }
 
-func (fb *FireButton) OnPressButton() {
-	fb.isPressing = true
+func (b *FireButton) HandlePress(x, y int) {
+	b.isPressing = true
 }
 
-func (fb *FireButton) OnReleaseButton() {
-	fb.isPressing = false
+func (b *FireButton) HandleRelease(x, y int, isCancel bool) {
+	b.isPressing = false
 }
 
 func (fb *FireButton) Draw(screen *ebiten.Image, frame image.Rectangle) {

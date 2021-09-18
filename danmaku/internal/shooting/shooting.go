@@ -51,7 +51,7 @@ type EnemyData struct {
 
 var (
 	isInitialized bool
-	battleView    *furex.View
+	battleUI      *furex.Flex
 
 	player *shooter.Shooter
 	graze  *shooter.Shooter
@@ -106,9 +106,6 @@ func (s *Shooting) Layout(width, height int) {
 	screenCenter.Y = screenSize.Y/2 - 50
 	shared.ScreenSize = screenSize
 
-	if battleView != nil {
-		battleView.Layout(0, 0, screenSize.X, screenSize.Y)
-	}
 	if isInitialized == false {
 		initAll()
 		isInitialized = true
@@ -127,7 +124,7 @@ func (s *Shooting) Update() {
 	checkCollision()
 	updateObjects()
 
-	battleView.Update()
+	battleUI.Update()
 
 	switch state {
 	case statePlaying:
@@ -162,7 +159,7 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 	}
 
 	if isInitialized {
-		battleView.Draw(offsetImage)
+		battleUI.Draw(offsetImage)
 	}
 
 	op := &ebiten.DrawRectShaderOptions{}
@@ -256,22 +253,16 @@ func initShaders() {
 
 func initUI() {
 	offsetImage = ebiten.NewImage(screenSize.X, screenSize.Y)
-	battleView = furex.NewView()
-
-	flex := furex.NewFlex(0, 0, screenSize.X, screenSize.Y)
-	battleView.AddLayer(furex.NewLayerWithContainer(flex))
+	battleUI = furex.NewFlex(screenSize.X, screenSize.Y)
 
 	console = NewConsole()
-	flex.AddChild(console)
+	battleUI.AddChild(console)
 
 	joystick = NewJoystick()
-	flex.AddChild(joystick)
+	battleUI.AddChild(joystick)
 
 	fireButton = NewFireButton()
-	flex.AddChild(fireButton)
-
-	battleView.AddLayer(furex.NewLayerWithContainer(flex))
-	battleView.Layout(0, 0, screenSize.X, screenSize.Y)
+	battleUI.AddChild(fireButton)
 }
 
 func initStage() {
@@ -283,7 +274,6 @@ func initStage() {
 	shared.BackEffects.Clean()
 	shared.Items.Clean()
 
-	// player
 	shooter.BuildShooter(shooter.P_ROBO1, player, fld,
 		fld.GetCenterX()/2, fld.GetCenterY()/2)
 	shooter.BuildGraze(graze, player)

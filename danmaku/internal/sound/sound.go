@@ -51,7 +51,6 @@ func Load() {
 	seDic[SeKindBomb] = loadMp3NoLoop(audioContext, &audios.BAKUHA)
 	seDic[SeKindJump] = loadWav(audioContext, &audios.JUMP)
 	seDic[SeKindItemGet] = loadMp3NoLoop(audioContext, &audios.SE_MAOUDAMASHII_BATTLE02)
-
 }
 
 func PlayBgm(kind BgmKind) {
@@ -60,10 +59,18 @@ func PlayBgm(kind BgmKind) {
 	bgmDic[kind].Play()
 }
 
+func PauseBgm(kind BgmKind) {
+	bgmDic[kind].Pause()
+}
+
 func PlaySe(kind SeKind) {
 	seDic[kind].Rewind()
 	seDic[kind].SetVolume(float64(seVolume128) / 128)
 	seDic[kind].Play()
+}
+
+func PauseSe(kind SeKind) {
+	seDic[kind].Pause()
 }
 
 func loadWav(c *audio.Context, wavBytes *[]byte) *audio.Player {
