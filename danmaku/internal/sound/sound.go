@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"io/ioutil"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/resources/audios"
+	"github.com/miyahoyo/godanmaku/danmaku/internal/resources/audios"
 
 	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/audio/mp3"

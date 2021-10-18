@@ -3,7 +3,7 @@ package shared
 import (
 	"image"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/flyweight"
+	"github.com/miyahoyo/godanmaku/danmaku/internal/flyweight"
 )
 
 type Input struct {

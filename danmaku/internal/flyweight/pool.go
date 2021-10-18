@@ -3,7 +3,7 @@ package flyweight
 import (
 	"unsafe"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
+	"github.com/miyahoyo/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Pool struct {

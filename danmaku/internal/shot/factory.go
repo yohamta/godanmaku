@@ -1,8 +1,8 @@
 package shot
 
 import (
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/miyahoyo/godanmaku/danmaku/internal/shared"
+	"github.com/miyahoyo/godanmaku/danmaku/internal/sprite"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"image"
 	"math"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/miyahoyo/godanmaku/danmaku/internal/shared"
 )
 
 func DegreeToDirectionIndex(degree int) int {
