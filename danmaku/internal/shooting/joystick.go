@@ -62,9 +62,8 @@ func (joystick *Joystick) Position() (int, int) {
 	return 0, 0
 }
 
-func (joystick *Joystick) HandleJustPressedTouchID(touchID ebiten.TouchID) bool {
+func (joystick *Joystick) HandleJustPressedTouchID(touchID ebiten.TouchID, x, y int) bool {
 	joystick.touchID = touchID
-	x, y := ebiten.TouchPosition(touchID)
 	joystick.center.X = x
 	joystick.center.Y = y
 	joystick.isReadingTouch = true
@@ -73,7 +72,7 @@ func (joystick *Joystick) HandleJustPressedTouchID(touchID ebiten.TouchID) bool 
 	return true
 }
 
-func (joystick *Joystick) HandleJustReleasedTouchID(touchID ebiten.TouchID) {
+func (joystick *Joystick) HandleJustReleasedTouchID(touchID ebiten.TouchID, x, y int) {
 	joystick.isReadingTouch = false
 }
 
