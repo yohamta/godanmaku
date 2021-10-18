@@ -12,5 +12,5 @@ How to play:
 - Space Key: Fire weapon
 
 [Mobile]
-- JoyStick(Left down grid): Move player
+- JoyStick(Left bottom grid): Move player
 - Attack Button: Fire weapon
