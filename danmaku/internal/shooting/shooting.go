@@ -95,7 +95,6 @@ var (
 func startGame() {
 	loadResources()
 	initAll()
-	state = statePlaying
 }
 
 type Shooting struct{}
@@ -295,6 +294,7 @@ func initStage() {
 	initEnemies()
 
 	sound.PlayBgm(sound.BgmKindBattle)
+	state = statePlaying
 }
 
 func checkResult() {
@@ -513,7 +513,6 @@ func getItem(itemKind shot.ItemKind) {
 }
 
 func loadResources() {
-	paint.LoadFonts()
 	sprite.LoadSprites()
 	sound.Load()
 }
