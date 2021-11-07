@@ -14,6 +14,11 @@ function build-ios {
     ebitenmobile bind -target ios -o ./mobile/ios/Mobile.framework ./mobile
 }
 
+function build-wasm {
+    ${SCRIPTS_DIR}/build-wasm.sh
+    bash -c "cd ./wasm && firebase deploy"
+}
+
 function update {
     bash ${SCRIPTS_DIR}/build-resources.sh
 }

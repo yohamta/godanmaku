@@ -46,12 +46,13 @@ func Load() {
 	audioContext = audio.NewContext(sampleRate)
 
 	bgmDic[BgmKindBattle] = loadMp3(audioContext, &audios.BGM_MAOUDAMASHII_8BIT18)
-
-	seDic[SeKindHit] = loadMp3NoLoop(audioContext, &audios.TM2_HIT000)
-	seDic[SeKindHit2] = loadMp3NoLoop(audioContext, &audios.TM2_BOM001)
-	seDic[SeKindShot] = loadMp3NoLoop(audioContext, &audios.SILENCER)
-	seDic[SeKindBomb] = loadMp3NoLoop(audioContext, &audios.BAKUHA)
 	seDic[SeKindItemGet] = loadMp3NoLoop(audioContext, &audios.SE_MAOUDAMASHII_BATTLE02)
+
+	seDic[SeKindHit] = loadWav(audioContext, &audios.SHOT)
+	seDic[SeKindShot] = loadWav(audioContext, &audios.JULIEN_MATTHEY_JM_NOIZ_LASER_01)
+	seDic[SeKindHit2] = loadWav(audioContext, &audios.ANIMATIONISAAC_SHORT_EXPLOSION)
+	seDic[SeKindJump] = loadWav(audioContext, &audios.IWILLDSTROYU_LASERROCKET)
+	seDic[SeKindBomb] = loadWav(audioContext, &audios.ANIMATIONISAAC_SHORT_EXPLOSION)
 
 	seDic[SeKindJump] = loadWav(audioContext, &audios.JUMP)
 

@@ -412,7 +412,7 @@ func checkCollision() {
 
 			enemy.AddDamage(1)
 			shot.OnHit()
-			// sound.PlaySe(sound.SeKindHit2)
+			sound.PlaySe(sound.SeKindHit2)
 
 			if enemy.IsDead() {
 				killNum++

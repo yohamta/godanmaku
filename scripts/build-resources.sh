@@ -15,7 +15,7 @@ generate () {
     echo "processing $f"
     INPUT_FILE=$DIRECTORY/$f
     OUTPUT_FILE=$DIRECTORY/${f%.*}.go
-    VARIABLE_NAME=`echo ${f%.*} | tr '[:lower:]' '[:upper:]'`
+    VARIABLE_NAME=`echo ${f%.*} | tr '[:lower:]' '[:upper:]' | sed -e 's/-/_/g'`
     $GOROOT/bin/file2byteslice -input $INPUT_FILE -output $OUTPUT_FILE -package $PACKAGE_NAME -var $VARIABLE_NAME
   done
 }
