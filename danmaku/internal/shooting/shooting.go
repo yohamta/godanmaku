@@ -10,6 +10,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/furex"
+	"github.com/yohamta/ganim8/v2"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
@@ -304,29 +305,29 @@ func checkResult() {
 }
 
 func drawBackground(screen *ebiten.Image) {
-	w, h := sprite.Background.Size()
 	screenW := float64(screenSize.X)
 	screenH := float64(screenSize.Y)
-	centerX := screenW / 2
-	centerY := screenH / 2
-	scaleH := (screenW / float64(h))
-	scaleW := (screenH / float64(w))
-	sprite.Background.SetPosition(centerX, centerY)
-	sprite.Background.DrawWithScale(screen, math.Max(scaleH, scaleW))
+
+	spr := sprite.Get("BACKGROUND")
+	w, h := spr.Size()
+	x, y := screenW/2, screenH/2
+	scale := math.Max((screenH / float64(w)), (screenW / float64(h)))
+
+	ganim8.DrawSprite(screen, spr, 0, x, y, 0,
+		scale, scale, .5, .5)
 
 	fld.Draw(screen)
 }
 
 func drawResult(screen *ebiten.Image) {
 	center := screenCenter
-	center.Y -= 50
+	x, y := float64(center.X), float64(center.Y)-50
+	spr := sprite.Get("BATTLE_RESULT")
 	if state == stateLose {
-		sprite.Result.SetIndex(0)
+		ganim8.DrawSprite(screen, spr, 0, x, y, 0, 1, 1, .5, .5)
 	} else {
-		sprite.Result.SetIndex(1)
+		ganim8.DrawSprite(screen, spr, 1, x, y, 0, 1, 1, .5, .5)
 	}
-	sprite.Result.SetPosition(float64(center.X), float64(center.Y))
-	sprite.Result.Draw(screen)
 }
 
 func popNextEnemy() {

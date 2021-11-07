@@ -2,6 +2,7 @@ package effect
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/yohamta/ganim8/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 )
@@ -51,7 +52,6 @@ func (c *normal) draw(e *Effect, screen *ebiten.Image) {
 	if e.spriteFrame >= e.sprite.Length() {
 		return
 	}
-	e.sprite.SetIndex(e.spriteFrame)
-	e.sprite.SetPosition(e.x-shared.OffsetX, e.y-shared.OffsetY)
-	e.sprite.DrawWithScale(screen, e.scale)
+	x, y := e.x-shared.OffsetX, e.y-shared.OffsetY
+	ganim8.DrawSprite(screen, e.sprite, e.spriteFrame, x, y, 0, e.scale, e.scale, .5, .5)
 }

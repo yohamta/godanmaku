@@ -44,7 +44,7 @@ func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 		sh.collisionBox = collision.GetCollisionBox("P_ROBO_1")
 		sh.life = 10
 		sh.maxLife = sh.life
-		sh.spr = sprite.Player
+		sh.spr = sprite.Get("P_ROBO1")
 		sh.controller = player
 
 		break
@@ -53,7 +53,7 @@ func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 		sh.SetWeapon(weapon.Machinegun(shot.BlueLaser, true))
 
 		sh.collisionBox = collision.GetCollisionBox("NULL")
-		sh.spr = sprite.Funnel
+		sh.spr = sprite.Get("FUNNEL")
 		sh.controller = funnel
 
 		break
@@ -66,7 +66,7 @@ func BuildShooter(kind kind, sh *Shooter, f *field.Field, x, y float64) {
 		sh.collisionBox = collision.GetCollisionBox("E_ROBO1")
 		sh.life = 3
 		sh.maxLife = sh.life
-		sh.spr = sprite.Enemy1
+		sh.spr = sprite.Get("E_ROBO1")
 		sh.controller = npc
 		break
 	}

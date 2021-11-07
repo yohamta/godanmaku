@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/yohamta/ganim8/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 
@@ -12,7 +13,6 @@ import (
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
 	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
@@ -38,7 +38,7 @@ type Shooter struct {
 	vy            float64
 	degree        int
 	name          string
-	spr           *sprite.Sprite
+	spr           *ganim8.Sprite
 	sprIndex      int
 	life          int
 	maxLife       int

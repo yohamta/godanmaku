@@ -5,6 +5,7 @@ import (
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/yohamta/ganim8/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
@@ -59,9 +60,10 @@ func (c *PlayerController) update(sh *Shooter) {
 }
 
 func (c *PlayerController) draw(sh *Shooter, screen *ebiten.Image) {
-	sh.spr.SetPosition(sh.GetX()-shared.OffsetX, sh.GetY()-shared.OffsetY)
-	sh.spr.SetIndex(util.DegreeToDirectionIndex(sh.degree))
-	sh.spr.Draw(screen)
+	x, y := sh.GetX()-shared.OffsetX, sh.GetY()-shared.OffsetY
+	index := util.DegreeToDirectionIndex(sh.degree)
+	ganim8.DrawSprite(screen, sh.spr, index, x, y, 0, 1, 1, .5, .5)
+
 	healthBar.Draw(sh.x-shared.OffsetX, sh.y+sh.height/2-shared.OffsetY+5,
 		float64(sh.life)/float64(sh.maxLife), screen)
 }

@@ -16,7 +16,7 @@ func CreateLocusEffect(x, y float64) {
 		return
 	}
 	e.init(normalController, x, y)
-	e.sprite = sprite.Backfire
+	e.sprite = sprite.Get("TRAIL")
 	e.waitFrame = 3
 	e.fps = 10
 }
@@ -27,7 +27,7 @@ func CreateHitEffect(x, y float64) {
 		return
 	}
 	e.init(normalController, x, y)
-	e.sprite = sprite.Hit
+	e.sprite = sprite.Get("HIT")
 	e.fps = 15
 }
 
@@ -37,7 +37,7 @@ func CreateHitLargeEffect(x, y float64) {
 		return
 	}
 	e.init(normalController, x, y)
-	e.sprite = sprite.Hit
+	e.sprite = sprite.Get("HIT")
 	e.scale = 2
 	e.fps = 15
 }
@@ -48,7 +48,7 @@ func CreateExplosion(x, y float64) {
 		return
 	}
 	e.init(normalController, x, y)
-	e.sprite = sprite.Explosion
+	e.sprite = sprite.Get("EXPLODE_SMALL")
 	e.se = sound.SeKindBomb
 	e.fps = 20
 }
@@ -59,7 +59,7 @@ func CreateJump(x, y float64, wait int, callback func()) {
 		return
 	}
 	e.init(normalController, x, y)
-	e.sprite = sprite.Jump
+	e.sprite = sprite.Get("JUMP")
 	e.waitFrame = wait
 	e.callback = callback
 	e.callbackFrame = 3
@@ -72,6 +72,6 @@ func CreateGraze(x, y float64) {
 		return
 	}
 	e.init(normalController, x, y)
-	e.sprite = sprite.Graze
+	e.sprite = sprite.Get("GRAZE")
 	e.fps = 10
 }

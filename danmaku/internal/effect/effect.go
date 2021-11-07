@@ -2,8 +2,8 @@ package effect
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/yohamta/ganim8/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/sound"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 )
 
 type Effect struct {
@@ -18,7 +18,7 @@ type Effect struct {
 	callbackFrame int
 	scale         float64
 	rotate        float64
-	sprite        *sprite.Sprite
+	sprite        *ganim8.Sprite
 	fps           int
 	se            sound.SeKind
 	sePlayed      bool

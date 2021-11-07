@@ -5,13 +5,13 @@ import (
 	"math"
 	"math/rand"
 
+	"github.com/yohamta/ganim8/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/collision"
 	"github.com/yohamta/godanmaku/danmaku/internal/effect"
 	"github.com/yohamta/godanmaku/danmaku/internal/quadtree"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/field"
-	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
@@ -68,7 +68,7 @@ type Shot struct {
 	vx            float64
 	vy            float64
 	degree        int
-	spr           *sprite.Sprite
+	spr           *ganim8.Sprite
 	sprIndex      int
 	updateCount   int
 	quadNode      *quadtree.Node

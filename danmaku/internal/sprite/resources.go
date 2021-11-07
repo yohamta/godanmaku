@@ -2,72 +2,72 @@ package sprite
 
 import (
 	"bytes"
+	"fmt"
 	"image"
+	_ "image/png"
 	"math/rand"
 
+	"github.com/yohamta/ganim8/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/images"
+	"github.com/yohamta/godanmaku/danmaku/internal/texture"
 )
 
-var (
-	Background    *Sprite
-	Player        *Sprite
-	Enemy1        *Sprite
-	Enemy2        *Sprite
-	Hit           *Sprite
-	Explosion     *Sprite
-	Jump          *Sprite
-	Result        *Sprite
-	Locus         *Sprite
-	Nova          *Sprite
-	PlayerBullet  *Sprite
-	EnemyShots    []*Sprite
-	BlueLaser     *Sprite
-	Sparkle       *Sprite
-	Backfire      *Sprite
-	BlueLaserLong *Sprite
-	Funnel        *Sprite
-	ItemP         *Sprite
-	ItemL         *Sprite
-	Graze         *Sprite
-)
+var EnemyShots = []string{
+	"ESHOT10_1",
+	"ESHOT10_2",
+	"ESHOT10_3",
+	"ESHOT10_4",
+	"ESHOT10_5",
+	"ESHOT10_6",
+}
+
+var textureData = []*texture.TextureData{
+	{"P_ROBO1", "main", decodeImage(&images.P_ROBO1), 16, 16},
+	{"BACKGROUND", "background", decodeImage(&images.SPACE5), 240, 260},
+	{"PSHOT_1", "main", decodeImage(&images.SHOT1), 10, 10},
+	{"E_ROBO1", "main", decodeImage(&images.E_ROBO1), 24, 24},
+	{"HIT", "main", decodeImage(&images.HIT_SMALL), 28, 28},
+	{"EXPLODE_SMALL", "main", decodeImage(&images.EXPLODE_SMALL), 32, 32},
+	{"JUMP", "main", decodeImage(&images.JUMP), 64, 64},
+	{"BATTLE_RESULT", "ui", decodeImage(&images.SYOUHAI), 56, 31},
+	{"TRAIL", "main", decodeImage(&images.KISEKI), 16, 16},
+	{"BLUE_LASER", "main", decodeImage(&images.RASER1), 16, 16},
+	{"BLUE_LASER_LONG", "main", decodeImage(&images.RASERLONG1), 16, 16},
+	{"TRAIL", "main", decodeImage(&images.BACKFIRE), 32, 32},
+	{"FUNNEL", "main", decodeImage(&images.PBIT_1), 10, 10},
+	{"ITEM_P", "main", decodeImage(&images.ITEM_P), 16, 17},
+	{"ITEM_LIFE", "main", decodeImage(&images.ITEM_LIFE), 16, 10},
+	{"GRAZE", "main", decodeImage(&images.KASRUI), 16, 16},
+	{"ESHOT10_1", "main", decodeImage(&images.ESHOT10_1), 10, 10},
+	{"ESHOT10_2", "main", decodeImage(&images.ESHOT10_2), 10, 10},
+	{"ESHOT10_3", "main", decodeImage(&images.ESHOT10_3), 10, 10},
+	{"ESHOT10_4", "main", decodeImage(&images.ESHOT10_4), 10, 10},
+	{"ESHOT10_5", "main", decodeImage(&images.ESHOT10_5), 10, 10},
+	{"ESHOT10_6", "main", decodeImage(&images.ESHOT10_6), 10, 10},
+}
 
 func LoadSprites() {
-	Player = createSprite(&images.P_ROBO1, 8, 1)
-	Background = createSprite(&images.SPACE5, 1, 1)
-	PlayerBullet = createSprite(&images.SHOT1, 1, 1)
-	Enemy1 = createSprite(&images.E_ROBO1, 8, 1)
-	Hit = createSprite(&images.HIT_SMALL, 8, 1)
-	Explosion = createSprite(&images.EXPLODE_SMALL, 10, 1)
-	Jump = createSprite(&images.JUMP, 5, 1)
-	Result = createSprite(&images.SYOUHAI, 1, 3)
-	Locus = createSprite(&images.KISEKI, 5, 1)
-	Nova = createSprite(&images.NOVA, 1, 1)
-	BlueLaser = createSprite(&images.RASER1, 6, 4)
-	BlueLaserLong = createSprite(&images.RASERLONG1, 6, 4)
-	Sparkle = createSprite(&images.SPARKLE, 8, 8)
-	Backfire = createSprite(&images.BACKFIRE, 8, 1)
-	Funnel = createSprite(&images.PBIT_1, 5, 1)
-	ItemP = createSprite(&images.ITEM_P, 1, 1)
-	ItemL = createSprite(&images.ITEM_LIFE, 1, 1)
-	Graze = createSprite(&images.KASRUI, 5, 1)
-
-	addEnemyShotSprite(createSprite(&images.ESHOT10_1, 1, 1))
-	addEnemyShotSprite(createSprite(&images.ESHOT10_2, 1, 1))
-	addEnemyShotSprite(createSprite(&images.ESHOT10_3, 1, 1))
-	addEnemyShotSprite(createSprite(&images.ESHOT10_4, 1, 1))
-	addEnemyShotSprite(createSprite(&images.ESHOT10_5, 1, 1))
-	addEnemyShotSprite(createSprite(&images.ESHOT10_6, 1, 1))
+	texture.LoadTextures(textureData)
+	var spriteData = []*Sprite2Data{}
+	for _, v := range textureData {
+		texture := texture.GetTexure(v.Id)
+		spriteData = append(spriteData, &Sprite2Data{
+			Id:  v.Id,
+			Tex: texture,
+		})
+		if texture == nil {
+			panic(fmt.Sprintf("texture is nil, %s", v.Id))
+		}
+	}
+	CacheSprite(spriteData)
 }
 
-func RandomEnemyShot() *Sprite {
-	return EnemyShots[int(rand.Float64()*float64(len(EnemyShots)))]
+func RandomEnemyShot() *ganim8.Sprite {
+	i := rand.Intn(len(EnemyShots))
+	return Get(EnemyShots[i])
 }
 
-func createSprite(rawImage *[]byte, columns int, rows int) *Sprite {
+func decodeImage(rawImage *[]byte) *image.Image {
 	img, _, _ := image.Decode(bytes.NewReader(*rawImage))
-	return NewSprite(&img, columns, rows)
-}
-
-func addEnemyShotSprite(s *Sprite) {
-	EnemyShots = append(EnemyShots, s)
+	return &img
 }

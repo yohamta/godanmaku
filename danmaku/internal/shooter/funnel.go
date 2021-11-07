@@ -5,6 +5,7 @@ import (
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/yohamta/ganim8/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
@@ -32,7 +33,6 @@ func (c *FunnelController) update(sh *Shooter) {
 }
 
 func (c *FunnelController) draw(sh *Shooter, screen *ebiten.Image) {
-	sh.spr.SetPosition(sh.x-shared.OffsetX, sh.y-shared.OffsetY)
-	sh.spr.SetIndex(sh.sprIndex)
-	sh.spr.Draw(screen)
+	x, y := sh.x-shared.OffsetX, sh.y-shared.OffsetY
+	ganim8.DrawSprite(screen, sh.spr, sh.sprIndex, x, y, 0, 1, 1, .5, .5)
 }

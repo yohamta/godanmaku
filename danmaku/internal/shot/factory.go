@@ -11,7 +11,6 @@ var (
 		"colorful": &colorful{baseController{}},
 		"blue":     &blue{baseController{}},
 		"laser":    &laser{baseController{}},
-		"sparkle":  &sparkle{baseController{}},
 	}
 )
 
@@ -29,7 +28,7 @@ func BlueLaser(shooter Shooter, x, y float64, degree int) {
 		return
 	}
 	s.init(controllers["laser"], shooter, x, y, degree)
-	s.spr = sprite.BlueLaser
+	s.spr = sprite.Get("BLUE_LASER")
 }
 
 func BlueLaserLong(shooter Shooter, x, y float64, degree int) {
@@ -38,7 +37,7 @@ func BlueLaserLong(shooter Shooter, x, y float64, degree int) {
 		return
 	}
 	s.init(controllers["laser"], shooter, x, y, degree)
-	s.spr = sprite.BlueLaserLong
+	s.spr = sprite.Get("BLUE_LASER_LONG")
 }
 
 func EnemyShot(shooter Shooter, x, y float64, degree int) {
