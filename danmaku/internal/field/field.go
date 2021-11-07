@@ -6,12 +6,12 @@ import (
 	"math"
 	"math/rand"
 
-	"github.com/miyahoyo/godanmaku/danmaku/internal/util"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 
-	"github.com/miyahoyo/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/miyahoyo/godanmaku/danmaku/internal/paint"
+	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 )
 
 const (

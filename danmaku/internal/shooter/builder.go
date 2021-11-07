@@ -1,11 +1,11 @@
 package shooter
 
 import (
-	"github.com/miyahoyo/godanmaku/danmaku/internal/collision"
-	"github.com/miyahoyo/godanmaku/danmaku/internal/field"
-	"github.com/miyahoyo/godanmaku/danmaku/internal/shot"
-	"github.com/miyahoyo/godanmaku/danmaku/internal/sprite"
-	"github.com/miyahoyo/godanmaku/danmaku/internal/weapon"
+	"github.com/yohamta/godanmaku/danmaku/internal/collision"
+	"github.com/yohamta/godanmaku/danmaku/internal/field"
+	"github.com/yohamta/godanmaku/danmaku/internal/shot"
+	"github.com/yohamta/godanmaku/danmaku/internal/sprite"
+	"github.com/yohamta/godanmaku/danmaku/internal/weapon"
 )
 
 func BuildFunnel(funnel *Shooter, owner *Shooter, f *field.Field) {

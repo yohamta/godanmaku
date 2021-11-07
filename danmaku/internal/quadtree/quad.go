@@ -3,7 +3,7 @@ package quadtree
 import (
 	"unsafe"
 
-	"github.com/miyahoyo/godanmaku/danmaku/internal/linkedlist"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Collider interface {

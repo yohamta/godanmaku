@@ -3,7 +3,7 @@ package mobile
 import (
 	"github.com/hajimehoshi/ebiten/v2/mobile"
 
-	"github.com/miyahoyo/godanmaku/danmaku"
+	"github.com/yohamta/godanmaku/danmaku"
 )
 
 type size struct {

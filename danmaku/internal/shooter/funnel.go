@@ -5,8 +5,8 @@ import (
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/miyahoyo/godanmaku/danmaku/internal/shared"
-	"github.com/miyahoyo/godanmaku/danmaku/internal/util"
+	"github.com/yohamta/godanmaku/danmaku/internal/shared"
+	"github.com/yohamta/godanmaku/danmaku/internal/util"
 )
 
 type FunnelController struct{}

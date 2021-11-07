@@ -1,7 +1,7 @@
 package flyweight
 
 import (
-	"github.com/miyahoyo/godanmaku/danmaku/internal/linkedlist"
+	"github.com/yohamta/godanmaku/danmaku/internal/linkedlist"
 )
 
 type Iterator struct {

@@ -3,7 +3,7 @@ package weapon
 import (
 	"time"
 
-	"github.com/miyahoyo/godanmaku/danmaku/internal/shot"
+	"github.com/yohamta/godanmaku/danmaku/internal/shot"
 )
 
 type machingun struct{ baseWeapon }

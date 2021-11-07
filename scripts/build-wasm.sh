@@ -1,1 +1,1 @@
-GOOS=js GOARCH=wasm go build -o wasm/public/godanmaku.wasm github.com/miyahoyo/godanmaku
+GOOS=js GOARCH=wasm go build -o wasm/public/godanmaku.wasm github.com/yohamta/godanmaku
