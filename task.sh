@@ -15,7 +15,7 @@ function build-ios {
 }
 
 function update {
-    bash build-resources.sh
+    bash ${SCRIPTS_DIR}/build-resources.sh
 }
 
 function start {
