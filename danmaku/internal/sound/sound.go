@@ -3,6 +3,7 @@ package sound
 import (
 	"bytes"
 	"io/ioutil"
+	"time"
 
 	"github.com/yohamta/godanmaku/danmaku/internal/resources/audios"
 
@@ -36,6 +37,7 @@ var (
 	audioContext *audio.Context
 	seDic        = map[SeKind]*audio.Player{}
 	bgmDic       = map[BgmKind]*audio.Player{}
+	sePlayTime   = map[SeKind]time.Time{}
 	bgmVolume128 = 32
 	seVolume128  = 32
 )
@@ -49,8 +51,19 @@ func Load() {
 	seDic[SeKindHit2] = loadMp3NoLoop(audioContext, &audios.TM2_BOM001)
 	seDic[SeKindShot] = loadMp3NoLoop(audioContext, &audios.SILENCER)
 	seDic[SeKindBomb] = loadMp3NoLoop(audioContext, &audios.BAKUHA)
-	seDic[SeKindJump] = loadWav(audioContext, &audios.JUMP)
 	seDic[SeKindItemGet] = loadMp3NoLoop(audioContext, &audios.SE_MAOUDAMASHII_BATTLE02)
+
+	seDic[SeKindJump] = loadWav(audioContext, &audios.JUMP)
+
+	for k := range bgmDic {
+		PlayBgm(k)
+		PauseBgm(k)
+	}
+
+	for k := range seDic {
+		PlaySe(k)
+		PauseSe(k)
+	}
 }
 
 func PlayBgm(kind BgmKind) {
@@ -64,9 +77,13 @@ func PauseBgm(kind BgmKind) {
 }
 
 func PlaySe(kind SeKind) {
+	if time.Since(sePlayTime[kind]).Milliseconds() < 100 {
+		return
+	}
 	seDic[kind].Rewind()
 	seDic[kind].SetVolume(float64(seVolume128) / 128)
 	seDic[kind].Play()
+	sePlayTime[kind] = time.Now()
 }
 
 func PauseSe(kind SeKind) {
