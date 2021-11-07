@@ -6,6 +6,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/godanmaku/danmaku/internal/paint"
+	"github.com/yohamta/godanmaku/danmaku/internal/sound"
 )
 
 type StartButton struct {
@@ -22,6 +23,7 @@ func (b *StartButton) Size() (int, int) {
 
 func (b *StartButton) HandlePress(x, y int) {
 	b.isPressing = true
+	sound.Load()
 }
 
 func (b *StartButton) HandleRelease(x, y int, isCancel bool) {

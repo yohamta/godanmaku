@@ -93,7 +93,7 @@ var (
 )
 
 func startGame() {
-	loadResources()
+	sprite.LoadSprites()
 	initAll()
 }
 
@@ -510,11 +510,6 @@ func getItem(itemKind shot.ItemKind) {
 	case shot.ItemKindRecovery:
 		player.Recovery()
 	}
-}
-
-func loadResources() {
-	sprite.LoadSprites()
-	sound.Load()
 }
 
 func updateInput() {
