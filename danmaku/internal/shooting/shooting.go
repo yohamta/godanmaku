@@ -40,7 +40,7 @@ const (
 type State int
 
 const (
-	stateLoading State = iota
+	stateTitle State = iota
 	statePlaying
 	stateLose
 	stateWin
@@ -92,12 +92,16 @@ var (
 	shader *ebiten.Shader
 )
 
+func startGame() {
+	loadResources()
+	initAll()
+	state = statePlaying
+}
+
 type Shooting struct{}
 
 func NewShooting() *Shooting {
 	s := &Shooting{}
-	loadResources()
-
 	return s
 }
 
@@ -106,14 +110,16 @@ func (s *Shooting) Layout(width, height int) {
 	screenCenter.X = screenSize.X / 2
 	screenCenter.Y = screenSize.Y/2 - 50
 	shared.ScreenSize = screenSize
-
-	if isInitialized == false {
-		initAll()
-		isInitialized = true
-	}
+	isInitialized = true
 }
 
 func (s *Shooting) Update() {
+	switch state {
+	case stateTitle:
+		UpdateTitle()
+		return
+	}
+
 	if isInitialized == false {
 		return
 	}
@@ -140,6 +146,11 @@ func (s *Shooting) Update() {
 }
 
 func (s *Shooting) Draw(screen *ebiten.Image) {
+	switch state {
+	case stateTitle:
+		DrawTitle(screen)
+		return
+	}
 	if isInitialized == false {
 		return
 	}
@@ -172,8 +183,6 @@ func (s *Shooting) Draw(screen *ebiten.Image) {
 }
 
 func initObjects() {
-	state = stateLoading
-
 	rand.Seed(time.Now().Unix())
 
 	fld = field.NewField()
@@ -286,8 +295,6 @@ func initStage() {
 	initEnemies()
 
 	sound.PlayBgm(sound.BgmKindBattle)
-
-	state = statePlaying
 }
 
 func checkResult() {

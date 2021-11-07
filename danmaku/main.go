@@ -4,6 +4,7 @@ import (
 	"image"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/yohamta/godanmaku/danmaku/internal/paint"
 	"github.com/yohamta/godanmaku/danmaku/internal/shooting"
 )
 
@@ -28,6 +29,7 @@ var (
 
 func NewGame() (*Game, error) {
 	game := &Game{}
+	paint.LoadFonts()
 
 	return game, nil
 }

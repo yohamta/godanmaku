@@ -24,6 +24,7 @@ type HAlign int
 
 const (
 	HAlignLeft HAlign = iota
+	HAlignCenter
 )
 
 var (
@@ -72,7 +73,14 @@ func DrawTextWithOptions(target *ebiten.Image, txt string, x, y int, opts DrawTe
 	f := fontMap[opts.FontSize]
 	c := opts.Color
 	r := text.BoundString(f, txt)
-	x2 := -r.Min.X + x
-	y2 := -r.Min.Y + y
+	x2 := 0
+	y2 := 0
+	if opts.HAligh == HAlignLeft {
+		x2 = -r.Min.X + x
+		y2 = -r.Min.Y + y
+	} else if opts.HAligh == HAlignCenter {
+		x2 = x - (r.Max.X-r.Min.X)/2
+		y2 = y + (r.Max.Y-r.Min.Y)/2
+	}
 	text.Draw(target, txt, f, x2, y2, c)
 }
