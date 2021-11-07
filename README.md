@@ -14,3 +14,12 @@ How to play:
 [Mobile]
 - JoyStick(Left down grid): Move player
 - Attack Button: Fire weapon
+
+
+## How to run locally
+
+```sh
+git checkout https://github.com/yohamta/godanmaku
+cd godanmaku
+./task.sh
+```
