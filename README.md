@@ -1,4 +1,4 @@
-# Simple shooting game using ebiten and Golang
+# Simple shooting game using ebitengine and Golang
 
 <image src="https://github.com/yohamta/godanmaku/blob/master/screenshots/battle1.gif" width="300px" />
 
